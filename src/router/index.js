@@ -1,5 +1,13 @@
 // 引入子路由
-
+import forgetPassword from '@/components/loginBox/forgetPassword'
+import register from '@/components/loginBox/register'
+import aboutUs from '@/components/myBox/aboutUs'
+import setup from '@/components/myBox/setup'
+import suggestion from '@/components/myBox/suggestion'
+import changePassword from '@/components/myBox/changePassword'
+import statusNow from '@/components/myBox/statusNow'
+import login from '../pages/login'
+import user from '../pages/user'
 import newOrder from '../pages/newOrder'
 import calculator from '../pages/calculator'
 import orderLogistics from '../pages/orderLogistics'
@@ -96,6 +104,51 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/forgetPassword',
+      name:'forgetPassword',
+      component:forgetPassword,
+    },
+    {
+      path:'/register',
+      name:'register',
+      component:register,
+    },
+    {
+      path:'/changePassword',
+      name:'changePassword',
+      component:changePassword,
+    },
+    {
+      path:'/suggestion',
+      name:'suggestion',
+      component:suggestion,
+    },
+    {
+      path:'/statusNow',
+      name:'statusNow',
+      component:statusNow,
+    },
+    {
+      path:'/aboutUs',
+      name:'aboutUs',
+      component:aboutUs,
+    },
+    {
+      path:'/setup',
+      name:'setup',
+      component:setup,
+    },
+    {
+      path:'/login',
+      name:'login',
+      component:login,
+    },
+    {
+      path:'/user',
+      name:'user',
+      component:user,
+    },
     {
       path: '/uploadData',
       name: 'uploadData',

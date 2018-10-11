@@ -1,17 +1,19 @@
 <template>
   <div id="app" class="bigbigtest appBox">
     <div id="appBox">
-    <div id="carTitleBox">
-      <div class="carTitleBox">
-        <div class="carTitleback" @click="goback()"></div>
-        <p>{{title}}</p>
-        <h3  id="manage" class="asd"  v-if="doNow==1"><span>管理</span></h3>
-        <h3 id="siteCar"  style="display: none" class="asd"  v-if="doNow==2"></h3>
-        <h3  id="search" class="asd"  v-if="doNow==3" ><h5 id="searchSpan"></h5></h3>
-        <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
+      <div id="carTitleBox">
+        <div class="carTitleBox">
+          <div class="carTitleback" @click="goback()" ></div>
+          <p>{{title}}</p>
+          <h3  id="manage" class="asd"  v-if="doNow==1"><span>管理</span></h3>
+          <h3 id="siteCar"  style="display: none" class="asd"  v-if="doNow==2"></h3>
+          <h3  id="search" class="asd"  v-if="doNow==3" ><h5 id="searchSpan"></h5></h3>
+          <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
+          <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
+          <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
+        </div>
+        <div id="table"></div>
       </div>
-      <div id="table"></div>
-    </div>
     </div>
     <router-view/>
   </div>
@@ -37,17 +39,62 @@
       var _this = this;
       _this.title = document.title;
       bridge.invoke('stoploading');
-      bridge.invoke('token','',function(response) {
-        response = JSON.parse(response);
-        sessionStorage.setItem("token",response.userCode);
-        sessionStorage.setItem("source",response.source);
-      });
+      var cookie = androidIos.getcookie("MESSAGEDRIVER");
+      sessionStorage.setItem("source",1);
+      if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
+        cookie = JSON.parse(cookie);
+        sessionStorage.setItem("token",cookie.token);
+        _this.$router.push({ path: '/user'});
+      }else if(cookie == ""){
+        _this.$router.push({ path: '/login'});
+      }
+      androidIos.bridge(_this);
+    },
+    beforeUpdate:function () {
+      var _this = this;
+      _this.title = document.title;
+      _this.html = location.href;
+      if(_this.html.indexOf("/login") != -1){
+        $("#appBox").hide();
+      }else{
+        $("#appBox").show();
+      }
+      if(_this.html.indexOf("/robbingList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+        $(".carTitleback").hide();
+      }else{
+        $(".carTitleback").show();
+      }
+      if(_this.html.indexOf("chooseSite") != -1 || _this.html.indexOf("/car/changeCarpeople") != -1){
+        _this.doNow = 1;
+      }else if(_this.html.indexOf("robbingMore") != -1){
+        _this.doNow = 2;
+      }else if(_this.html.indexOf("/site/car") != -1){
+        _this.doNow = 3;
+      }else if( _this.html.indexOf("/track/trackMore") != -1){
+        _this.doNow = 4;
+      }else if( _this.html.indexOf("/user") != -1){
+        _this.doNow = 5;
+      }else if( _this.html.indexOf("/trackList") != -1){
+        _this.doNow = 6;
+      }else{
+        _this.doNow = "";
+      }
     },
     updated: function () {
       var _this = this;
       _this.$nextTick(function () {
         _this.title = document.title;
         _this.html = location.href;
+        if(_this.html.indexOf("/login") != -1){
+          $("#appBox").hide();
+        }else{
+          $("#appBox").show();
+        }
+        if(_this.html.indexOf("/robbingList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+          $(".carTitleback").hide();
+        }else{
+          $(".carTitleback").show();
+        }
         if(_this.html.indexOf("chooseSite") != -1 || _this.html.indexOf("/car/changeCarpeople") != -1){
           _this.doNow = 1;
         }else if(_this.html.indexOf("robbingMore") != -1){
@@ -56,20 +103,36 @@
           _this.doNow = 3;
         }else if( _this.html.indexOf("/track/trackMore") != -1){
           _this.doNow = 4;
+        }else if( _this.html.indexOf("/user") != -1){
+          _this.doNow = 5;
+        }else if( _this.html.indexOf("/trackList") != -1){
+          _this.doNow = 6;
         }else{
           _this.doNow = "";
         }
       })
     },
     methods:{
+      go:function () {
+        var _this = this;
+      },
       goback:function () {
-           var _this = this;
-           androidIos.gobackFrom(_this);
-      }
+        var _this = this;
+        androidIos.gobackFrom(_this);
+      },
+      setUpgo:function () {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: "/setUp"});
+      },
+      orderScreen:function () {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: "/orderScreen"});
+      },
     }
   }
 </script>
-
 <style>
   @import "./css/myScroll.css";
   @import "./css/mobiscroll.css";
@@ -115,7 +178,7 @@
     margin:0;
   }
   html,body{
-    background-color: #f6f6f6!important;
+    background-color: white;
     touch-action: none;
   }
   body ::-webkit-scrollbar{
@@ -209,13 +272,13 @@
   }
   #appBox #carTitleBox{
     width:100%;
-/*    position: absolute;*/
+    /*    position: absolute;*/
     z-index: 100;
     top:0;
   }
   #appBox .carTitleBox{
     width: 100%;
-   /* height:1.21875rem;*/
+    /* height:1.21875rem;*/
     height: 1.3rem;
     background: white;
     position: relative;
@@ -243,7 +306,7 @@
   .asd{
     text-align: right;
     font-size: 0.375rem;
-    line-height: 1.25rem;
+    line-height: 1.3rem;
     color:#333;
     position: absolute;
     right: 0.3rem;
@@ -352,6 +415,28 @@
     right:0.3rem;
     width:0.7rem;
     top:0.25rem;
+  }
+  #setUp{
+    position: absolute;
+    right:0.3rem;
+    width:1rem;
+    top:0rem;
+    height: 100%;
+    background-image: url("./images/setUp.png");
+    background-position: 100% 50%;
+    background-size: 0.4rem;
+    background-repeat: no-repeat;
+  }
+  #orderScreenTitle{
+    position: absolute;
+    right:0.3rem;
+    width:1rem;
+    top:0rem;
+    height: 100%;
+    background-image: url("./images/orderScreen.png");
+    background-position: 100% 50%;
+    background-size: 0.4rem;
+    background-repeat: no-repeat;
   }
   #siteCar{
     background-image: url("./images/sitechoosesite.png");

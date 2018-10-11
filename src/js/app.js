@@ -8,34 +8,34 @@ var androidIos = {
       $(".tanBox-bigBox").remove();
       var http =  location.href;
       if(http.indexOf("/uploadData/uploadDataT") != -1){
-       var message = sessionStorage.getItem("source") == "2" ? JSON.parse(localStorage.getItem("UPMESSA")) :  JSON.parse(localStorage.getItem("DRIVERMESSA"));
-       var type = androidIos.GetQueryString("type");
-       if(message != null && (message.Drivepic != "" || message.IDpic != "" || message.Licensepic != "" || message.Roadpic != "" || message.Travelpic != "" || message.bank != "" || message.bankNumber != "" || message.company != "" || message.name != "" || (message.nvitationodeIC != null &&  message.nvitationodeIC != "" )|| message.peopleNumber != "" )){
-         if(type != null){
-           androidIos.first("信息尚未上传，需要保存吗？");
-           $(".tanBox-close").unbind('click').click(function(){
-             $(".tanBox-bigBox").remove();
-             if(sessionStorage.getItem("source") == 2){
-               localStorage.removeItem("UPMESSA");
-             }else if(sessionStorage.getItem("source") == 3){
-               localStorage.removeItem("DRIVERMESSA");
-             }
-             androidIos.gogogogo();
-           });
-           $(".tanBox-yes").unbind('click').click(function(){
-             $(".tanBox-bigBox").remove();
-             androidIos.gogogogo();
-           });
-         }else{
-           if(sessionStorage.getItem("source") == 2){
-             localStorage.removeItem("UPMESSA");
-           }else if(sessionStorage.getItem("source") == 3){
-             localStorage.removeItem("DRIVERMESSA");
-           }
-         }
-       }else{
-         androidIos.gogogogo();
-       }
+        var message = sessionStorage.getItem("source") == "2" ? JSON.parse(localStorage.getItem("UPMESSA")) :  JSON.parse(localStorage.getItem("DRIVERMESSA"));
+        var type = androidIos.GetQueryString("type");
+        if(message != null && (message.Drivepic != "" || message.IDpic != "" || message.Licensepic != "" || message.Roadpic != "" || message.Travelpic != "" || message.bank != "" || message.bankNumber != "" || message.company != "" || message.name != "" || (message.nvitationodeIC != null &&  message.nvitationodeIC != "" )|| message.peopleNumber != "" )){
+          if(type != null){
+            androidIos.first("信息尚未上传，需要保存吗？");
+            $(".tanBox-close").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              if(sessionStorage.getItem("source") == 2){
+                localStorage.removeItem("UPMESSA");
+              }else if(sessionStorage.getItem("source") == 3){
+                localStorage.removeItem("DRIVERMESSA");
+              }
+              androidIos.gogogogo();
+            });
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              androidIos.gogogogo();
+            });
+          }else{
+            if(sessionStorage.getItem("source") == 2){
+              localStorage.removeItem("UPMESSA");
+            }else if(sessionStorage.getItem("source") == 3){
+              localStorage.removeItem("DRIVERMESSA");
+            }
+          }
+        }else{
+          androidIos.gogogogo();
+        }
       }else{
         androidIos.gogogogo();
       }
@@ -57,28 +57,28 @@ var androidIos = {
     }
   },
   fixed:function (number,length) {
-      var len = 1;
-     for(var i=0 ; i<length ; i++){
-         len = len +"0";
+    var len = 1;
+    for(var i=0 ; i<length ; i++){
+      len = len +"0";
+    }
+    var bignumber = number*len;
+    if((bignumber.toString()).indexOf(".")!=-1){
+      var list = (bignumber.toString()).split(".");
+      var leng = 1;
+      for(var x=0 ; x<list[1].length-1 ; x++){
+        leng = leng +"0";
       }
-      var bignumber = number*len;
-      if((bignumber.toString()).indexOf(".")!=-1){
-        var list = (bignumber.toString()).split(".");
-        var leng = 1;
-        for(var x=0 ; x<list[1].length-1 ; x++){
-          leng = leng +"0";
-        }
-         if(list[1]-5*leng>=0){
-            bignumber = list[0]*1+1
-         }else{
-           bignumber = list[0]
-         }
+      if(list[1]-5*leng>=0){
+        bignumber = list[0]*1+1
+      }else{
+        bignumber = list[0]
       }
-      return  bignumber/len;
+    }
+    return  bignumber/len;
   },
   ajaxHttp: function () {
-   // var http = 'http://10.10.10.187:8085';
-   // var http = 'http://10.10.10.224:8085';
+    // var http = 'http://10.10.10.187:8085';
+    // var http = 'http://10.10.10.224:8085';
     var http = 'http://222.73.159.76:8085';
     return http;
   },
@@ -129,20 +129,20 @@ var androidIos = {
       300)
   },
   first:function(message){
+    $(".tanBox-bigBox").remove();
+    $("body").append("<div class='tanBox-bigBox'>" +
+      "<div class='tanBox-box'>" +
+      "<p>温馨提示</p>"+
+      "<div class='tanBox-class'>" +
+      "<h3 style='width: 80%;margin-left: 10%;line-height: 0.6rem;padding: 0.3rem 0;'>" + message + "</h3>"+
+      "<div class='clearBoth'></div>"+
+      "</div>"+
+      "<div class='tanBox-button'><button class='tanBox-close'>取消</button><div class='tanBox-shuxian'></div><button id='tanBox-yes' class='tanBox-yes tanBox-yesGo'>确定</button></div>"+
+      "</div>"+
+      "</div>");
+    $(".tanBox-close").unbind('click').click(function(){
       $(".tanBox-bigBox").remove();
-      $("body").append("<div class='tanBox-bigBox'>" +
-        "<div class='tanBox-box'>" +
-        "<p>温馨提示</p>"+
-        "<div class='tanBox-class'>" +
-        "<h3 style='width: 80%;margin-left: 10%;line-height: 0.6rem;padding: 0.3rem 0;'>" + message + "</h3>"+
-        "<div class='clearBoth'></div>"+
-        "</div>"+
-        "<div class='tanBox-button'><button class='tanBox-close'>取消</button><div class='tanBox-shuxian'></div><button id='tanBox-yes' class='tanBox-yes tanBox-yesGo'>确定</button></div>"+
-        "</div>"+
-        "</div>");
-      $(".tanBox-close").unbind('click').click(function(){
-        $(".tanBox-bigBox").remove();
-      });
+    });
   },
   second:function(message){
     $(".tanBox-bigBox").remove();
@@ -158,6 +158,25 @@ var androidIos = {
       "</div>");
     $(".tanBox-close").unbind('click').click(function(){
       $(".tanBox-bigBox").remove();
+    });
+  },
+  telCall:function (tel) {
+    $(".tanBox-bigBox").remove();
+    $("body").append("<div class='tanBox-bigBox'>" +
+      "<div class='tanBox-box'>" +
+      "<p>温馨提示</p>"+
+      "<div class='tanBox-class'>" +
+      "<h3 style='width: 80%;margin-left: 10%;line-height: 0.6rem;padding: 0.3rem 0;'>" + tel + "</h3>"+
+      "<div class='clearBoth'></div>"+
+      "</div>"+
+      "<div class='tanBox-button'><button class='tanBox-close'>取消</button><div class='tanBox-shuxian'></div><button id='tanBox-yes' class='tanBox-yes tanBox-yesGo'>拨打</button></div>"+
+      "</div>"+
+      "</div>");
+    $(".tanBox-close").unbind('click').click(function(){
+      $(".tanBox-bigBox").remove();
+    });
+    $(".tanBox-yes").unbind('click').click(function(){
+      window.location.href = "tel://" + tel;
     });
   },
   third:function (message) {
@@ -185,26 +204,9 @@ var androidIos = {
       "</div>");
   },
   bridge:function (that) {
-    new Promise(function (resolve,reject) {
-      /*if(bridge.invoke('token') != undefined){*/
-        bridge.invoke('token','',function(response) {
-          resolve(response);
-        })
-      /*}else{
-        reject(2)
-      }*/
-    }).then(function (data) {
-      data = JSON.parse(data);
-      sessionStorage.setItem("token", data.userCode);
-      sessionStorage.setItem("source", data.source);
-      that.$nextTick(function() {
-        that.go();
-      });
-    }).catch(function (error) {
-      that.$nextTick(function() {
-        that.go();
-      });
-    })
+    that.$nextTick(function() {
+      that.go();
+    });
   },
   jsonsort: function (obj) {
     var keys = [];
@@ -276,42 +278,50 @@ var androidIos = {
     return null;
   },
   CheckSocialCreditCode:function (Code) {
-  var patrn = /^[0-9A-Z]+$/;
-  //18位校验及大写校验
-  if ((Code.length != 18) || (patrn.test(Code) == false)) {
-    bomb.first("不是有效的统一社会信用编码！");
-    return false;
-  }
-  else {
-    var Ancode;//统一社会信用代码的每一个值
-    var Ancodevalue;//统一社会信用代码每一个值的权重
-    var total = 0;
-    var weightedfactors = [1, 3, 9, 27, 19, 26, 16, 17, 20, 29, 25, 13, 8, 24, 10, 30, 28];//加权因子
-    var str = '0123456789ABCDEFGHJKLMNPQRTUWXY';
-    //不用I、O、S、V、Z
-    for (var i = 0; i < Code.length - 1; i++) {
-      Ancode = Code.substring(i, i + 1);
-      Ancodevalue = str.indexOf(Ancode);
-      total = total + Ancodevalue * weightedfactors[i];
-      //权重与加权因子相乘之和
-    }
-    var logiccheckcode = 31 - total % 31;
-    if (logiccheckcode == 31) {
-      logiccheckcode = 0;
-    }
-    var Str = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,T,U,W,X,Y";
-    var Array_Str = Str.split(',');
-    logiccheckcode = Array_Str[logiccheckcode];
-
-
-    var checkcode = Code.substring(17, 18);
-    if (logiccheckcode != checkcode) {
+    var patrn = /^[0-9A-Z]+$/;
+    //18位校验及大写校验
+    if ((Code.length != 18) || (patrn.test(Code) == false)) {
       bomb.first("不是有效的统一社会信用编码！");
       return false;
     }
-    return true;
-  }
-},
+    else {
+      var Ancode;//统一社会信用代码的每一个值
+      var Ancodevalue;//统一社会信用代码每一个值的权重
+      var total = 0;
+      var weightedfactors = [1, 3, 9, 27, 19, 26, 16, 17, 20, 29, 25, 13, 8, 24, 10, 30, 28];//加权因子
+      var str = '0123456789ABCDEFGHJKLMNPQRTUWXY';
+      //不用I、O、S、V、Z
+      for (var i = 0; i < Code.length - 1; i++) {
+        Ancode = Code.substring(i, i + 1);
+        Ancodevalue = str.indexOf(Ancode);
+        total = total + Ancodevalue * weightedfactors[i];
+        //权重与加权因子相乘之和
+      }
+      var logiccheckcode = 31 - total % 31;
+      if (logiccheckcode == 31) {
+        logiccheckcode = 0;
+      }
+      var Str = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,T,U,W,X,Y";
+      var Array_Str = Str.split(',');
+      logiccheckcode = Array_Str[logiccheckcode];
+
+
+      var checkcode = Code.substring(17, 18);
+      if (logiccheckcode != checkcode) {
+        bomb.first("不是有效的统一社会信用编码！");
+        return false;
+      }
+      return true;
+    }
+  },
+  telCheck:function (tel) {
+    var reg = /^1([3|5|8][0-9]|4[5|7|9]|66|7[0|1|3|5|6|7|8]|9[8|9])[0-9]{8}$/;
+    if(!reg.test(tel)){
+      return false;
+    }else{
+      return true;
+    }
+  },
   idCardCheck:function (id) {
     // 1 "验证通过!", 0 //校验不通过
     var format = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
@@ -345,66 +355,66 @@ var androidIos = {
   },
   chooseSite:function (type) {
     // 0 拆段 1 拆量 2全部
-     var body = document.getElementsByTagName("body")[0];
-     var site = document.getElementById("siteLook");
-     if(site != null){
-       body.removeChild(site);
-     }else{
-       var listDom=document.createElement("ul");
-       listDom.id = "siteLook";
-       var listBox = "";
-       if(type == 0){
-         listBox = "<li class='sitechoose' id='sitechoosesite'>拆段</li>";
-       }else if(type == 1){
-         listBox = "<li class='sitechoose' id='sitedismantling'>拆量</li>";
-       }else if(type == 2){
-         for(var i = 0 ; i < 2 ; i ++ ){
-           var id = i ==0 ? "sitechoosesite" : "sitedismantling";
-           var name = i ==0 ? "拆段" : "拆量";
-           var list = "<li class='sitechoose' id='" + id + "'>" + name + "</li>";
-           listBox += list;
-         }
-       }
-       listDom.innerHTML =  listBox ;
-       body.appendChild(listDom);
-       var style = listDom.style;
-       var styleClass = document.getElementsByClassName("sitechoose")[0].style;
-       var styleClass2 = "";
-       if(document.getElementsByClassName("sitechoose").length > 1){
-         styleClass2 = document.getElementsByClassName("sitechoose")[1].style;
-       }
-       style.position = "fixed";
-       style.zIndex = "12";
-       style.width = "2rem";
-       style.background = "black";
-       style.padding = "0 0.3rem";
-       style.top = "0.85rem";
-       style.right = "0.3rem";
-       style.borderRadius = "0.1rem";
-       styleClass.color = "white";
-       styleClass.textAlign = "center";
-       styleClass.marginTop = "0.2rem";
-       styleClass.paddingBottom = "0.2rem";
-       styleClass.fontSize = "0.3125rem";
-       if(document.getElementsByClassName("sitechoose").length > 1){
-         styleClass.borderBottom = "1px solid white";
-         styleClass2.color = "white";
-         styleClass2.textAlign = "center";
-         styleClass2.marginTop = "0.2rem";
-         styleClass2.paddingBottom = "0.2rem";
-         styleClass2.fontSize = "0.3125rem";
-       }
-       document.getElementsByTagName("body")[0].onclick = function (e) {
-         var id = e.target.id;
-         if( id != "siteLook" && id != "siteCar" ){
-           var body = document.getElementsByTagName("body")[0];
-           var listDom=document.getElementById("siteLook");
-           if(listDom != null){
-             body.removeChild(listDom);
-           }
-         }
-       }
-     }
+    var body = document.getElementsByTagName("body")[0];
+    var site = document.getElementById("siteLook");
+    if(site != null){
+      body.removeChild(site);
+    }else{
+      var listDom=document.createElement("ul");
+      listDom.id = "siteLook";
+      var listBox = "";
+      if(type == 0){
+        listBox = "<li class='sitechoose' id='sitechoosesite'>拆段</li>";
+      }else if(type == 1){
+        listBox = "<li class='sitechoose' id='sitedismantling'>拆量</li>";
+      }else if(type == 2){
+        for(var i = 0 ; i < 2 ; i ++ ){
+          var id = i ==0 ? "sitechoosesite" : "sitedismantling";
+          var name = i ==0 ? "拆段" : "拆量";
+          var list = "<li class='sitechoose' id='" + id + "'>" + name + "</li>";
+          listBox += list;
+        }
+      }
+      listDom.innerHTML =  listBox ;
+      body.appendChild(listDom);
+      var style = listDom.style;
+      var styleClass = document.getElementsByClassName("sitechoose")[0].style;
+      var styleClass2 = "";
+      if(document.getElementsByClassName("sitechoose").length > 1){
+        styleClass2 = document.getElementsByClassName("sitechoose")[1].style;
+      }
+      style.position = "fixed";
+      style.zIndex = "12";
+      style.width = "2rem";
+      style.background = "black";
+      style.padding = "0 0.3rem";
+      style.top = "0.85rem";
+      style.right = "0.3rem";
+      style.borderRadius = "0.1rem";
+      styleClass.color = "white";
+      styleClass.textAlign = "center";
+      styleClass.marginTop = "0.2rem";
+      styleClass.paddingBottom = "0.2rem";
+      styleClass.fontSize = "0.3125rem";
+      if(document.getElementsByClassName("sitechoose").length > 1){
+        styleClass.borderBottom = "1px solid white";
+        styleClass2.color = "white";
+        styleClass2.textAlign = "center";
+        styleClass2.marginTop = "0.2rem";
+        styleClass2.paddingBottom = "0.2rem";
+        styleClass2.fontSize = "0.3125rem";
+      }
+      document.getElementsByTagName("body")[0].onclick = function (e) {
+        var id = e.target.id;
+        if( id != "siteLook" && id != "siteCar" ){
+          var body = document.getElementsByTagName("body")[0];
+          var listDom=document.getElementById("siteLook");
+          if(listDom != null){
+            body.removeChild(listDom);
+          }
+        }
+      }
+    }
 
   },
   numAdd:function(num1, num2) {
@@ -423,7 +433,7 @@ var androidIos = {
     }
     baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
     precision = (baseNum1 >= baseNum2) ? baseNum1 : baseNum2;
-    return ((num1 * baseNum - num2 * baseNum) / baseNum).toFixed(precision);
+    return ((num1 * baseNum + num2 * baseNum) / baseNum).toFixed(precision);
   },
   numSub:function (num1, num2) {
     //减法精度
@@ -455,6 +465,79 @@ var androidIos = {
     } catch (e) {
     }
     return Number(num1.toString().replace(".", "")) * Number(num2.toString().replace(".", "")) / Math.pow(10, baseNum);
+  },
+  setcookie:function (c_name,value,time) {
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + time);
+    document.cookie =  c_name + "="  + escape(value)+ ( (time == null) ?  ""  : ";expires="+exdate.toGMTString());
+  },
+  getcookie:function (c_name) {
+    if (document.cookie.length>0){
+      var c_start=document.cookie.indexOf(c_name + "=")
+      if (c_start != -1 ) {
+        c_start=c_start + c_name.length+1
+        var c_end=document.cookie.indexOf(";",c_start)
+        if (c_end==-1){
+          c_end=document.cookie.length
+        }
+        return unescape(document.cookie.substring(c_start,c_end))
+      }else{
+        return ""
+      }
+    }
+    return ""
+  },
+  delCookie:function (name){
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=androidIos.getcookie(name);
+    if(cval!=null){
+      document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+  },
+  lineCanvas:function (obj) {
+    this.linewidth = 1;
+    this.color = "#000000";
+    this.background = "#ffffff";
+    for (var i in obj) {
+      this[i] = obj[i];
+    };
+    this.canvas = document.createElement("canvas");
+    this.el.appendChild(this.canvas);
+    this.cxt = this.canvas.getContext("2d");
+    this.canvas.width = this.el.clientWidth;
+    this.canvas.height = this.el.clientHeight;
+    this.cxt.fillStyle = this.background;
+    this.cxt.fillRect(0, 0, this.canvas.width, this.canvas.width);
+    this.cxt.strokeStyle = this.color;
+    this.cxt.lineWidth = this.linewidth;
+    this.cxt.lineCap = "round";
+    //开始绘制
+    this.canvas.addEventListener("touchstart", function(e) {
+      this.cxt.beginPath();
+      this.cxt.moveTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+    }.bind(this), false);
+    //绘制中
+    this.canvas.addEventListener("touchmove", function(e) {
+      this.cxt.lineTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+      this.cxt.stroke();
+    }.bind(this), false);
+    //结束绘制
+    this.canvas.addEventListener("touchend", function() {
+      this.cxt.closePath();
+    }.bind(this), false);
+    //清除画布
+    this.clearEl.addEventListener("click", function() {
+      this.cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }.bind(this), false);
+    //保存图片，直接转base64
+    this.saveEl.addEventListener("click", function() {
+      var imgBase64 = this.canvas.toDataURL();
+      console.log(imgBase64);
+    }.bind(this), false);
+  },
+  checkText:function (text) {
+    return text.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'')
   },
 };
 export {
