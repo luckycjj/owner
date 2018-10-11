@@ -11,15 +11,16 @@
           <p>{{message.name}}</p>
           <h1 v-html="message.status == '0' ? '未认证' :message.status == '1' ? '待审核' : message.status == '2' ? '已审核' : message.status == '3' ? '已驳回' : message.status == '4' ? '已禁用' : ''"></h1>
         </div>
-        <div class="lookMore"  @click="lookMore('/statusNow')"><span v-if="message.status == 0">去认证</span></div>
+        <div class="lookMore"  @click="renzhen()"><span v-if="message.status == 0">去认证</span></div>
         <div class="clearBoth"></div>
       </div>
       <ul>
-        <li @click="lookMore(item.url)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
+        <li @click="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
           <div class="tableIcon" :style="{backgroundImage:'url(' + item.icon + ')'}"></div>
           <p>{{item.name}}</p>
           <div class="lookMore"></div>
           <div class="clearBoth"></div>
+          <input type="file" class="saoyisao"  @change="jiexi($event)" v-if="(item.name).indexOf('扫') != -1">
         </li>
       </ul>
     </div>
@@ -46,6 +47,7 @@
   import {androidIos} from "../js/app";
   import {bomb} from "../js/zujian";
   import bridge from '../js/bridge';
+  import reqrcode from  '../js/reqrcode';
   export default {
     name: "user",
     data(){
@@ -151,6 +153,11 @@
       androidIos.bridge(_this);
     },
     methods:{
+      renzhen:function () {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({path:'/statusNow'});
+      },
       go:function () {
         var _this = this;
         $.ajax({
@@ -180,13 +187,55 @@
           }
         });
       },
-      lookMore:function (url) {
+      jiexi:function (enevt) {
         var _this = this;
-        if(url != ""){
+        androidIos.loading("正在扫描");
+        var getObjectURL = function (file) {
+          var url = null;
+          if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+          } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+          } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+          }
+          return url;
+        }
+        reqrcode.decode(getObjectURL(enevt.target.files[0]));
+        reqrcode.callback = function (imgMsg) {
+          enevt.target.value = "";
+          var img;
+          try {
+            img = JSON.parse(imgMsg);
+          } catch (e) {
+            img = "";
+          }
+          $("#common-blackBox").remove();
+          if(img == ""){
+            androidIos.second("扫描二维码失败,请重试!");
+          }else{
+            if(img.type != 1){
+              androidIos.second("请扫描签收二维码!");
+            }else{
+              androidIos.first("确定签收吗？");
+              $(".tanBox-yes").unbind('click').click(function(){
+                $(".tanBox-bigBox").remove();
+                androidIos.addPageList();
+                _this.$router.push({path:'/signIn',query:{pk:img.pk,}});
+              });
+            }
+          }
+        }
+      },
+      lookMore:function (item) {
+        var _this = this;
+        if(item.url != ""){
           androidIos.addPageList();
-          _this.$router.push({ path: url});
+          _this.$router.push({ path: item.url});
         }else{
-          _this.shareListTrue = true;
+          if(item.name.indexOf("扫") == -1){
+            _this.shareListTrue = true;
+          }
         }
       },
       shareYes:function (type) {
@@ -322,6 +371,15 @@
 </script>
 
 <style scoped>
+  .saoyisao{
+    position: absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    height:auto;
+    width:100%;
+    opacity: 0;
+  }
   #userBox{
     overflow: scroll;
     position: absolute;
