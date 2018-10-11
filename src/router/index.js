@@ -8,6 +8,7 @@ import changePassword from '@/components/myBox/changePassword'
 import statusNow from '@/components/myBox/statusNow'
 import login from '../pages/login'
 import user from '../pages/user'
+import trackList from '../pages/trackList'
 import newOrder from '../pages/newOrder'
 import calculator from '../pages/calculator'
 import orderLogistics from '../pages/orderLogistics'
@@ -108,6 +109,11 @@ export default new Router({
       path:'/forgetPassword',
       name:'forgetPassword',
       component:forgetPassword,
+    },
+    {
+      path:'/trackList',
+      name:'trackList',
+      component:trackList,
     },
     {
       path:'/register',

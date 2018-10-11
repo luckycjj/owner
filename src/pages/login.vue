@@ -33,7 +33,7 @@
           var _this = this;
           sessionStorage.removeItem("token");
           androidIos.delCookie("MESSAGEDRIVER");
-          sessionStorage.removeItem("driverMessage");
+          sessionStorage.removeItem("ownerMessage");
           androidIos.bridge(_this);
       },
       methods:{

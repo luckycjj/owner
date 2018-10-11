@@ -80,7 +80,7 @@
         },{
           name:"地址管理",
           icon:require("../images/addressmanagement.png"),
-          url:"/suggestion"
+          url:"/newOrder/addressMessage?type=1"
         },{
           name:"分享",
           icon:require("../images/share.png"),
@@ -105,12 +105,12 @@
     },
     mounted:function () {
       var _this = this;
-      var carrierMessage = sessionStorage.getItem("carrierMessage");
-      if(carrierMessage != null) {
-        carrierMessage = JSON.parse(carrierMessage);
-        _this.message.photo = carrierMessage.photo;
-        _this.message.name = carrierMessage.name;
-        _this.message.status = carrierMessage.status;
+      var ownerMessage = sessionStorage.getItem("ownerMessage");
+      if(ownerMessage != null) {
+        ownerMessage = JSON.parse(ownerMessage);
+        _this.message.photo = ownerMessage.photo;
+        _this.message.name = ownerMessage.name;
+        _this.message.status = ownerMessage.status;
       }
       $.ajax({
         type: "POST",
@@ -127,7 +127,7 @@
             _this.message.photo =  getUserInfo.photo;
             _this.message.name = getUserInfo.corpName == "" ? getUserInfo.name :getUserInfo.corpName;
             _this.message.status =   getUserInfo.status;
-            sessionStorage.setItem("carrierMessage",JSON.stringify({
+            sessionStorage.setItem("ownerMessage",JSON.stringify({
               licType: getUserInfo.licType,
               name:  getUserInfo.name,
               photo:  getUserInfo.photo,

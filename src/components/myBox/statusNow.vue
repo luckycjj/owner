@@ -11,46 +11,17 @@
       <h1 v-html="status == '0' ? '未认证' :status == '1' ? '待审核' : status == '2' ? '认证成功' : status == '3' ? '已驳回' : status == '4' ? '已禁用' : ''">认证通过</h1>
       <div class="clearBoth"></div>
       <div class="tableBox">
-        <div class="tableTap border" v-if="letterType == 2">
-          <span class="title">公司名称</span><span class="nei">{{corpName}}</span>
-        </div>
         <div class="tableTap border">
           <span class="title w2">姓名</span><span class="nei">{{name}}</span>
         </div>
-        <div class="tableTap border" v-if="letterType == 2">
+        <div class="tableTap border">
+          <span class="title">公司名称</span><span class="nei">{{corpName}}</span>
+        </div>
+        <div class="tableTap border">
+          <span class="title">公司地址</span><span class="nei">{{corpAddress}}</span>
+        </div>
+        <div class="tableTap border">
           <span class="title">信用代码</span><span class="nei">{{creditCode}}</span>
-        </div>
-        <div class="tableTap border" v-if="inviteCode != '' && inviteCode != null">
-          <span class="title">邀请代码</span><span class="nei">{{inviteCode}}</span>
-        </div>
-        <div class="tableTap">
-          <span class="title">证件信息</span>
-          <div class="clearBoth"></div>
-          <div class="imgBox">
-             <img :src="IDpic" :onerror="errorlogo" @click="imgLook(IDpic)">
-              身份证正面
-          </div>
-          <div class="imgBox" style="float: right;" @click="imgLook(IDpicfan)">
-            <img :src="IDpicfan" :onerror="errorlogo" >
-            身份证反面
-          </div>
-          <div class="imgBox" v-if="letterType == 2">
-            <img :src="certification" :onerror="errorlogo"  @click="imgLook(certification)">
-            邀请函
-          </div>
-          <div class="imgBox" v-if="letterType == 1">
-            <img :src="driverLicense" :onerror="errorlogo"  @click="imgLook(driverLicense)">
-            驾驶证
-          </div>
-          <div class="imgBox" v-if="letterType == 1"  style="float: right;">
-            <img :src="drivingLicence" :onerror="errorlogo"  @click="imgLook(drivingLicence)">
-            行驶证
-          </div>
-          <div class="imgBox" v-if="letterType == 1">
-            <img :src="roadTransLicense" :onerror="errorlogo"  @click="imgLook(roadTransLicense)">
-            道路运输许可证
-          </div>
-          <div class="clearBoth"></div>
         </div>
       </div>
       <button v-if="status != 2 && status != 1" @click="goStatus(2)">重新上传</button>
@@ -71,14 +42,9 @@
              status : 0,
              name: "",
              corpName:"",
-             certification:"",
-             IDpic:"",
-             IDpicfan:"",
-             driverLicense:"",
-             drivingLicence:"",
-             roadTransLicense:"",
+             corpAddress:"",
+             creditCode:"",
              ftp:"",
-             letterType:"",
              errorlogo: 'this.src="' + require('../../images/timg.jpg') + '"',
           }
       },
@@ -98,9 +64,11 @@
           success: function (getUserInfo) {
             if (getUserInfo.success == "1") {
               _this.status =  getUserInfo.status;
-              _this.inviteCode = getUserInfo.inviteCode;
+              _this.name = getUserInfo.name;
+              _this.corpName = getUserInfo.corpName;
+              _this.corpAddress = getUserInfo.corpAddress;
               _this.creditCode = getUserInfo.creditCode;
-              sessionStorage.setItem("driverMessage",JSON.stringify({
+              sessionStorage.setItem("ownerMessage",JSON.stringify({
                 licType: getUserInfo.licType,
                 name:  getUserInfo.name,
                 photo:  getUserInfo.photo,
@@ -119,42 +87,6 @@
             }
           }
         });
-        if(_this.status != 0){
-          $.ajax({
-            type: "POST",
-            url: androidIos.ajaxHttp() + "/getCarrAndCompanyInfo",
-            data: JSON.stringify({
-              userCode:sessionStorage.getItem("token"),
-              source:sessionStorage.getItem("source")
-            }),
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            timeout:10000,
-            success: function(findDriverInfo){
-              if(findDriverInfo.success == "1"){
-                _this.letterType = findDriverInfo.type == 3 ? 1: 2;
-                _this.name = findDriverInfo.userName.replace(/[0-9]/g,'');
-                _this.certification = findDriverInfo.ftpUrl + findDriverInfo.certification;
-                _this.IDpic = findDriverInfo.ftpUrl + findDriverInfo.idCardPos;
-                _this.IDpicfan = findDriverInfo.ftpUrl + findDriverInfo.idCardNeg;
-                _this.driverLicense = findDriverInfo.ftpUrl + findDriverInfo.drivingLicence;
-                _this.drivingLicence = findDriverInfo.ftpUrl + findDriverInfo.driverLicense;
-                _this.roadTransLicense = findDriverInfo.ftpUrl + findDriverInfo.roadTransLicense;
-                _this.corpName = findDriverInfo.corpName;
-                _this.ftp = findDriverInfo.ftpUrl;
-              }else{
-                androidIos.second(findDriverInfo.message);
-              }
-            },
-            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
-              if(status=='timeout'){//超时,status还有success,error等值的情况
-                androidIos.second("当前状况下网络状态差，请检查网络！")
-              }else if(status=="error"){
-                androidIos.errorwife();
-              }
-            }
-          });
-        }
         androidIos.bridge(_this);
       },
       methods:{
