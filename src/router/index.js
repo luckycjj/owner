@@ -2,6 +2,7 @@
 import forgetPassword from '@/components/loginBox/forgetPassword'
 import register from '@/components/loginBox/register'
 import aboutUs from '@/components/myBox/aboutUs'
+import addUser from '@/components/myBox/addUser'
 import setup from '@/components/myBox/setup'
 import suggestion from '@/components/myBox/suggestion'
 import settlement from '@/components/myBox/settlement'
@@ -108,6 +109,11 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/addUser',
+      name:'addUser',
+      component:addUser,
+    },
     {
       path:'/settlement',
       name:'settlement',

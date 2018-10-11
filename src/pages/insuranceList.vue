@@ -95,6 +95,7 @@
     top:1.3rem;
     bottom: 1.3rem;
     height: auto;
+    background: #f6f6f6;
   }
 </style>
 <style scoped>

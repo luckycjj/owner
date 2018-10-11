@@ -74,7 +74,7 @@
         },{
           name:"添加账号",
           icon:require("../images/associated.png"),
-          url:"/suggestion"
+          url:"/addUser"
         },{
           name:"扫码签收",
           icon:require("../images/saoyisao.png"),
