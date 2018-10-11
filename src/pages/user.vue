@@ -68,7 +68,7 @@
         tabList:[{
           name:"结算中心",
           icon:require("../images/settlementcenter.png"),
-          url:"/suggestion"
+          url:"/settlement"
         },{
           name:"添加账号",
           icon:require("../images/associated.png"),

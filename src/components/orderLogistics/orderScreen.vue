@@ -135,11 +135,11 @@
     setTimeout(function () {
       $.ajax({
         type: "POST",
-        url: androidIos.ajaxHttp() + "/order/loadEntrust",
+        url: androidIos.ajaxHttp() + "/order/loadInvoice",
         data:JSON.stringify({
           page:pageNum,
           size:pageSize,
-          type:2,
+          type:"1",
           state:"",
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
@@ -177,7 +177,7 @@
     width: 100%;
     position: absolute;
     top: 0;
-    height: 1.25rem;
+    height: 1.3rem;
     background: white;
   }
   #orderScreen .carTitleback{
@@ -207,7 +207,7 @@
     position: absolute;
     right:0;
     top:0;
-    line-height: 1.25rem;
+    line-height: 1.3rem;
     color:#333;
     margin-right: 2%;
     font-size: 0.35rem;

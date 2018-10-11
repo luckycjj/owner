@@ -21,6 +21,7 @@
     position: absolute;
     overflow: scroll;
     margin-top: 0.03125rem;
+    background-color: #f6f6f6;
   }
   #orderLogistics .set_image_all {
     cursor: pointer;

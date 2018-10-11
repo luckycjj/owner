@@ -44,7 +44,7 @@
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
         cookie = JSON.parse(cookie);
         sessionStorage.setItem("token",cookie.token);
-        _this.$router.push({ path: '/user'});
+        _this.$router.push({ path: '/trackList'});
       }else if(cookie == ""){
         _this.$router.push({ path: '/login'});
       }

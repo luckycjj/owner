@@ -4,6 +4,7 @@ import register from '@/components/loginBox/register'
 import aboutUs from '@/components/myBox/aboutUs'
 import setup from '@/components/myBox/setup'
 import suggestion from '@/components/myBox/suggestion'
+import settlement from '@/components/myBox/settlement'
 import changePassword from '@/components/myBox/changePassword'
 import statusNow from '@/components/myBox/statusNow'
 import login from '../pages/login'
@@ -107,6 +108,11 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/settlement',
+      name:'settlement',
+      component:settlement,
+    },
     {
       path:'/orderScreen',
       name:'orderScreen',
