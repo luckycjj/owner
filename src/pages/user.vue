@@ -105,6 +105,7 @@
     },
     mounted:function () {
       var _this = this;
+      sessionStorage.removeItem("settlementTap");
       var ownerMessage = sessionStorage.getItem("ownerMessage");
       if(ownerMessage != null) {
         ownerMessage = JSON.parse(ownerMessage);
