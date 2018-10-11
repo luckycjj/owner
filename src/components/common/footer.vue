@@ -36,7 +36,7 @@
                 marginRight:0,
                 cls: "insurance",
                 name: "保险",
-                push: "/insurance"
+                push: "/insuranceList"
               },
               {
                 number:0,

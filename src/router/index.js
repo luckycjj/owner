@@ -13,6 +13,7 @@ import newOrder from '../pages/newOrder'
 import calculator from '../pages/calculator'
 import orderLogistics from '../pages/orderLogistics'
 import uploadData from '../pages/uploadData'
+import insuranceList from '../pages/insuranceList'
 import signIn from  '../pages/signIn'
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -28,6 +29,7 @@ import  newOrder11 from '@/components/newOrder/addressMessage'
 import  newOrder12 from '@/components/newOrder/needKnow'
 import  orderLogisticsF from '@/components/orderLogistics/orderLogisticsMore'
 import  orderLogisticsS from '@/components/orderLogistics/map'
+import  orderScreen from '@/components/orderLogistics/orderScreen'
 import uploadDataF from '@/components/uploadData/pdf'
 Vue.use(Router);
 
@@ -105,6 +107,16 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/orderScreen',
+      name:'orderScreen',
+      component:orderScreen,
+    },
+    {
+      path:'/insuranceList',
+      name:'insuranceList',
+      component:insuranceList,
+    },
     {
       path:'/forgetPassword',
       name:'forgetPassword',

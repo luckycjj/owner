@@ -78,6 +78,7 @@
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             timeout: 30000,
+            async:false,
             success: function (login) {
               if (login.success == "1") {
                 sessionStorage.setItem("token",login.data.userCode);
@@ -95,6 +96,37 @@
             },
             complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
               $("#common-blackBox").remove();
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                androidIos.errorwife();
+              }
+            }
+          });
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "/getUserInfo",
+            data:JSON.stringify({
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (getUserInfo) {
+              if (getUserInfo.success == "1") {
+                sessionStorage.setItem("ownerMessage",JSON.stringify({
+                  licType: getUserInfo.licType,
+                  name:  getUserInfo.name,
+                  photo:  getUserInfo.photo,
+                  status:  getUserInfo.status,
+                  corpName:  getUserInfo.corpName,
+                }));
+              }else{
+                androidIos.second(getUserInfo.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
               if (status == 'timeout') { //超时,status还有success,error等值的情况
                 androidIos.second("当前状况下网络状态差，请检查网络！");
               } else if (status == "error") {
