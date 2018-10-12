@@ -438,7 +438,7 @@
                 }
               },10);
             }
-            if(self.pdlist[0].logistics.length > 0){
+            if(self.pdlist[0].logistics.length > 0 && self.$route.query.type != 2){
               var htmlFont = document.getElementsByTagName("html");
               var logisticsBox = document.getElementById("logisticsBox");
               var logisticsBoxFont = logisticsBox.firstChild.offsetHeight / htmlFont[0].style.fontSize.replace("px","");

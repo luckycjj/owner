@@ -136,6 +136,7 @@
               photo:  getUserInfo.photo,
               status:  getUserInfo.status,
               corpName:  getUserInfo.corpName,
+              role:getUserInfo.role,
             }));
           }else{
             androidIos.second(getUserInfo.message);

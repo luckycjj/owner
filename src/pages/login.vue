@@ -88,7 +88,7 @@
                 }),80);
                 _this.$cjj("登录成功");
                 setTimeout(function () {
-                  _this.$router.push({ path: '/user'});
+                  _this.$router.push({ path: '/trackList'});
                 },500)
               }else{
                 androidIos.second(login.message);
@@ -121,6 +121,7 @@
                   photo:  getUserInfo.photo,
                   status:  getUserInfo.status,
                   corpName:  getUserInfo.corpName,
+                  role:getUserInfo.role
                 }));
               }else{
                 androidIos.second(getUserInfo.message);
