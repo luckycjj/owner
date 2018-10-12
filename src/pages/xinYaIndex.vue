@@ -60,7 +60,7 @@
         <div id="bestDriver">
           <div class="driverTitle">
             <p><img src="../images/bestDriver.png">优秀司机</p>
-            <h1>更多</h1>
+            <h1 @click="lookMoreD(1)">更多</h1>
             <div class="clearBoth"></div>
           </div>
           <div id="bestDriverListbox">
@@ -197,6 +197,13 @@
           var _this = this;
           androidIos.addPageList();
           _this.$router.push({path:"/newOrder",query:{newordertrantype:type}})
+        },
+        lookMoreD:function (type) {
+          var _this = this;
+          androidIos.addPageList();
+          if(type == 1){
+            _this.$router.push({path:"/bestDriverList"});
+          }
         },
         scrollX:function () {
             var x = 0

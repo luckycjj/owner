@@ -8,6 +8,7 @@ import suggestion from '@/components/myBox/suggestion'
 import settlement from '@/components/myBox/settlement'
 import changePassword from '@/components/myBox/changePassword'
 import statusNow from '@/components/myBox/statusNow'
+import bestDriverList from '@/components/xinyaBox/bestDriverList'
 import login from '../pages/login'
 import user from '../pages/user'
 import trackList from '../pages/trackList'
@@ -110,6 +111,11 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/bestDriverList',
+      name:'bestDriverList',
+      component:bestDriverList,
+    },
     {
       path:'/xinYaIndex',
       name:'xinYaIndex',
