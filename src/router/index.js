@@ -17,7 +17,7 @@ import orderLogistics from '../pages/orderLogistics'
 import uploadData from '../pages/uploadData'
 import insuranceList from '../pages/insuranceList'
 import signIn from  '../pages/signIn'
-import xinyaIndex from  '../pages/xinyaIndex'
+import xinYaIndex from  '../pages/xinYaIndex'
 import Vue from 'vue'
 import Router from 'vue-router'
 import  newOrderF from '@/components/newOrder/newOrder'
@@ -111,9 +111,9 @@ Vue.filter('orderTypeName', function(value) {
 export default new Router({
   routes: [
     {
-      path:'/xinyaIndex',
-      name:'xinyaIndex',
-      component:xinyaIndex,
+      path:'/xinYaIndex',
+      name:'xinYaIndex',
+      component:xinYaIndex,
     },
     {
       path:'/addUser',

@@ -22,7 +22,7 @@
                 marginRight:0,
                 cls: "hall",
                 name: "大厅",
-                push: "/xinyaIndex"
+                push: "/xinYaIndex"
               },
               {
                 number:0,

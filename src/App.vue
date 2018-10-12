@@ -44,7 +44,7 @@
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
         cookie = JSON.parse(cookie);
         sessionStorage.setItem("token",cookie.token);
-        _this.$router.push({ path: '/trackList'});
+        _this.$router.push({ path: '/xinYaIndex'});
       }else if(cookie == ""){
         _this.$router.push({ path: '/login'});
       }
@@ -59,7 +59,7 @@
       }else{
         $("#appBox").show();
       }
-      if(_this.html.indexOf("/xinyaIndex") != -1 || _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+      if(_this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
         $(".carTitleback").hide();
       }else{
         $(".carTitleback").show();
@@ -90,7 +90,7 @@
         }else{
           $("#appBox").show();
         }
-        if(_this.html.indexOf("/xinyaIndex") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+        if(_this.html.indexOf("/xinYaIndex") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
           $(".carTitleback").hide();
         }else{
           $(".carTitleback").show();
