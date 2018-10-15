@@ -797,7 +797,7 @@
 
       },
       telphone:function(tel){
-        bridge.invoke('callTelephone',tel);
+        androidIos.telCall(tel);
       },
       payOrder:function () {
         var _this = this;

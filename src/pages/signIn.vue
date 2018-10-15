@@ -430,7 +430,7 @@
 
       },
       telphone:function () {
-        bridge.invoke('callTelephone',"50929122");
+        androidIos.telCall("50929122");
       },
       qianshou:function () {
         var _this = this ;
