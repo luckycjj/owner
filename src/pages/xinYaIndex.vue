@@ -46,7 +46,7 @@
             <div class="clearBoth"></div>
           </div>
           <ul>
-            <li v-for="(item,index) in bestCarrier" :style="{float:index % 2 == 1 ? 'right' : 'left'}"  @click="goCarrier(item.pkCarrier)">
+            <li v-for="(item,index) in bestCarrier" :style="{float:index % 2 == 1 ? 'right' : 'left'}">
               <img :src="item.carrierImg" :onerror="errorlogo1" >
               <p>{{item.corpName}}</p>
               <div class="pinList">
@@ -66,7 +66,7 @@
           <div id="bestDriverListbox">
             <div id="bestDriverList">
               <ul>
-                <li v-for="(item,indexs) in bestDriver" :style="{marginRight:indexs == bestDriver.length - 1 ? '0' : '0.56rem' }" @click="goDriver(item.pkDriver)">
+                <li v-for="(item,indexs) in bestDriver" :style="{marginRight:indexs == bestDriver.length - 1 ? '0' : '0.56rem' }">
                   <img :src="item.driverImg"  :onerror="errorlogo1" >
                 </li>
               </ul>
@@ -92,6 +92,7 @@
              bestCarrier:[],
              bestDriver:[],
              cookie:"",
+             indexscroll:"",
              errorlogo: 'this.src="' + require('../images/timg.jpg') + '"',
              errorlogo1: 'this.src="' + require('../images/userImg.png') + '"',
            }
@@ -103,9 +104,9 @@
           androidIos.bridge(_this);
       },
       methods:{
-          go:function () {
+        go:function () {
             var _this = this;
-            $.ajax({
+            var ajax1 =  $.ajax({
               type: "POST",
               url: androidIos.ajaxHttp() + "/settings/getBanner",
               data:JSON.stringify({
@@ -134,7 +135,7 @@
                 }
               }
             });
-            $.ajax({
+            var ajax2 =  $.ajax({
               type: "POST",
               url: androidIos.ajaxHttp() + "/carrier/getCarrierPage",
               data:JSON.stringify({
@@ -164,7 +165,7 @@
                 }
               }
             });
-            $.ajax({
+            var ajax3 = $.ajax({
               type: "POST",
               url: androidIos.ajaxHttp() + "/driver/getDriverPage",
               data:JSON.stringify({
@@ -194,11 +195,24 @@
                 }
               }
             });
+            Promise.all([ajax1, ajax2, ajax3]).then(function(values) {
+              var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
+              if(INDEXSCROLLTOP != null){
+                $("#xinYaIndexBox").animate({scrollTop: INDEXSCROLLTOP}, 0);
+                sessionStorage.removeItem("INDEXSCROLLTOP");
+              }
+            })
           },
+        getPageScroll:function() {
+          var  yScroll;
+          yScroll = document.getElementById("xinYaIndexBox").scrollTop;
+          sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
+        },
         gonewOrder:function (type) {
           var _this = this;
           if(_this.cookie != ""){
             androidIos.addPageList();
+            _this.getPageScroll();
             _this.$router.push({path:"/newOrder",query:{newordertrantype:type}});
           }else if(_this.cookie == ""){
             androidIos.first("尚未登录,请登录！");
@@ -212,6 +226,7 @@
           var _this = this;
           if(_this.cookie != ""){
             androidIos.addPageList();
+            _this.getPageScroll();
             _this.$router.push({path:"/bestDriverMore",query:{pk:pk}});
           }else if(_this.cookie == ""){
             androidIos.first("尚未登录,请登录！");
@@ -225,6 +240,7 @@
           var _this = this;
           if(_this.cookie != ""){
             androidIos.addPageList();
+            _this.getPageScroll();
             _this.$router.push({path:"/bestCarrierMore",query:{pk:pk}});
           }else if(_this.cookie == ""){
             androidIos.first("尚未登录,请登录！");
@@ -238,6 +254,7 @@
           var _this = this;
           if(_this.cookie != ""){
             androidIos.addPageList();
+            _this.getPageScroll();
             if(type == 0){
               _this.$router.push({path:"/bestCarrierList"});
             }else if(type == 1){

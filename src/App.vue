@@ -11,6 +11,7 @@
           <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
           <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
           <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
+          <div id="messageLD" class="asd"  v-if="doNow == 7" @click="messageLD()"></div>
         </div>
         <div id="table"></div>
       </div>
@@ -76,6 +77,8 @@
         _this.doNow = 5;
       }else if( _this.html.indexOf("/trackList") != -1){
         _this.doNow = 6;
+      }else if( _this.html.indexOf("/xinYaIndex") != -1){
+        _this.doNow = 7;
       }else{
         _this.doNow = "";
       }
@@ -107,6 +110,8 @@
           _this.doNow = 5;
         }else if( _this.html.indexOf("/trackList") != -1){
           _this.doNow = 6;
+        }else if( _this.html.indexOf("/xinYaIndex") != -1){
+          _this.doNow = 7;
         }else{
           _this.doNow = "";
         }
@@ -443,6 +448,14 @@
     height: 1.3rem;
     width:1rem;
     background-size: 0.7rem;
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+  }
+  #messageLD{
+    background-image: url("./images/messageLD.png");
+    height: 1.3rem;
+    width:1rem;
+    background-size: 0.375rem;
     background-repeat: no-repeat;
     background-position: 100% 50%;
   }

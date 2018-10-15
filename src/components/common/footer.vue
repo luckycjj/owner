@@ -130,6 +130,10 @@
         urlGoshow:function (url) {
             var _this = this;
             if(_this.cookie != ""){
+              if(_this.idx == 0){
+                var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
+                sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
+              }
               _this.$router.push({path:url});
             }else if(_this.cookie == ""){
               androidIos.first("尚未登录,请登录！");

@@ -3,7 +3,7 @@
     <div id="title" v-title data-title="优秀司机"></div>
     <div id="mescroll" class="mescroll" :style="{bottom : manage && productPk == ''?'1.2rem':0}">
       <ul id="dataList" class="data-list">
-        <li v-for="(item,index) in pdlist" @click="goDriver(item.carPeoplePk)">
+        <li v-for="(item,index) in pdlist">
           <div id="peopleMessage">
             <div class="imgBoxOverFllow">
               <img :src="item.pic" :onerror="errorlogo" class="peopleImg">
