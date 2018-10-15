@@ -60,7 +60,7 @@
       }else{
         $("#appBox").show();
       }
-      if(_this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+      if(_this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/login") != -1){
         $(".carTitleback").hide();
       }else{
         $(".carTitleback").show();
@@ -99,7 +99,7 @@
         }else{
           $("#appBox").show();
         }
-        if(_this.html.indexOf("/xinYaIndex") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/message") != -1  || _this.html.indexOf("/login") != -1){
+        if(_this.html.indexOf("/xinYaIndex") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/login") != -1){
           $(".carTitleback").hide();
         }else{
           $(".carTitleback").show();
@@ -152,6 +152,18 @@
         var cookie = androidIos.getcookie("MESSAGEDRIVER");
         if(cookie != "") {
           androidIos.messageSite(2);
+          $("#sitechoosesite").unbind("click").click(function () {
+            androidIos.addPageList();
+            var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
+            sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
+            _this.$router.push({path:"/logicsOrder"});
+          })
+          $("#sitedismantling").unbind("click").click(function () {
+            androidIos.addPageList();
+            var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
+            sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
+            _this.$router.push({path:"/messageList"});
+          })
           var  messageCount = sessionStorage.getItem("messageCount");
           if(messageCount != undefined && messageCount > 0){
             $("#sitechoosesite span").show();

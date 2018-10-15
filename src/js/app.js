@@ -482,7 +482,7 @@ var androidIos = {
       }
       document.getElementsByTagName("body")[0].onclick = function (e) {
         var id = e.target.id;
-        if( id != "siteLook" && id != "messageLD" ){
+        if( id != "siteLook" && id != "messageLD" && id != "messageLDTX" ){
           var body = document.getElementsByTagName("body")[0];
           var listDom=document.getElementById("siteLook");
           if(listDom != null){

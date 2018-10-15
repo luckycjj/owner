@@ -11,6 +11,8 @@ import statusNow from '@/components/myBox/statusNow'
 import bestDriverList from '@/components/xinyaBox/bestDriverList'
 import bestDriverMore from '@/components/xinyaBox/bestDriverMore'
 import bestCarrierMore from '@/components/xinyaBox/bestCarrierMore'
+import logicsOrder from '@/components/xinyaBox/logicsOrder'
+import messageList from '@/components/xinyaBox/messageList'
 import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
 import login from '../pages/login'
 import user from '../pages/user'
@@ -114,6 +116,16 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+  {
+    path:'/logicsOrder',
+    name:'logicsOrder',
+    component:logicsOrder,
+  },
+    {
+      path:'/messageList',
+      name:'messageList',
+      component:messageList,
+    },
     {
       path:'/bestCarrierMore',
       name:'bestCarrierMore',
