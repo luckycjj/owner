@@ -42,11 +42,11 @@
         <div id="bestCarrier">
           <div class="carrierTitle">
             <p><img src="../images/bestCarrier.png">优秀承运商</p>
-            <h1>更多</h1>
+            <h1 @click="lookMoreD(0)">更多</h1>
             <div class="clearBoth"></div>
           </div>
           <ul>
-            <li v-for="(item,index) in bestCarrier" :style="{float:index % 2 == 1 ? 'right' : 'left'}">
+            <li v-for="(item,index) in bestCarrier" :style="{float:index % 2 == 1 ? 'right' : 'left'}"  @click="goCarrier(item.pkCarrier)">
               <img :src="item.carrierImg" :onerror="errorlogo1" >
               <p>{{item.corpName}}</p>
               <div class="pinList">
@@ -66,7 +66,7 @@
           <div id="bestDriverListbox">
             <div id="bestDriverList">
               <ul>
-                <li v-for="(item,indexs) in bestDriver" :style="{marginRight:indexs == bestDriver.length - 1 ? '0' : '0.56rem' }">
+                <li v-for="(item,indexs) in bestDriver" :style="{marginRight:indexs == bestDriver.length - 1 ? '0' : '0.56rem' }" @click="goDriver(item.pkDriver)">
                   <img :src="item.driverImg"  :onerror="errorlogo1" >
                 </li>
               </ul>
@@ -91,6 +91,7 @@
              banner:[],
              bestCarrier:[],
              bestDriver:[],
+             cookie:"",
              errorlogo: 'this.src="' + require('../images/timg.jpg') + '"',
              errorlogo1: 'this.src="' + require('../images/userImg.png') + '"',
            }
@@ -98,6 +99,7 @@
       mounted:function () {
           var _this = this;
           sessionStorage.removeItem("NEWORDERTRANTYPE");
+          _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
           androidIos.bridge(_this);
       },
       methods:{
@@ -195,15 +197,60 @@
           },
         gonewOrder:function (type) {
           var _this = this;
-          androidIos.addPageList();
-          _this.$router.push({path:"/newOrder",query:{newordertrantype:type}})
+          if(_this.cookie != ""){
+            androidIos.addPageList();
+            _this.$router.push({path:"/newOrder",query:{newordertrantype:type}});
+          }else if(_this.cookie == ""){
+            androidIos.first("尚未登录,请登录！");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              _this.$router.push({path:"/login"});
+            });
+          }
+        },
+        goDriver:function (pk) {
+          var _this = this;
+          if(_this.cookie != ""){
+            androidIos.addPageList();
+            _this.$router.push({path:"/bestDriverMore",query:{pk:pk}});
+          }else if(_this.cookie == ""){
+            androidIos.first("尚未登录,请登录！");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              _this.$router.push({path:"/login"});
+            });
+          }
+        },
+        goCarrier:function (pk) {
+          var _this = this;
+          if(_this.cookie != ""){
+            androidIos.addPageList();
+            _this.$router.push({path:"/bestCarrierMore",query:{pk:pk}});
+          }else if(_this.cookie == ""){
+            androidIos.first("尚未登录,请登录！");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              _this.$router.push({path:"/login"});
+            });
+          }
         },
         lookMoreD:function (type) {
           var _this = this;
-          androidIos.addPageList();
-          if(type == 1){
-            _this.$router.push({path:"/bestDriverList"});
+          if(_this.cookie != ""){
+            androidIos.addPageList();
+            if(type == 0){
+              _this.$router.push({path:"/bestCarrierList"});
+            }else if(type == 1){
+              _this.$router.push({path:"/bestDriverList"});
+            }
+          }else if(_this.cookie == ""){
+            androidIos.first("尚未登录,请登录！");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              _this.$router.push({path:"/login"});
+            });
           }
+
         },
         scrollX:function () {
             var x = 0

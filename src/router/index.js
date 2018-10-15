@@ -9,6 +9,9 @@ import settlement from '@/components/myBox/settlement'
 import changePassword from '@/components/myBox/changePassword'
 import statusNow from '@/components/myBox/statusNow'
 import bestDriverList from '@/components/xinyaBox/bestDriverList'
+import bestDriverMore from '@/components/xinyaBox/bestDriverMore'
+import bestCarrierMore from '@/components/xinyaBox/bestCarrierMore'
+import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
 import login from '../pages/login'
 import user from '../pages/user'
 import trackList from '../pages/trackList'
@@ -111,6 +114,21 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/bestCarrierMore',
+      name:'bestCarrierMore',
+      component:bestCarrierMore,
+    },
+    {
+      path:'/bestCarrierList',
+      name:'bestCarrierList',
+      component:bestCarrierList,
+    },
+    {
+      path:'/bestDriverMore',
+      name:'bestDriverMore',
+      component:bestDriverMore,
+    },
     {
       path:'/bestDriverList',
       name:'bestDriverList',

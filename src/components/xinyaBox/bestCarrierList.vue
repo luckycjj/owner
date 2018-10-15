@@ -1,18 +1,18 @@
 <template>
-  <div id="bestDriverList">
-    <div id="title" v-title data-title="优秀司机"></div>
+  <div id="bestCarrierList">
+    <div id="title" v-title data-title="优秀承运商"></div>
     <div id="mescroll" class="mescroll" :style="{bottom : manage && productPk == ''?'1.2rem':0}">
       <ul id="dataList" class="data-list">
-        <li v-for="(item,index) in pdlist" @click="goDriver(item.carPeoplePk)">
+        <li v-for="(item,index) in pdlist" @click="goCarrier(item.pkCarrier)">
           <div id="peopleMessage">
             <div class="imgBoxOverFllow">
-              <img :src="item.pic" :onerror="errorlogo" class="peopleImg">
+              <img :src="item.carrierImg" :onerror="errorlogo" class="peopleImg">
             </div>
             <div class="peoplemessage">
-              <p>{{item.name}}</p>
+              <p>{{item.corpName}}</p>
               <div :id="'star_grade' + index" class="star_grade"></div>
-              <h2> 驾驶证等级：{{item.licType}}</h2>
-              <h1>驾龄：{{item.year}}年 </h1>
+              <h2> {{item.tranType}}</h2>
+              <h1 v-html="item.addtime < 1 ? '小于1年' : Math.floor(item.addtime) + '年'"></h1>
               <div class="clearBoth"></div>
             </div>
             <div class="clearBoth"></div>
@@ -32,7 +32,7 @@
   import  "../../js/markingSystem";
   var thisThat;
   export default {
-    name: "bestDriverList",
+    name: "bestCarrierList",
     data(){
       return{
         pdlist:[],
@@ -61,12 +61,12 @@
             callback: self.upCallback, //上拉回调
             isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
             page: {
-              size: 12, //每页数据的数量
+              size: 10, //每页数据的数量
             },
             empty:{
               warpId:'mescroll',
               icon:require('../../images/nojilu.png'),
-              tip:"暂无司机~"
+              tip:"暂无承运商~"
             }
           },
           down: {
@@ -99,7 +99,7 @@
                 backgroundImageInitial:require('../../images/star_hollow.png'),
                 backgroundImageOver:require('../../images/star_solid.png'),
                 unit: '星',
-                grade:self.pdlist[i].score==null ? 0 : self.pdlist[i].source * 1,
+                grade:self.pdlist[i].score==null ? 0 : self.pdlist[i].score * 1,
                 height: 0.4* $("html").css("font-size").replace("px", ""),
                 width: 0.4* $("html").css("font-size").replace("px", ""),
               });
@@ -112,10 +112,10 @@
           self.mescroll.endErr();
         });
       },
-      goDriver:function (pk) {
+      goCarrier:function (pk) {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({path:"/bestDriverMore",query:{pk:pk}});
+        _this.$router.push({path:"/bestCarrierMore",query:{pk:pk}});
       },
     }
   }
@@ -124,7 +124,7 @@
     setTimeout(function () {
       $.ajax({
         type: "POST",
-        url: androidIos.ajaxHttp() + "/driver/getDriverPage",
+        url: androidIos.ajaxHttp() + "/carrier/getCarrierPage",
         data: JSON.stringify({
           pk: "",
           page:pageNum,
@@ -135,32 +135,18 @@
         contentType: "application/json;charset=utf-8",
         dataType: "json",
         timeout: 30000,
-        success: function (getDriverPage) {
+        success: function (getCarrierPage) {
           var listData = [];
-          if(getDriverPage.success == "1" || getDriverPage.success == ""){
-            for(var i = 0 ; i < getDriverPage.list.length ; i++){
-              var list = getDriverPage.list[i];
-              if(list.pkDriver == thisThat.$route.query.driverZ ){
-                continue;
-              }
-              var pkTrue = false;
-              if(list.pkDriver == thisThat.$route.query.driverPk){
-                pkTrue = true;
-              }
-              var json = {
-                pkTrue:pkTrue,
-                carPeoplePk:list.pkDriver,
-                tel:list.mobile,
-                name:list.driverName,
-                licType:list.licType == "" || list.licType == undefined || list.licType == null ? "暂无" : list.licType + "级别",
-                year:list.driverAge*1<1?"小于1":list.driverAge*1,
-                pic:list.driverImg,
-              }
-              listData.push(json)
+          if(getCarrierPage.success == "1" || getCarrierPage.success == ""){
+            for(var i = 0 ; i < getCarrierPage.list.length ; i ++ ){
+               var time =  getCarrierPage.list[i].createDate.replace(/-/g,'/');
+               var addtime = (new Date()).getTime() - (new Date(time)).getTime();
+               getCarrierPage.list[i].addtime = addtime/1000/60/60/24/365;
             }
+            listData = getCarrierPage.list;
             successCallback&&successCallback(listData);//成功回调
           }else{
-            androidIos.second(getDriverPage.message);
+            androidIos.second(getCarrierPage.message);
             successCallback&&successCallback(listData);//成功回调
           }
         },
@@ -181,46 +167,46 @@
 <style>
   @import "../../css/mescroll.css";
   @import "../../css/scroll.css";
-  #bestDriverList .set_image_all {
+  #bestCarrierList .set_image_all {
     cursor: pointer;
     position: relative;
   }
-  #bestDriverList .set_image_top div{
+  #bestCarrierList .set_image_top div{
     position: relative;
   }
-  #bestDriverList .star_grade{
+  #bestCarrierList .star_grade{
     margin-top: 0.25rem;
   }
-  #bestDriverList .set_image_top img{
+  #bestCarrierList .set_image_top img{
     position: absolute;
     top:0;
     left:0;
     height:100%;
     width:0.4rem!important;
   }
-  #bestDriverList .set_image_all .set_image_item {
+  #bestCarrierList .set_image_all .set_image_item {
     position: relative;
     display: inline-block;
     z-index: 11;
     visibility: visible;
   }
 
-  #bestDriverList .set_image_all .set_image_top {
+  #bestCarrierList .set_image_all .set_image_top {
     position: absolute;
     left: 0;
     top: 0;
     z-index: 13;
   }
 
-  #bestDriverList .set_image_all .set_image_top>div {
+  #bestCarrierList .set_image_all .set_image_top>div {
     display: inline-block;
     overflow: hidden;
   }
 
-  #bestDriverList .set_image_all .set_image_top>div>img {
+  #bestCarrierList .set_image_all .set_image_top>div>img {
     height: 100%;
   }
-  #bestDriverList .grade {
+  #bestCarrierList .grade {
     vertical-align: top;
     font-size: 0.3125rem;
     line-height:0.4rem ;
@@ -228,7 +214,7 @@
   }
 </style>
 <style scoped>
-  #bestDriverList{
+  #bestCarrierList{
     position:absolute;
     top:1.3rem;
     bottom:0;
@@ -236,12 +222,12 @@
     width:100%;
     background: #f6f6f6;
   }
-  #bestDriverList ul{
+  #bestCarrierList ul{
     width:100%;
     background: white;
     margin-top: 0.2rem;
   }
-  #bestDriverList #newCar{
+  #bestCarrierList #newCar{
     width:100%;
     height: 1.2rem;
     color:white;
@@ -253,59 +239,61 @@
     left:0;
     font-size: 0.4rem;
   }
-  #bestDriverList li{
+  #bestCarrierList li{
     width: 100%;
     border-bottom: 1px solid #dadada;
   }
-  #bestDriverList #peopleMessage{
+  #bestCarrierList #peopleMessage{
     width:94%;
     padding:0.36rem 0.76rem 0.36rem 0.42rem;
     background: white;
   }
-  #bestDriverList #peopleMessage .peopleImg{
+  #bestCarrierList #peopleMessage .peopleImg{
     width:100%;
   }
-  #bestDriverList #peopleMessage .peoplemessage{
+  #bestCarrierList #peopleMessage .peoplemessage{
     float: left;
     margin-left: 0.44rem;
     width:7rem;
   }
-  #bestDriverList #peopleMessage .peoplemessage p{
+  #bestCarrierList #peopleMessage .peoplemessage p{
     font-size: 0.375rem;
     line-height: 0.375rem;
     color:#333;
   }
-  #bestDriverList #peopleMessage .peoplemessage h1{
+  #bestCarrierList #peopleMessage .peoplemessage h1{
     font-size: 0.32rem;
-    line-height: 0.32rem;
-    margin-top: 0.2rem;
-    color:#373737;
-    float: right;
-  }
-  #bestDriverList #peopleMessage .peoplemessage h2{
-    font-size: 0.32rem;
-    line-height: 0.32rem;
-    margin-top: 0.2rem;
+    line-height: 0.4rem;
+    margin-top: 0.19rem;
     color:#373737;
     float: left;
+    margin-left: 0.2rem;
   }
-  #bestDriverList  #peopleMessage .tel{
+  #bestCarrierList #peopleMessage .peoplemessage h2{
+    font-size: 0.32rem;
+    line-height: 0.4rem;
+    margin-top: 0.19rem;
+    color:#373737;
+    float: left;
+    max-width: 5.6rem;
+  }
+  #bestCarrierList  #peopleMessage .tel{
     width:1.2rem;
     float: right;
     margin-top: 0.3rem;
   }
-  #bestDriverList #peopleMessage .tel img{
+  #bestCarrierList #peopleMessage .tel img{
     display: block;
     margin: 0 auto;
     width:0.6rem;
   }
-  #bestDriverList .mescroll{
+  #bestCarrierList .mescroll{
     position: fixed;
     top:1.3rem;
     bottom: 0;
     height: auto;
   }
-  #bestDriverList .imgBoxOverFllow{
+  #bestCarrierList .imgBoxOverFllow{
     width:1.68rem;
     height:1.68rem;
     overflow: hidden;
@@ -313,7 +301,7 @@
     border-radius: 50%;
     line-height: 1.2rem
   }
-  #bestDriverList .imgBoxOverFllow img{
+  #bestCarrierList .imgBoxOverFllow img{
     display: inline-block;
     vertical-align: middle;
     width:1.68rem;

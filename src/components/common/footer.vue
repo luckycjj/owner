@@ -1,7 +1,7 @@
 <template>
   <div id="footer">
     <ul>
-      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="$router.push(item.push)">
+      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)">
         <div class="imgBox"  :class='[ item.cls , {imgSure:index === idx} ]'><div :style="{marginRight:item.marginRight}" class="corner" v-show=" item.number > 0">{{item.number}}</div></div>
         {{item.name}}
       </li>
@@ -17,6 +17,7 @@
         name: "footer",
         data() {
           return {
+            cookie:"",
             items: [{
                 number:0,
                 marginRight:0,
@@ -52,11 +53,11 @@
         mounted:function () {
           var _this = this;
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
+          _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
           if(driverBottomIcon != undefined){
             _this.items = JSON.parse(driverBottomIcon);
           }
           androidIos.bridge(_this);
-
         },
       methods:{
           go:function () {
@@ -126,6 +127,18 @@
               });
             }
           },
+        urlGoshow:function (url) {
+            var _this = this;
+            if(_this.cookie != ""){
+              _this.$router.push({path:url});
+            }else if(_this.cookie == ""){
+              androidIos.first("尚未登录,请登录！");
+              $(".tanBox-yes").unbind('click').click(function(){
+                $(".tanBox-bigBox").remove();
+                _this.$router.push({path:"/login"});
+              });
+            }
+        },
         marginWidth:function () {
           var _this = this;
           var corner = document.getElementsByClassName("corner");

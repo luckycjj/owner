@@ -46,7 +46,7 @@
         sessionStorage.setItem("token",cookie.token);
         _this.$router.push({ path: '/xinYaIndex'});
       }else if(cookie == ""){
-        _this.$router.push({ path: '/login'});
+        _this.$router.push({ path: '/xinYaIndex'});
       }
       androidIos.bridge(_this);
     },
