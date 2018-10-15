@@ -17,7 +17,7 @@
       <ul>
         <li @click="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
           <div class="tableIcon" :style="{backgroundImage:'url(' + item.icon + ')'}"></div>
-          <p>{{item.name}}</p>
+          <p>{{item.name}}<span v-if="item.number > 0">{{item.number}}</span></p>
           <div class="lookMore"></div>
           <div class="clearBoth"></div>
           <input type="file" class="saoyisao"  @change="jiexi($event)" v-if="(item.name).indexOf('扫') != -1">
@@ -70,35 +70,43 @@
         tabList:[{
           name:"结算中心",
           icon:require("../images/settlementcenter.png"),
-          url:"/settlement"
+          url:"/settlement",
+          number:0,
         },{
           name:"添加账号",
           icon:require("../images/associated.png"),
-          url:"/addUser"
+          url:"/addUser",
+          number:0,
         },{
           name:"扫码签收",
           icon:require("../images/saoyisao.png"),
-          url:""
+          url:"",
+          number:0,
         },{
           name:"地址管理",
           icon:require("../images/addressmanagement.png"),
-          url:"/newOrder/addressMessage?type=1"
+          url:"/newOrder/addressMessage?type=1",
+          number:0,
         },{
           name:"分享",
           icon:require("../images/share.png"),
-          url:""
+          url:"",
+          number:0,
         },{
           name:"建议反馈",
           icon:require("../images/feedback.png"),
-          url:"/suggestion"
+          url:"/suggestion",
+          number:0,
         },{
           name:"关于我们",
           icon:require("../images/aboutUs.png"),
-          url:"/aboutUs"
+          url:"/aboutUs",
+          number:0,
         },{
           name:"新手指引",
           icon:require("../images/noviceguidance.png"),
-          url:"/noviceguidance"
+          url:"/noviceguidance",
+          number:0,
         }],
         errorlogo: 'this.src="' + require('../images/userImg.png') + '"',
         httpurl:"",
@@ -150,7 +158,31 @@
           }
         }
       });
-
+      $.ajax({
+        type: "POST",
+        url: androidIos.ajaxHttp() + "/order/getPayCount",
+        data:JSON.stringify({
+          userCode:sessionStorage.getItem("token"),
+          source:sessionStorage.getItem("source")
+        }),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        timeout: 30000,
+        success: function (getPayCount) {
+          if (getPayCount.success == "1") {
+            _this.tabList[0].number = getPayCount.paied*1 + getPayCount.unPaied*1;
+          }else{
+            androidIos.second(getPayCount.message);
+          }
+        },
+        complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+          if (status == 'timeout') { //超时,status还有success,error等值的情况
+            androidIos.second("当前状况下网络状态差，请检查网络！");
+          } else if (status == "error") {
+            androidIos.errorwife();
+          }
+        }
+      });
       androidIos.bridge(_this);
     },
     methods:{
@@ -475,6 +507,15 @@
     color:#373737;
     font-size: 0.375rem;
     margin-left: 0.27rem;
+  }
+  li p span{
+    color:#373737;
+    font-size: 0.3125rem;
+    margin-left: 0.27rem;
+    color:white;
+    background: #2c9cff;
+    padding: 0.05rem 0.15rem;
+    border-radius: 0.25rem;
   }
   .marTop{
     margin-top: 0.27rem;

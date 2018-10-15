@@ -417,6 +417,82 @@ var androidIos = {
     }
 
   },
+  messageSite:function (type) {
+    // 0 拆段 1 拆量 2全部
+    var body = document.getElementsByTagName("body")[0];
+    var site = document.getElementById("siteLook");
+    if(site != null){
+      body.removeChild(site);
+    }else{
+      var listDom=document.createElement("ul");
+      listDom.id = "siteLook";
+      var listBox = "";
+      if(type == 0){
+        listBox = "<li class='sitechoose' id='sitechoosesite'>运单消息</li>";
+      }else if(type == 1){
+        listBox = "<li class='sitechoose' id='sitedismantling'>系统消息</li>";
+      }else if(type == 2){
+        for(var i = 0 ; i < 2 ; i ++ ){
+          var id = i ==0 ? "sitechoosesite" : "sitedismantling";
+          var name = i ==0 ? "运单消息" : "系统消息";
+          var spanBottom = i== 0 ? "<span style='position: absolute;right:0.1rem;color:white;background: #2c9cff;padding: 0.05rem 0.15rem;border-radius: 0.25rem;'></span>" : "";
+          var list = "<li class='sitechoose' id='" + id + "'>" + name + spanBottom + "<div class='clearBoth'></div></li>";
+          if(i == 0){
+             list += "<div style='width:60%;margin-left: 40%;height:1px;background:#E1E1E1; '></div>"
+          }
+          listBox += list;
+        }
+      }
+      listDom.innerHTML =  listBox ;
+      body.appendChild(listDom);
+      var style = listDom.style;
+      var styleClass = document.getElementsByClassName("sitechoose")[0].style;
+      var styleClass2 = "";
+      if(document.getElementsByClassName("sitechoose").length > 1){
+        styleClass2 = document.getElementsByClassName("sitechoose")[1].style;
+      }
+      style.position = "fixed";
+      style.zIndex = "12";
+      style.width = "4.6rem";
+      style.boxShadow = "0 0 0.04rem #cacaca";
+      style.background = "white";
+      style.top = "1.3rem";
+      style.right = "0.3rem";
+      style.borderRadius = "0.1rem";
+      styleClass.width = "60%";
+      styleClass.position = "relative";
+      styleClass.color = "#424242";
+      styleClass.textAlign = "left";
+      styleClass.padding = "0.35rem 0 0.35rem 40%";
+      styleClass.fontSize = "0.4rem";
+      styleClass.backgroundImage = "url('" + require("../images/indexCarmessage.png") +"')";
+      styleClass.backgroundSize = "0.7rem";
+      styleClass.backgroundPosition = "20% 50%";
+      styleClass.backgroundRepeat = "no-repeat";
+      if(document.getElementsByClassName("sitechoose").length > 1){
+        styleClass2.width = "60%";
+        styleClass2.color = "#424242";
+        styleClass2.textAlign = "left";
+        styleClass2.padding = "0.35rem 0 0.35rem 40%";
+        styleClass2.fontSize = "0.4rem";
+        styleClass2.backgroundImage = "url('" + require("../images/indexAppmessage.png") +"')";
+        styleClass2.backgroundSize = "0.7rem";
+        styleClass2.backgroundPosition = "20% 50%";
+        styleClass2.backgroundRepeat = "no-repeat";
+      }
+      document.getElementsByTagName("body")[0].onclick = function (e) {
+        var id = e.target.id;
+        if( id != "siteLook" && id != "messageLD" ){
+          var body = document.getElementsByTagName("body")[0];
+          var listDom=document.getElementById("siteLook");
+          if(listDom != null){
+            body.removeChild(listDom);
+          }
+        }
+      }
+    }
+
+  },
   numAdd:function(num1, num2) {
     //加法精度
     var baseNum, baseNum1, baseNum2;

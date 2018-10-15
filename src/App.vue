@@ -11,7 +11,7 @@
           <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
           <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
           <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
-          <div id="messageLD" class="asd"  v-if="doNow == 7" @click="messageLD()"></div>
+          <div id="messageLD" class="asd"  v-if="doNow == 7" @click="messageLD()"><div id="messageLDTX"></div></div>
         </div>
         <div id="table"></div>
       </div>
@@ -79,6 +79,12 @@
         _this.doNow = 6;
       }else if( _this.html.indexOf("/xinYaIndex") != -1){
         _this.doNow = 7;
+        var  messageCount = sessionStorage.getItem("messageCount");
+        if(messageCount != undefined && messageCount > 0){
+          $("#messageLDTX").show();
+        }else{
+          $("#messageLDTX").hide();
+        }
       }else{
         _this.doNow = "";
       }
@@ -112,6 +118,12 @@
           _this.doNow = 6;
         }else if( _this.html.indexOf("/xinYaIndex") != -1){
           _this.doNow = 7;
+          var  messageCount = sessionStorage.getItem("messageCount");
+          if(messageCount != undefined && messageCount > 0){
+            $("#messageLDTX").show();
+          }else{
+            $("#messageLDTX").hide();
+          }
         }else{
           _this.doNow = "";
         }
@@ -135,6 +147,59 @@
         androidIos.addPageList();
         _this.$router.push({ path: "/orderScreen"});
       },
+      messageLD:function () {
+        var _this = this;
+        var cookie = androidIos.getcookie("MESSAGEDRIVER");
+        if(cookie != "") {
+          androidIos.messageSite(2);
+          var  messageCount = sessionStorage.getItem("messageCount");
+          if(messageCount != undefined && messageCount > 0){
+            $("#sitechoosesite span").show();
+            $("#sitechoosesite span").text(messageCount);
+            sessionStorage.removeItem("messageCount");
+          }else{
+            $("#sitechoosesite span").hide();
+          }
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "/order/messageCount",
+            data: JSON.stringify({
+              userCode: sessionStorage.getItem("token"),
+              source: sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (driverBottomIcon) {
+              if (driverBottomIcon.success == "1") {
+                if(driverBottomIcon.count > 0){
+                  $("#sitechoosesite span").show();
+                  $("#sitechoosesite span").text(messageCount);
+                  sessionStorage.setItem("messageCount", driverBottomIcon.count * 1);
+                }else{
+                  $("#sitechoosesite span").hide();
+                }
+              } else {
+                androidIos.second(driverBottomIcon.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                androidIos.errorwife();
+              }
+            }
+          });
+        }else if(cookie == ""){
+          androidIos.first("尚未登录,请登录！");
+          $(".tanBox-yes").unbind('click').click(function(){
+            $(".tanBox-bigBox").remove();
+            _this.$router.push({path:"/login"});
+          });
+        }
+
+      }
     }
   }
 </script>
@@ -458,5 +523,15 @@
     background-size: 0.375rem;
     background-repeat: no-repeat;
     background-position: 100% 50%;
+  }
+  #messageLDTX{
+    position: absolute;
+    width:0.18rem;
+    height: 0.18rem;
+    border-radius: 50%;
+    background: #E1473C;
+    top:0.40rem;
+    right:0;
+    display:none;
   }
 </style>
