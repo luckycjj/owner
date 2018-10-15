@@ -10,8 +10,10 @@
             </div>
             <div class="peoplemessage">
               <p>{{item.name}}</p>
+              <div :id="'star_grade' + index" class="star_grade"></div>
+              <h2> 驾驶证等级：{{item.licType}}</h2>
               <h1>驾龄：{{item.year}}年 </h1>
-              <h1> 驾驶证等级：{{item.licType}}</h1>
+              <div class="clearBoth"></div>
             </div>
             <div class="clearBoth"></div>
           </div>
@@ -27,6 +29,7 @@
   import {androidIos} from "../../js/app";
   import bridge from '../../js/bridge';
   import {bomb} from "../../js/zujian";
+  import  "../../js/markingSystem";
   var thisThat;
   export default {
     name: "bestDriverList",
@@ -84,6 +87,25 @@
           //更新列表数据
           self.pdlist = self.pdlist.concat(curPageData);
           self.mescroll.endSuccess(curPageData.length);
+          self.$nextTick(function () {
+            var num = page.num;
+            var size = page.size;
+            for(var i = 0 ; i < self.pdlist.length ;i ++){
+              $("#star_grade"+(i*1+(num-1)*size)).html("");
+              $("#star_grade"+(i*1+(num-1)*size)).markingSystem({
+                num: 5,
+                havePoint: true,
+                haveGrade: true,
+                backgroundImageInitial:require('../../images/star_hollow.png'),
+                backgroundImageOver:require('../../images/star_solid.png'),
+                unit: '星',
+                grade:self.pdlist[i].score==null ? 0 : self.pdlist[i].source * 1,
+                height: 0.4* $("html").css("font-size").replace("px", ""),
+                width: 0.4* $("html").css("font-size").replace("px", ""),
+              });
+            }
+
+          })
 
         }, function() {
           //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
@@ -155,6 +177,51 @@
 <style>
   @import "../../css/mescroll.css";
   @import "../../css/scroll.css";
+  #bestDriverList .set_image_all {
+    cursor: pointer;
+    position: relative;
+  }
+  #bestDriverList .set_image_top div{
+    position: relative;
+  }
+  #bestDriverList .star_grade{
+    margin-top: 0.25rem;
+  }
+  #bestDriverList .set_image_top img{
+    position: absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:0.4rem!important;
+  }
+  #bestDriverList .set_image_all .set_image_item {
+    position: relative;
+    display: inline-block;
+    z-index: 11;
+    visibility: visible;
+  }
+
+  #bestDriverList .set_image_all .set_image_top {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 13;
+  }
+
+  #bestDriverList .set_image_all .set_image_top>div {
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  #bestDriverList .set_image_all .set_image_top>div>img {
+    height: 100%;
+  }
+  #bestDriverList .grade {
+    vertical-align: top;
+    font-size: 0.3125rem;
+    line-height:0.4rem ;
+    display: none!important;
+  }
 </style>
 <style scoped>
   #bestDriverList{
@@ -188,25 +255,35 @@
   }
   #bestDriverList #peopleMessage{
     width:94%;
-    padding:0.2rem 3%;
+    padding:0.36rem 0.76rem 0.36rem 0.42rem;
     background: white;
-    margin-top: 0.2rem;
   }
   #bestDriverList #peopleMessage .peopleImg{
     width:100%;
   }
   #bestDriverList #peopleMessage .peoplemessage{
     float: left;
-    margin-left: 0.3rem;
-    margin-top: 0.1rem;
+    margin-left: 0.44rem;
+    width:7rem;
   }
   #bestDriverList #peopleMessage .peoplemessage p{
-    font-size: 0.3125rem;
+    font-size: 0.375rem;
+    line-height: 0.375rem;
     color:#333;
   }
   #bestDriverList #peopleMessage .peoplemessage h1{
-    font-size: 0.3125rem;
-    color:#999;
+    font-size: 0.32rem;
+    line-height: 0.32rem;
+    margin-top: 0.2rem;
+    color:#373737;
+    float: right;
+  }
+  #bestDriverList #peopleMessage .peoplemessage h2{
+    font-size: 0.32rem;
+    line-height: 0.32rem;
+    margin-top: 0.2rem;
+    color:#373737;
+    float: left;
   }
   #bestDriverList  #peopleMessage .tel{
     width:1.2rem;
@@ -225,8 +302,8 @@
     height: auto;
   }
   #bestDriverList .imgBoxOverFllow{
-    width:1.2rem;
-    height:1.2rem;
+    width:1.68rem;
+    height:1.68rem;
     overflow: hidden;
     float: left;
     border-radius: 50%;
@@ -235,5 +312,7 @@
   #bestDriverList .imgBoxOverFllow img{
     display: inline-block;
     vertical-align: middle;
+    width:1.68rem;
+    height:1.68rem;
   }
 </style>
