@@ -31,10 +31,10 @@
 </template>
 
 <script>
-  import {androidIos} from "../../js/app";
-  import {bomb} from "../../js/zujian";
-  import bridge from '../../js/bridge';
-  import PinchZoom from "../../js/pinchzoom";
+   import {androidIos} from "../../js/app";
+   import {bomb} from "../../js/zujian";
+   import bridge from '../../js/bridge';
+   import PinchZoom from "../../js/pinchzoom";
     export default {
         name: "status-now",
       data(){
@@ -97,10 +97,10 @@
           var _this = this;
           if(type == 1){
             androidIos.addPageList();
-            _this.$router.push({path:'/uploadData/uploadDataS',query:{type:1}})
+            _this.$router.push({path:'/authentication',query:{type:1}})
           }else{
             androidIos.addPageList();
-            _this.$router.push({path:'/uploadData/uploadDataT'});
+            _this.$router.push({path:'/authentication'});
           }
         },
         imgLook:function (img) {

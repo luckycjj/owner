@@ -14,6 +14,7 @@ import bestCarrierMore from '@/components/xinyaBox/bestCarrierMore'
 import logicsOrder from '@/components/xinyaBox/logicsOrder'
 import messageList from '@/components/xinyaBox/messageList'
 import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
+import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
 import trackList from '../pages/trackList'
@@ -116,6 +117,11 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/authentication',
+      name:'authentication',
+      component:authentication,
+    },
   {
     path:'/logicsOrder',
     name:'logicsOrder',
