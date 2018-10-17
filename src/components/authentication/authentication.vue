@@ -18,7 +18,7 @@
           <p>请上传公司授权函</p>
           <div class="fileup">
             <img src="../../images/addImg.png" v-if="message.first.authorization.bendi == ''">
-            <input type="file" @change="fileImgUp($event,0)">
+            <input type="file" @change="fileImgUp($event,0)"  accept="image/*"  capture = "camera">
             <img class="fileImg" :src="message.first.authorization.bendi" v-if="message.first.authorization.bendi != ''">
             <h6 v-if="message.first.authorization.bendi == ''">点击拍照</h6>
           </div>
@@ -38,7 +38,7 @@
           <p>请上传营业执照</p>
           <div class="fileup">
             <img src="../../images/addImg.png" v-if="message.second.businesslicense.bendi == ''">
-            <input type="file" @change="fileImgUp($event,1)">
+            <input type="file" @change="fileImgUp($event,1)"  accept="image/*"  capture = "camera">
             <img class="fileImg" :src="message.second.businesslicense.bendi" v-if="message.second.businesslicense.bendi != ''">
             <h6 v-if="message.second.businesslicense.bendi == ''">点击拍照</h6>
           </div>
@@ -75,7 +75,7 @@
           <p>请拍摄五官清晰头像照</p>
           <div class="fileup3">
             <img src="../../images/addImg.png" v-if="message.third.people.bendi == ''">
-            <input type="file" @change="fileImgUp($event,2)">
+            <input type="file" @change="fileImgUp($event,2)"  accept="image/*"  capture = "user">
             <img class="fileImg3" :src="message.third.people.bendi" v-if="message.third.people.bendi != ''">
             <h6 v-if="message.third.people.bendi == ''">点击拍照</h6>
           </div>
@@ -86,7 +86,7 @@
           <p>请拍摄本人身份证正面照</p>
           <div class="fileup2">
             <img src="../../images/addImg.png" v-if="message.third.idCardZ.bendi == ''">
-            <input type="file" @change="fileImgUp($event,3)">
+            <input type="file" @change="fileImgUp($event,3)"  accept="image/*"  capture = "camera">
             <img class="fileImg2" :src="message.third.idCardZ.bendi" v-if="message.third.idCardZ.bendi != ''">
             <h6 v-if="message.third.idCardZ.bendi == ''">点击拍照</h6>
           </div>
@@ -97,7 +97,7 @@
           <p>请拍摄本人身份证反面照</p>
           <div class="fileup2">
             <img src="../../images/addImg.png" v-if="message.third.idCardF.bendi == ''">
-            <input type="file" @change="fileImgUp($event,4)">
+            <input type="file" @change="fileImgUp($event,4)"  accept="image/*"  capture = "camera">
             <img class="fileImg2" :src="message.third.idCardF.bendi" v-if="message.third.idCardF.bendi != ''">
             <h6 v-if="message.third.idCardF.bendi == ''">点击拍照</h6>
           </div>
