@@ -1,13 +1,17 @@
 <template>
   <div id="footer">
     <ul>
-      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)">
+      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)" :style="{marginLeft:index == 2 ? '20%':''}">
         <div class="imgBox"  :class='[ item.cls , {imgSure:index === idx} ]'><div :style="{marginRight:item.marginRight}" class="corner" v-show=" item.number > 0">{{item.number}}</div></div>
         <div id="footerUserTX" v-if="index == 3" :style="{display: item.show ? 'block' : 'none'}"></div>
         {{item.name}}
       </li>
       <div class="clearBoth"></div>
     </ul>
+    <div id="newOrderGo" @click="gonewOrder()">
+      <div class="shuxian"></div>
+      <div class="hengxian"></div>
+    </div>
   </div>
 </template>
 
@@ -55,6 +59,7 @@
         mounted:function () {
           var _this = this;
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
+          sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
           if(driverBottomIcon != undefined){
             _this.items = JSON.parse(driverBottomIcon);
@@ -151,6 +156,33 @@
               });
             }
         },
+        gonewOrder:function () {
+          var _this = this;
+          if(_this.cookie != ""){
+            var owner = sessionStorage.getItem("ownerMessage");
+            if(owner != undefined){
+              var status = JSON.parse(owner);
+              if(status.status == 1){
+                androidIos.first("正在审核中，请耐心等待！");
+              }else if(status.status == 0){
+                androidIos.first("尚未认证，请认证上传资料！");
+              }else if(status.status == 3){
+                androidIos.first("资料已驳回，请重新上传资料！");
+              }else if(status.status == 4){
+                androidIos.first("账户已禁用！");
+              }else if(status.status == 2){
+                androidIos.addPageList();
+                _this.$router.push({path:"/newOrder",query:{newordertrantype:0}});
+              }
+            }
+          }else if(_this.cookie == ""){
+            androidIos.first("尚未登录,请登录！");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              _this.$router.push({path:"/login"});
+            });
+          }
+        },
         marginWidth:function () {
           var _this = this;
           var corner = document.getElementsByClassName("corner");
@@ -175,8 +207,40 @@
        left:0;
        width:100%;
      }
+     #newOrderGo{
+       position: absolute;
+       width:1.6rem;
+       height: 1.6rem;
+       background: #2c9cff;
+       border-top-left-radius: 0.2rem;
+       border-top-right-radius: 0.2rem;
+       left:50%;
+       margin-left: -0.8rem;
+       bottom: 0;
+     }
+     .shuxian{
+       width:0.067rem;
+       height:0.5067rem;
+       background: white;
+       position: absolute;
+       top:50%;
+       left:50%;
+       margin-top: -0.25335rem;
+       margin-left: -0.0335rem;
+     }
+     .hengxian{
+       height:0.067rem;
+       width:0.5067rem;
+       background: white;
+       position: absolute;
+       top:50%;
+       left:50%;
+       margin-left: -0.25335rem;
+       margin-top: -0.0335rem;
+     }
      #footer ul{
        width:100%;
+       background: white;
      }
      .imgBox{
        width:0.67rem;
@@ -217,7 +281,7 @@
      }
     #footer ul li {
       float: left;
-      width:25%;
+      width:20%;
       text-align: center;
       height: 1.3rem;
       color:#999;
