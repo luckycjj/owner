@@ -25,7 +25,7 @@
         </div>
       </div>
       <button v-if="status != 2 && status != 1" @click="goStatus(2)">重新上传</button>
-      <button v-if="status == 1" @click="goStatus(2)">修改资料</button>
+    <!--  <button v-if="status == 1">修改资料</button>-->
     </div>
   </div>
 </template>
@@ -95,13 +95,8 @@
         },
         goStatus:function (type) {
           var _this = this;
-          if(type == 1){
-            androidIos.addPageList();
-            _this.$router.push({path:'/authentication',query:{type:1}})
-          }else{
-            androidIos.addPageList();
-            _this.$router.push({path:'/authentication'});
-          }
+          androidIos.addPageList();
+          _this.$router.push({path:'/authentication',query:{type:1}})
         },
         imgLook:function (img) {
           var _this = this;

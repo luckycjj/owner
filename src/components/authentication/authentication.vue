@@ -171,9 +171,27 @@
              }
           }
         },
+      watch:{
+        message:{
+          handler:function(val,oldval){
+            var _this = this;
+            var type = _this.$route.query.type;
+            if(type != undefined){
+              localStorage.setItem("OWNERSETMESSAGE",JSON.stringify(_this.message));
+            }
+          },
+          deep:true
+        }
+      },
       mounted:function () {
         var _this = this;
         var type = _this.$route.query.type;
+        if(type != undefined){
+           var OWNERSETMESSAGE = localStorage.getItem("OWNERSETMESSAGE");
+           if(OWNERSETMESSAGE != undefined){
+             _this.message = JSON.parse(OWNERSETMESSAGE);
+           }
+        }
         androidIos.bridge(_this);
       },
        methods:{
@@ -283,6 +301,7 @@
                timeout: 10000,
                success: function (authenticateCustomer) {
                  if(authenticateCustomer.success=="1"){
+                   localStorage.removeItem("OWNERSETMESSAGE");
                    _this.$cjj("上传成功");
                    setTimeout(function () {
                       androidIos.gobackFrom(_this);

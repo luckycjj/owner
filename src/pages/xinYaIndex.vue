@@ -211,9 +211,23 @@
         gonewOrder:function (type) {
           var _this = this;
           if(_this.cookie != ""){
-            androidIos.addPageList();
-            _this.getPageScroll();
-            _this.$router.push({path:"/newOrder",query:{newordertrantype:type}});
+            var owner = sessionStorage.getItem("ownerMessage");
+            if(owner != undefined){
+               var status = JSON.parse(owner);
+               if(status.status == 1){
+                 androidIos.first("正在审核中，请耐心等待！");
+               }else if(status.status == 0){
+                 androidIos.first("尚未认证，请认证上传资料！");
+               }else if(status.status == 3){
+                 androidIos.first("资料已驳回，请重新上传资料！");
+               }else if(status.status == 4){
+                 androidIos.first("账户已禁用！");
+               }else if(status.status == 2){
+                 androidIos.addPageList();
+                 _this.getPageScroll();
+                 _this.$router.push({path:"/newOrder",query:{newordertrantype:type}});
+               }
+            }
           }else if(_this.cookie == ""){
             androidIos.first("尚未登录,请登录！");
             $(".tanBox-yes").unbind('click').click(function(){

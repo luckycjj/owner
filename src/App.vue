@@ -44,9 +44,13 @@
       var cookie = androidIos.getcookie("MESSAGEDRIVER");
       sessionStorage.setItem("source",1);
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
-        cookie = JSON.parse(cookie);
-        sessionStorage.setItem("token",cookie.token);
-        _this.$router.push({ path: '/xinYaIndex'});
+         if(status.status == 4){
+           _this.$router.push({ path: '/login'});
+        }else{
+           cookie = JSON.parse(cookie);
+           sessionStorage.setItem("token",cookie.token);
+           _this.$router.push({ path: '/xinYaIndex'});
+        }
       }else if(cookie == ""){
         _this.$router.push({ path: '/xinYaIndex'});
       }
