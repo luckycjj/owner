@@ -142,7 +142,7 @@
                      http:"",
                   },
                 },
-               second:{
+                second:{
                  businesslicense : {
                    bendi:"",
                    http:"",
@@ -152,7 +152,7 @@
                  companyCity:"",
                  companyAddress:"",
                },
-               third:{
+                third:{
                   people:{
                     bendi:"",
                     http:"",
@@ -173,6 +173,7 @@
         },
       mounted:function () {
         var _this = this;
+        var type = _this.$route.query.type;
         androidIos.bridge(_this);
       },
        methods:{
@@ -252,6 +253,53 @@
            if(_this.nowStep < 3){
              _this.nowStep ++ ;
              _this.showBefore();
+           }else if(_this.nowStep == 3){
+             androidIos.loading("正在上传");
+             var json = {
+               name:_this.message.third.name,
+               idCode:_this.message.third.idCode,
+               idCodeImage : _this.message.third.idCardZ.http,
+               idCardBack : _this.message.third.idCardF.http,
+               cropName:_this.message.second.companyName,
+               province:_this.message.second.companyCity.split("-")[0],
+               city:_this.message.second.companyCity.split("-")[1],
+               area:_this.message.second.companyCity.split("-")[2],
+               address:_this.message.second.companyAddress,
+               businessLicense:_this.message.second.businesslicense.http,
+               creditCode:_this.message.second.creditcode,
+               certification:_this.message.first.authorization.http,
+               sticker:_this.message.third.people.http,
+               startTime:"",
+               endTime:"",
+               userCode:sessionStorage.getItem("token"),
+               source:sessionStorage.getItem("source"),
+             }
+             $.ajax({
+               type: "POST",
+               url: androidIos.ajaxHttp()+"/authenticateCustomer",
+               data:JSON.stringify(json),
+               contentType: "application/json;charset=utf-8",
+               dataType: "json",
+               timeout: 10000,
+               success: function (authenticateCustomer) {
+                 if(authenticateCustomer.success=="1"){
+                   _this.$cjj("上传成功");
+                   setTimeout(function () {
+                      androidIos.gobackFrom(_this);
+                   },500)
+                 }else{
+                   androidIos.second(authenticateCustomer.message);
+                 }
+               },
+               complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                 $("#common-blackBox").remove();
+                 if(status=='timeout'){//超时,status还有success,error等值的情况
+                   androidIos.second("网络请求超时");
+                 }else if(status=='error'){
+                   androidIos.errorwife();
+                 }
+               }
+             })
            }
            if(_this.nowStep == 2){
               _this.$nextTick(function () {

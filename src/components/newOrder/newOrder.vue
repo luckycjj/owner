@@ -125,7 +125,7 @@
                    <div class="clearBoth"></div>
                  </ul>
                </div>
-               <div class="vehicle" v-if="both.carWidthList.length > 0">
+               <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
                  <h6>车长<span>（米，可多选）</span></h6>
                  <ul>
                    <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @click="carListS(index,2)">{{item.displayName}}</li>
@@ -134,7 +134,7 @@
                    <div class="cartypeOther" v-if="!both.carWidthListMore"><span>其它车长：</span><input v-model="both.cartypeOther" placeholder="点击输入"/>米</div>
                  </ul>
                </div>
-               <div class="vehicle" v-if="both.carTypeList.length > 0">
+               <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
                  <h6>车型<span>（可多选）</span></h6>
                  <ul>
                    <li v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @click="carListS(index,3)">{{item.displayName}}</li>
@@ -256,6 +256,7 @@
             newOrderMessageBox:false,
             vehicleBox:false,
             newordertrantype:"",
+            lindanShow:true,
             suremend: new Debounce(this.ajaxPost, 1000)
           }
        },
@@ -511,6 +512,8 @@
                   success: function (invoiceDetail) {
                     var list=[];
                     for(var i =0;i<invoiceDetail.invPackDao.length;i++){
+                      invoiceDetail.carLength = invoiceDetail.carLength == null ? "" :invoiceDetail.carLength;
+                      invoiceDetail.carModel = invoiceDetail.carModel == null ? "" :invoiceDetail.carModel;
                       _this.both.initialWeight = _this.both.initialWeight*1 + invoiceDetail.invPackDao[i].weight/1000*1;
                       var listJson = {
                         tranpk:invoiceDetail.category,
@@ -1140,6 +1143,7 @@
         },
         carListS:function (index,type) {
           var _this = this.both;
+          var _self = this;
           if(type == 1){
             var trueMen = _this.carList[index].choose;
             for(var i = 0 ;i < _this.carList.length;i++){
@@ -1147,6 +1151,11 @@
             }
             if(!trueMen){
               _this.carList[index].choose = !_this.carList[index].choose;
+            }
+            if(_this.carList[index].displayName.indexOf("零担") != -1){
+              _self.lindanShow = false;
+            }else{
+              _self.lindanShow = true;
             }
           }else if(type == 2){
             var x = 0;
@@ -1231,6 +1240,11 @@
           _this.both.tranTypeValue = _this.both.tranType;
           if(_this.both.carList.length > 0 && _this.both.carWidthList.length > 0 && _this.both.carTypeList.length > 0){
             var list1 = _this.both.carListSure.split(",");
+            if(_this.both.carListSure.indexOf("零担") != -1){
+              _this.lindanShow = false;
+            }else{
+              _this.lindanShow = true;
+            }
             var list2 = _this.both.carWidthListSure.split(",");
             var list3 = _this.both.carTypeListSure.split(",");
             var len1 = list1.length;
@@ -1278,6 +1292,9 @@
                }
             }
           for(var i = 0; i < self.carWidthList.length ; i++){
+            if(x[0].name.indexOf("零担") != -1){
+              self.carWidthList[i].choose = false;
+            }
             if(self.carWidthList[i].choose){
               y.push({
                 name : self.carWidthList[i].displayName,
@@ -1286,6 +1303,9 @@
             }
           }
           for(var i = 0; i < self.carTypeList.length ; i++){
+            if(x[0].name.indexOf("零担") != -1){
+              self.carTypeList[i].choose = false;
+            }
             if(self.carTypeList[i].choose){
               z.push({
                 name : self.carTypeList[i].displayName,
