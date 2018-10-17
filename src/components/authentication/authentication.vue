@@ -22,7 +22,7 @@
             <img class="fileImg" :src="message.first.authorization.bendi" v-if="message.first.authorization.bendi != ''">
             <h6 v-if="message.first.authorization.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SQHlook.png" class="YYZZLook">
+          <img src="../../images/SQHlook.png" class="YYZZLook"  @click="lookImg($event,require('../../images/SQHlook.png'))">
           <div class="clearBoth"></div>
         </div>
         <div class="stepFbottom">
@@ -42,7 +42,7 @@
             <img class="fileImg" :src="message.second.businesslicense.bendi" v-if="message.second.businesslicense.bendi != ''">
             <h6 v-if="message.second.businesslicense.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/YYZZLook.png" class="YYZZLook">
+          <img src="../../images/YYZZLook.png" class="YYZZLook"   @click="lookImg($event,require('../../images/YYZZLook.png'))">
           <div class="clearBoth"></div>
         </div>
         <div class="stepSbottom">
@@ -79,7 +79,7 @@
             <img class="fileImg3" :src="message.third.people.bendi" v-if="message.third.people.bendi != ''">
             <h6 v-if="message.third.people.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/ALEX.png" class="SFZLook">
+          <img src="../../images/ALEX.png" class="SFZLook"    @click="lookImg($event,require('../../images/ALEX.png'))">
           <div class="clearBoth"></div>
         </div>
         <div class="stepTtop">
@@ -90,7 +90,7 @@
             <img class="fileImg2" :src="message.third.idCardZ.bendi" v-if="message.third.idCardZ.bendi != ''">
             <h6 v-if="message.third.idCardZ.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SFZZ.png" class="SFZFLook">
+          <img src="../../images/SFZZ.png" class="SFZFLook"    @click="lookImg($event,require('../../images/SFZZ.png'))">
           <div class="clearBoth"></div>
         </div>
         <div class="stepTtop">
@@ -101,7 +101,7 @@
             <img class="fileImg2" :src="message.third.idCardF.bendi" v-if="message.third.idCardF.bendi != ''">
             <h6 v-if="message.third.idCardF.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SFZF.png" class="SFZFLook">
+          <img src="../../images/SFZF.png" class="SFZFLook" @click="lookImg($event,require('../../images/SFZF.png'))">
           <div class="clearBoth"></div>
         </div>
         <div class="stepTbottom">
@@ -128,6 +128,7 @@
   import {androidIos} from "../../js/app";
   import {bomb} from "../../js/zujian";
   import bridge from '../../js/bridge';
+  import PinchZoom from "../../js/pinchzoom";
   import  {provinceCityArea} from "../../js/provinceCityArea"
     export default {
         name: "authentication",
@@ -168,7 +169,8 @@
                  name:"",
                  idCode:""
                }
-             }
+             },
+            errorlogo: 'this.src="' + require('../../images/timg.jpg') + '"',
           }
         },
       watch:{
@@ -201,6 +203,60 @@
                  _this.showBefore();
              })
           },
+         lookImg:function (even,imgurl) {
+           var _this = this;
+           if (even.target.className != "closed") {
+             var img = imgurl;
+             $("#imgBigbox").remove();
+             $("body").append(
+               "<div id='imgBigbox'><div class='pinch-zoom'><img onerror='"+ _this.errorlogo+"' id='zoomimg'  src='"+img+"' '></div><div id='zhezhaoImg'></div></div>"
+             );
+             $("#imgBigbox").css({
+               width: "100%",
+               height: "100%",
+               position: "fixed",
+               top: "0",
+               left: "0",
+               background: "rgb(0,0,0)",
+               "z-index": "999",
+               display: "block"
+             });
+             $("#zhezhaoImg").css({
+               width: "100%",
+               height: "100%",
+               position: "absolute",
+               background: "rgba(0,0,0,0)",
+               "z-index": "999",
+               top: "0",
+               left: "0"
+             });
+             $("#imgBigbox img").css({ width: "100%", position: "absolute" });
+             var image = document.getElementById("zoomimg");
+             image.onload = function() {
+               var height = $("#imgBigbox img").height();
+               $("div.pinch-zoom").each(function() {
+                 new PinchZoom($(this), {});
+               });
+               $(".pinch-zoom-container").css({
+                 width: "100%",
+                 height: "100%"
+               });
+               $("#imgBigbox img").css("top", "50%");
+               $(".pinch-zoom").css({ width: "100%", height: "100%" });
+               $("#imgBigbox img").css("margin-top", -height / 2 + "px");
+               var setImgBox;
+               var setImgBoxNumber = 10;
+               setImgBox = setInterval(function() {
+                 setImgBoxNumber--;
+                 if (setImgBoxNumber < 9) {
+                   clearInterval(setImgBox);
+                   setImgBoxNumber = 10;
+                   $("#zhezhaoImg").remove();
+                 }
+               }, 100);
+             };
+           }
+         },
          showBefore:function () {
            var _this = this;
            if(_this.nowStep == 1){

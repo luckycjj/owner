@@ -123,6 +123,7 @@
         _this.message.name = ownerMessage.name;
         _this.message.status = ownerMessage.status;
       }
+      _this.jrisdiction();
       $.ajax({
         type: "POST",
         url: androidIos.ajaxHttp() + "/getUserInfo",
@@ -146,6 +147,7 @@
               corpName:  getUserInfo.corpName,
               role:getUserInfo.role,
             }));
+            _this.jrisdiction();
           }else{
             androidIos.second(getUserInfo.message);
           }
@@ -219,6 +221,25 @@
             }
           }
         });
+      },
+      jrisdiction:function () {
+        var _this = this;
+        var ownerMessage =  sessionStorage.getItem("ownerMessage");
+        if(ownerMessage != null){
+          // 1业务员 2审核员 3管理员
+           if(JSON.parse(ownerMessage).role.indexOf(3) != -1){
+             var json = {
+               name:"添加账号",
+               icon:require("../images/associated.png"),
+               url:"/addUser",
+               number:0,
+             }
+             _this.tabList.splice(1,1);
+             _this.tabList.splice(1,0,json);
+           }else{
+              _this.tabList.splice(1,1);
+           }
+        }
       },
       jiexi:function (enevt) {
         var _this = this;

@@ -12,7 +12,7 @@
        </div>
        <div class="label">
          <span>设置密码</span>
-         <input type="password" placeholder="请设置密码" v-model="password"/>
+         <input type="password" placeholder="请设置密码" maxlength="25" v-model="password"/>
        </div>
      </div>
      <div id="zhiwuBox">
@@ -82,8 +82,8 @@
             bomb.first("请输入正确的被添加人的手机号码");
             return false;
           }
-          if(_this.password == ""){
-            bomb.first("请设置密码");
+          if(_this.password.length < 6){
+            bomb.first("密码不得小于6位");
             return false;
           }
           var list = [];

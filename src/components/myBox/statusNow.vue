@@ -25,7 +25,6 @@
         </div>
       </div>
       <button v-if="status != 2 && status != 1" @click="goStatus(2)">重新上传</button>
-    <!--  <button v-if="status == 1">修改资料</button>-->
     </div>
   </div>
 </template>
