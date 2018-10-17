@@ -425,7 +425,7 @@ var androidIos = {
           var spanBottom = i== 0 ? "<span style='position: absolute;right:0.1rem;color:white;background: #2c9cff;padding: 0.05rem 0.15rem;border-radius: 0.25rem;'></span>" : "";
           var list = "<li class='sitechoose' id='" + id + "'>" + name + spanBottom + "<div class='clearBoth'></div></li>";
           if(i == 0){
-             list += "<div style='width:60%;margin-left: 40%;height:1px;background:#E1E1E1; '></div>"
+             list += "<div style='width:60%;margin-left: 40%;height:1px;background:#E1E1E1; ' id='siteLine'></div>"
           }
           listBox += list;
         }

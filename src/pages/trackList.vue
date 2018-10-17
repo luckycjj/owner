@@ -78,6 +78,7 @@
          sessionStorage.removeItem("carPKlistGo");
          sessionStorage.removeItem("driverPk");
          sessionStorage.removeItem("ORDERSCREEN");
+         sessionStorage.removeItem("orderType");
          androidIos.bridge(_this);
        },
        methods:{

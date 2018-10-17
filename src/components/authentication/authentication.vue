@@ -325,8 +325,18 @@
              }
            }
            if(_this.nowStep < 3){
-             _this.nowStep ++ ;
-             _this.showBefore();
+             if(_this.nowStep == 2){
+               androidIos.first("请确认公司名称和社会信用代码");
+               $(".tanBox-yes").html("已确认");
+               $(".tanBox-yes").unbind('click').click(function(){
+                 $(".tanBox-bigBox").remove();
+                 _this.nowStep ++ ;
+                 _this.showBefore();
+               });
+             }else{
+               _this.nowStep ++ ;
+               _this.showBefore();
+             }
            }else if(_this.nowStep == 3){
              androidIos.loading("正在上传");
              var json = {

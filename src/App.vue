@@ -159,8 +159,13 @@
       messageLD:function () {
         var _this = this;
         var cookie = androidIos.getcookie("MESSAGEDRIVER");
-        if(cookie != "") {
           androidIos.messageSite(2);
+          if(cookie != "") {
+              $("#sitechoosesite,#siteLine").show();
+          }else{
+            $("#sitechoosesite,#siteLine").hide();
+
+          }
           $("#sitechoosesite").unbind("click").click(function () {
             androidIos.addPageList();
             var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
@@ -212,13 +217,13 @@
               }
             }
           });
-        }else if(cookie == ""){
+   /*     }else if(cookie == ""){
           androidIos.first("尚未登录,请登录！");
           $(".tanBox-yes").unbind('click').click(function(){
             $(".tanBox-bigBox").remove();
             _this.$router.push({path:"/login"});
           });
-        }
+        }*/
 
       }
     }

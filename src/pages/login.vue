@@ -34,6 +34,10 @@
           sessionStorage.removeItem("token");
           androidIos.delCookie("MESSAGEDRIVER");
           sessionStorage.removeItem("ownerMessage");
+          sessionStorage.removeItem("trackTap");
+          sessionStorage.removeItem("INDEXSCROLLTOP");
+          sessionStorage.removeItem("driverBottomIcon");
+          sessionStorage.removeItem("messageCount");
           androidIos.bridge(_this);
       },
       methods:{
