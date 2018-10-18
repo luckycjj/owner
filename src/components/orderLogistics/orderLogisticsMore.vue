@@ -185,7 +185,7 @@
             <div :id="'star_grade00'+index" class="star_grade scorelistscore"></div>
             <div class="clearBoth"></div>
           </li>
-          <textarea placeholder="详细描述" v-model="scorereason" style="width:95%;height:2rem;border: 1px solid #dcdcdc;margin: 0.1rem auto;padding: 0.1rem 2.5%;font-size: 0.375rem;color:#333;"></textarea>
+          <textarea placeholder="详细描述"  @keyup="filterInput()" v-model="scorereason" style="width:95%;height:2rem;border: 1px solid #dcdcdc;margin: 0.1rem auto;padding: 0.1rem 2.5%;font-size: 0.375rem;color:#333;"></textarea>
         </ul>
         <button @click="scoreChange()" id="gogogo" class="gogogo">提交</button>
       </div>
@@ -201,7 +201,7 @@
             {{item.displayName}}
           </li>
           <div class="clearBoth"></div>
-          <input type="text" maxlength="30" placeholder="其他原因" v-model="cancelreason">
+          <input type="text"  @keyup="filterInput()" maxlength="30" placeholder="其他原因" v-model="cancelreason">
         </ul>
         <button @click="cancelReasonChange()" id="gogogo" class="gogogo">提交</button>
       </div>
@@ -252,6 +252,11 @@
         var _this = this;
         androidIos.addPageList();
         _this.$router.push({ path: '/orderLogistics/map'});
+      },
+      filterInput:function () {
+        var _this = this;
+        _this.cancelreason = _this.cancelreason.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+        _this.scorereason = _this.scorereason.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
       },
       go:function () {
         var self = this;
