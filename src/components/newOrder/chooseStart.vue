@@ -4,19 +4,19 @@
     <div id="title" v-title data-title="收货地址" v-if="addressType == 2"></div>
     <div id="inputKeyup">
       <div class="name">
-        <input type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
+        <input @keyup="filterInput()" type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
         <div class="lineBox"><div class="line"></div></div>
-        <input type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
+        <input @keyup="filterInput()" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
         <div class="clearBoth"></div>
       </div>
       <div class="company inputUp">
-        <input type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
+        <input @keyup="filterInput()" type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
       </div>
       <div class="company inputUp">
         <p id="X00" :class="start.province!=''?'blackColor':''" v-html="start.province==''?'选择省市区':start.province+'-'+start.city+'-'+start.area"></p>
       </div>
       <div class="address inputUp">
-        <input type="text" maxlength="40" placeholder="详细地址"  v-model="start.address"/>
+        <input @keyup="filterInput()" type="text" maxlength="40" placeholder="详细地址"  v-model="start.address"/>
       </div>
       <div class="address inputUp" style=" color:#666;line-height:1rem;font-size: 0.35rem;border: none" v-if="addressType == 1">
         设置默认
@@ -115,6 +115,13 @@
               _this.start.areaCode = name.thirdCode;
             }
           },
+        filterInput:function () {
+          var _this = this;
+          _this.start.name =  _this.start.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+          _this.start.phone =  _this.start.phone.replace(/[^\0-9]/g,'');
+          _this.start.company =  _this.start.company.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+          _this.start.address =  _this.start.address.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+        },
         morenClick:function () {
             var _this = this;
             if(_this.start.moren == 0){

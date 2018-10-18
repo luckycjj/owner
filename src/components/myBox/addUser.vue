@@ -4,15 +4,15 @@
      <div id="addUserBox">
        <div class="label border">
          <span>添加姓名</span>
-         <input type="text" placeholder="请输入被添加人的姓名" v-model="name"/>
+         <input @keyup="filterInput()" type="text" placeholder="请输入被添加人的姓名" v-model="name"/>
        </div>
        <div class="label border">
          <span>添加账号</span>
-         <input type="tel" placeholder="请输入被添加人的手机号码" v-model="tel" maxlength="11"/>
+         <input  @keyup="filterInput()" type="tel" placeholder="请输入被添加人的手机号码" v-model="tel" maxlength="11"/>
        </div>
        <div class="label">
          <span>设置密码</span>
-         <input type="password" placeholder="请设置密码" maxlength="25" v-model="password"/>
+         <input @keyup="filterInput()"  type="password" placeholder="请设置密码" maxlength="25" v-model="password"/>
        </div>
      </div>
      <div id="zhiwuBox">
@@ -61,6 +61,13 @@
           go:function () {
 
           },
+        filterInput:function () {
+          var _this = this;
+          _this.name =  _this.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+          _this.tel =  _this.tel.replace(/[^\0-9]/g,'');
+          _this.password =  _this.password.replace(/[\u4E00-\u9FA5]/g,'');
+          _this.password =  _this.password.replace(/<script>/g,'');
+        },
         jobChoose:function (number) {
           var _this = this;
           if(_this.jobList[number].check){

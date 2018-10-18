@@ -177,6 +177,11 @@
         message:{
           handler:function(val,oldval){
             var _this = this;
+            _this.message.second.companyName = _this.message.second.companyName.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+            _this.message.second.creditcode = _this.message.second.creditcode.replace(/[^\a-\z\A-\Z0-9]/g,'');
+            _this.message.second.companyAddress = _this.message.second.companyAddress.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+            _this.message.second.name = _this.message.second.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+            _this.message.second.idCode = _this.message.second.idCode.replace(/[^\X0-9\x]/g,'');
             var type = _this.$route.query.type;
             if(type != undefined){
               localStorage.setItem("OWNERSETMESSAGE",JSON.stringify(_this.message));
