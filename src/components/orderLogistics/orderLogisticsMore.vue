@@ -151,17 +151,17 @@
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type == '10' && orderSource == 1">
-              <button  style="background: transparent;color:#3492ff;"  @click="closedOrder(1)">取消订单</button>
+              <button  style="background: transparent;color:#3492ff;border:1px solid #3492ff"  @click="closedOrder(1)">取消订单</button>
               <button @click="shengcheng()">生成委托</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if=" type == '0' && orderSource == 1  && (pdlist[0].fabu.indexOf('2') != -1 || pdlist[0].fabu.indexOf('3') != -1)">
-              <button   style="background: transparent;color:#3492ff;" @click="closedOrder(2)">驳回</button>
+              <button   style="background: transparent;color:#3492ff;border:1px solid #3492ff" @click="closedOrder(2)">驳回</button>
               <button @click="shenhe()">确认</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
-              <button style="background: transparent;color:#3492ff;" @click="scoreYes(1)">评价</button>
+              <button style="background: transparent;color:#3492ff;border:1px solid #3492ff" @click="scoreYes(1)">评价</button>
               <button @click="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
@@ -1233,8 +1233,11 @@
   }
   #sure button{
     width:4.2rem;
-    background: #3492ff;
-    border:1px solid #3492ff;
+    background: -webkit-linear-gradient(left, #00C4FF , #0074FF); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, #00C4FF, #0074FF); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, #00C4FF, #0074FF); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #00C4FF , #0074FF); /* 标准的语法 */
+    border:1px solid #f6f6f6;
     margin-left: 0.53333rem;
     color:white;
     font-size: 0.4rem;

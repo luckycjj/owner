@@ -2025,11 +2025,11 @@
     letter-spacing: 0.03125rem;
   }
   .submit{
-    background: #3492ff!important;
-    /*background: -webkit-linear-gradient(left,#3da4ff, #3492ff)!important; !* Safari 5.1 - 6.0 *!
-    background: -o-linear-gradient(left,#3da4ff, #3492ff)!important; !* Opera 11.1 - 12.0 *!
-    background: -moz-linear-gradient(left,#3da4ff, #3492ff)!important; !* Firefox 3.6 - 15 *!
-    background: linear-gradient(left,#3da4ff, #3492ff)!important; !* 标准的语法 *!*/
+ /*   background: #3492ff!important;*/
+    background: -webkit-linear-gradient(left, #00C4FF , #0074FF)!important; /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, #00C4FF, #0074FF)!important; /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, #00C4FF, #0074FF)!important; /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #00C4FF , #0074FF)!important; /* 标准的语法 */
   }
   #add p{
     font-size: 0.375rem;
