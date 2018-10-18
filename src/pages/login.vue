@@ -38,6 +38,9 @@
           sessionStorage.removeItem("INDEXSCROLLTOP");
           sessionStorage.removeItem("driverBottomIcon");
           sessionStorage.removeItem("messageCount");
+          localStorage.removeItem("noviceguidance1");
+          localStorage.removeItem("noviceguidance2");
+          localStorage.removeItem("noviceguidance3");
           androidIos.bridge(_this);
       },
       methods:{

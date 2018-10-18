@@ -101,6 +101,7 @@
           var _this = this;
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
+          androidIos.noviceguidance(1);
           androidIos.bridge(_this);
       },
       methods:{

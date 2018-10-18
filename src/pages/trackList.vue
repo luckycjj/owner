@@ -80,6 +80,7 @@
          sessionStorage.removeItem("ORDERSCREEN");
          sessionStorage.removeItem("orderType");
          androidIos.bridge(_this);
+         androidIos.noviceguidance(2);
        },
        methods:{
          go:function () {

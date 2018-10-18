@@ -336,6 +336,7 @@
           sessionStorage.setItem("orderType",self.pdlist[0].orderType);
           sessionStorage.setItem("orderPk",self.$route.query.pk);
           self.$nextTick(function () {
+            androidIos.noviceguidance(3);
             if(self.carList.length > 1){
               $('#full_feature').swipeslider();
             }
@@ -530,7 +531,6 @@
                 }
               }
             }
-            bridge.invoke("guide","2");
           })
         }, function() {
           //联网失败的回调,隐藏下拉刷新和上拉加载的状态;

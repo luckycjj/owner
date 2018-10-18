@@ -602,6 +602,58 @@ var androidIos = {
   checkText:function (text) {
     return text.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'')
   },
+  noviceguidance:function (type) {
+    var message = localStorage.getItem("noviceguidance" + type);
+    if(message == null){
+      $(".tanBox-noviceguidance").remove();
+      localStorage.setItem("noviceguidance" + type,"true");
+      $("body").append("<div class='tanBox-noviceguidance'><img src='"+require("../images/noviceGuidance"+type+".png")+"'><button>知道</button></div>");
+      $(".tanBox-noviceguidance").css({
+        width:"100%",
+        position:"fixed",
+        top:0,
+        bottom:0,
+        height: "auto",
+        background:"rgba(0,0,0,0.2)",
+        zIndex:"9999"
+      });
+      $(".tanBox-noviceguidance img").css({
+        width:"100%",
+        position:"fixed",
+        top:0,
+        bottom:0,
+        height: "100%"
+      });
+      $(".tanBox-noviceguidance button").css({
+        width:"2.78rem",
+        position:"absolute",
+        top:0,
+        left:"50%",
+        marginLeft:"-1.39rem",
+        color:"#333",
+        background:"white",
+        fontSize:"0.4rem",
+        borderRadius:"0.2rem",
+        height: "1.13rem"
+      });
+      if(type == 1){
+        $(".tanBox-noviceguidance button").css({
+          top:"61%"
+        })
+      }else if(type == 2){
+        $(".tanBox-noviceguidance button").css({
+          top:"46.8%"
+        })
+      }else if(type == 3){
+        $(".tanBox-noviceguidance button").css({
+          top:"60%"
+        })
+      }
+      $(".tanBox-noviceguidance button").unbind("click").click(function () {
+        $(".tanBox-noviceguidance").remove();
+      })
+    }
+  }
 };
 export {
   androidIos
