@@ -40,7 +40,6 @@
     mounted:function () {
       var _this = this;
       _this.title = document.title;
-      bridge.invoke('stoploading');
       var cookie = androidIos.getcookie("MESSAGEDRIVER");
       sessionStorage.setItem("source",1);
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
@@ -80,12 +79,6 @@
         _this.doNow = 6;
       }else if( _this.html.indexOf("/xinYaIndex") != -1){
         _this.doNow = 7;
-        var  messageCount = sessionStorage.getItem("messageCount");
-        if(messageCount != undefined && messageCount > 0){
-          $("#messageLDTX").show();
-        }else{
-          $("#messageLDTX").hide();
-        }
       }else if( _this.html.indexOf("/authentication") != -1){
         _this.doNow = 8;
       }else{
@@ -121,12 +114,6 @@
           _this.doNow = 6;
         }else if( _this.html.indexOf("/xinYaIndex") != -1){
           _this.doNow = 7;
-          var  messageCount = sessionStorage.getItem("messageCount");
-          if(messageCount != undefined && messageCount > 0){
-            $("#messageLDTX").show();
-          }else{
-            $("#messageLDTX").hide();
-          }
         }else if( _this.html.indexOf("/authentication") != -1){
           _this.doNow = 8;
         }else{
