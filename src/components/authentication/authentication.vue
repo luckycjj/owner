@@ -22,7 +22,10 @@
             <img class="fileImg" :src="message.first.authorization.bendi" v-if="message.first.authorization.bendi != ''">
             <h6 v-if="message.first.authorization.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SQHlook.png" class="YYZZLook"  @click="lookImg($event,require('../../images/SQHlook.png'))">
+          <div class="YYZZLook">
+            <img src="../../images/SQHlook.png"   @click="lookImg($event,require('../../images/SQHlook.png'))">
+            <span>样例</span>
+          </div>
           <div class="clearBoth"></div>
         </div>
         <div class="stepFbottom">
@@ -42,7 +45,10 @@
             <img class="fileImg" :src="message.second.businesslicense.bendi" v-if="message.second.businesslicense.bendi != ''">
             <h6 v-if="message.second.businesslicense.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/YYZZLook.png" class="YYZZLook"   @click="lookImg($event,require('../../images/YYZZLook.png'))">
+          <div class="YYZZLook">
+            <img src="../../images/YYZZLook.png"    @click="lookImg($event,require('../../images/YYZZLook.png'))">
+            <span>样例</span>
+          </div>
           <div class="clearBoth"></div>
         </div>
         <div class="stepSbottom">
@@ -79,7 +85,10 @@
             <img class="fileImg3" :src="message.third.people.bendi" v-if="message.third.people.bendi != ''">
             <h6 v-if="message.third.people.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/ALEX.png" class="SFZLook"    @click="lookImg($event,require('../../images/ALEX.png'))">
+          <div class="SFZLook">
+            <img src="../../images/ALEX.png"    @click="lookImg($event,require('../../images/ALEX.png'))">
+            <span>样例</span>
+          </div>
           <div class="clearBoth"></div>
         </div>
         <div class="stepTtop">
@@ -90,7 +99,10 @@
             <img class="fileImg2" :src="message.third.idCardZ.bendi" v-if="message.third.idCardZ.bendi != ''">
             <h6 v-if="message.third.idCardZ.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SFZZ.png" class="SFZFLook"    @click="lookImg($event,require('../../images/SFZZ.png'))">
+          <div class="SFZFLook">
+            <img src="../../images/SFZZ.png"    @click="lookImg($event,require('../../images/SFZZ.png'))">
+            <span>样例</span>
+          </div>
           <div class="clearBoth"></div>
         </div>
         <div class="stepTtop">
@@ -101,7 +113,10 @@
             <img class="fileImg2" :src="message.third.idCardF.bendi" v-if="message.third.idCardF.bendi != ''">
             <h6 v-if="message.third.idCardF.bendi == ''">点击拍照</h6>
           </div>
-          <img src="../../images/SFZF.png" class="SFZFLook" @click="lookImg($event,require('../../images/SFZF.png'))">
+          <div class="SFZFLook">
+            <img src="../../images/SFZF.png"    @click="lookImg($event,require('../../images/SFZZ.png'))">
+            <span>样例</span>
+          </div>
           <div class="clearBoth"></div>
         </div>
         <div class="stepTbottom">
@@ -180,8 +195,8 @@
             _this.message.second.companyName = _this.message.second.companyName.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
             _this.message.second.creditcode = _this.message.second.creditcode.replace(/[^\a-\z\A-\Z0-9]/g,'');
             _this.message.second.companyAddress = _this.message.second.companyAddress.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
-            _this.message.second.name = _this.message.second.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
-            _this.message.second.idCode = _this.message.second.idCode.replace(/[^\X0-9\x]/g,'');
+            _this.message.third.name = _this.message.third.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
+            _this.message.third.idCode = _this.message.third.idCode.replace(/[^\X0-9\x]/g,'');
             var type = _this.$route.query.type;
             if(type != undefined){
               localStorage.setItem("OWNERSETMESSAGE",JSON.stringify(_this.message));
@@ -676,19 +691,61 @@
      width:2rem;
      margin-left: 0.56rem;
      margin-top:1.28rem;
+    position: relative;
   }
+.YYZZLook img{
+  width:100%;
+}
+.YYZZLook span{
+  position: absolute;
+  top:0;
+  right:0;
+  background: black;
+  color:white;
+  padding: 0.04rem 0.1rem;
+  font-size: 0.3125rem;
+  border-bottom-left-radius: 0.1rem;
+}
   .SFZLook{
     float: left;
     width:2rem;
     margin-left: 0.56rem;
     margin-top:1.28rem;
+    position: relative;
   }
+.SFZLook img{
+  width:100%;
+}
+.SFZLook span{
+  position: absolute;
+  top:0;
+  right:0;
+  background: black;
+  color:white;
+  padding: 0.04rem 0.1rem;
+  font-size: 0.3125rem;
+  border-bottom-left-radius: 0.1rem;
+}
   .SFZFLook{
     float: left;
     width:2.84rem;
     margin-left: 0.56rem;
     margin-top:1.28rem;
+    position: relative;
   }
+.SFZFLook img{
+  width:100%;
+}
+.SFZFLook span{
+  position: absolute;
+  top:0;
+  right:0;
+  background: black;
+  color:white;
+  padding: 0.04rem 0.1rem;
+  font-size: 0.3125rem;
+  border-bottom-left-radius: 0.1rem;
+}
   .calltel{
     font-size: 0.3125rem;
     text-align: center;
@@ -753,6 +810,9 @@
     color:#BCBCBC;
     width:6.15rem;
     margin-right: 0.2rem;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .blackColor{
     color: #333333!important;
