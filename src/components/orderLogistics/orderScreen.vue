@@ -99,7 +99,7 @@
       },
       inputKeyup:function () {
         var _this = this;
-        _this.address = androidIos.checkText(_this.address);
+        _this.address = _this.address.replace(/[^\a-\z\A-\Z0-9\-]/g,'');
       },
       upCallback: function(page) {
         //联网加载数据
