@@ -33,6 +33,7 @@
           var _this = this;
           sessionStorage.removeItem("token");
           androidIos.delCookie("MESSAGEDRIVER");
+          androidIos.delCookie("BAIDUTOKEN");
           sessionStorage.removeItem("ownerMessage");
           sessionStorage.removeItem("trackTap");
           sessionStorage.removeItem("INDEXSCROLLTOP");
