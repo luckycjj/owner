@@ -506,6 +506,9 @@
     text-align: right;
     padding-right: 4%;
   }
+  .lookMore span{
+    font-size: 0.3125rem;
+  }
   ul{
     width:100%;
   }
