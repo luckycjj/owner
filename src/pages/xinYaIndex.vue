@@ -196,31 +196,35 @@
                 }
               }
             });
-            var ajax4 = $.ajax({
-              type: "POST",
-              url: androidIos.ajaxHttp() + "/order/messageCount",
-              data: JSON.stringify({
-                userCode: sessionStorage.getItem("token"),
-                source: sessionStorage.getItem("source")
-              }),
-              contentType: "application/json;charset=utf-8",
-              dataType: "json",
-              timeout: 30000,
-              success: function (driverBottomIcon) {
-                if (driverBottomIcon.success == "1") {
-                  sessionStorage.setItem("messageCount", driverBottomIcon.count * 1);
-                } else {
-                  androidIos.second(driverBottomIcon.message);
+            var ajax4 = "";
+            if(sessionStorage.getItem("token") != undefined){
+              ajax4 = $.ajax({
+                type: "POST",
+                url: androidIos.ajaxHttp() + "/order/messageCount",
+                data: JSON.stringify({
+                  userCode: sessionStorage.getItem("token"),
+                  source: sessionStorage.getItem("source")
+                }),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                timeout: 30000,
+                success: function (driverBottomIcon) {
+                  if (driverBottomIcon.success == "1") {
+                    sessionStorage.setItem("messageCount", driverBottomIcon.count * 1);
+                  } else {
+                    androidIos.second(driverBottomIcon.message);
+                  }
+                },
+                complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                  if (status == 'timeout') { //超时,status还有success,error等值的情况
+                    androidIos.second("当前状况下网络状态差，请检查网络！");
+                  } else if (status == "error") {
+                    androidIos.errorwife();
+                  }
                 }
-              },
-              complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-                if (status == 'timeout') { //超时,status还有success,error等值的情况
-                  androidIos.second("当前状况下网络状态差，请检查网络！");
-                } else if (status == "error") {
-                  androidIos.errorwife();
-                }
-              }
-            });
+              });
+            }
+
             Promise.all([ajax1, ajax2, ajax3,ajax4]).then(function(values) {
               var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
               if(INDEXSCROLLTOP != null){
