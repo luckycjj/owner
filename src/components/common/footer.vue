@@ -69,8 +69,7 @@
       methods:{
           go:function () {
             var _this = this;
-            var cookie = androidIos.getcookie("MESSAGEDRIVER");
-            if(cookie != "") {
+            if(sessionStorage.getItem("token")!= undefined) {
               $.ajax({
                 type: "POST",
                 url: androidIos.ajaxHttp() + "/getUserInfo",
