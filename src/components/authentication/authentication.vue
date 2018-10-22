@@ -328,7 +328,12 @@
                  if (status == 'timeout') { //超时,status还有success,error等值的情况
                    androidIos.second("当前状况下网络状态差，请检查网络！")
                  } else if (status == "error") {
-                   androidIos.errorwife();
+                   androidIos.second("当天使用次数用尽，请明日再上传");
+                   _this.baiduhuotiBox  = false;
+                   _this.baidudumaBox = false;
+                   clearInterval(_this.setTime);
+                   _this.baidudumaHaoma = "";
+                   _this.daojishi = 0;
                  }
                }
              });
@@ -359,7 +364,12 @@
                if (status == 'timeout') { //超时,status还有success,error等值的情况
                  androidIos.second("当前状况下网络状态差，请检查网络！")
                } else if (status == "error") {
-                 androidIos.errorwife();
+                 androidIos.second("当天使用次数用尽，请明日再上传");
+                 _this.baiduhuotiBox  = false;
+                 _this.baidudumaBox = false;
+                 clearInterval(_this.setTime);
+                 _this.baidudumaHaoma = "";
+                 _this.daojishi = 0;
                }
              }
            });
@@ -711,7 +721,12 @@
                          if (status == 'timeout') { //超时,status还有success,error等值的情况
                            androidIos.second("当前状况下网络状态差，请检查网络！")
                          } else if (status == "error") {
-                           androidIos.errorwife();
+                           androidIos.second("当天使用次数用尽，请明日再上传");
+                           _this.baiduhuotiBox  = false;
+                           _this.baidudumaBox = false;
+                           clearInterval(_this.setTime);
+                           _this.baidudumaHaoma = "";
+                           _this.daojishi = 0;
                          }
                        }
                      });
