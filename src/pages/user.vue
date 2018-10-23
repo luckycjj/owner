@@ -102,12 +102,12 @@
           icon:require("../images/aboutUs.png"),
           url:"/aboutUs",
           number:0,
-        },{
+        }/*,{
           name:"新手指引",
           icon:require("../images/noviceguidance.png"),
           url:"/noviceguidance",
           number:0,
-        }],
+        }*/],
         errorlogo: 'this.src="' + require('../images/userImg.png') + '"',
         httpurl:"",
         shareListTrue:false,

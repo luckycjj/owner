@@ -1,5 +1,5 @@
 <template>
-    <div id="calculator">
+    <div id="calculator" style="top:1.3rem;">
       <div id="title" v-title data-title="欣阳计算器"></div>
       <div class="calc-wrap">
         <div class="calc-in-out">
@@ -48,7 +48,8 @@
 </template>
 
 <script>
-    export default {
+  import {androidIos} from "../js/app";
+  export default {
         name: "calculator",
         data(){
           return{
@@ -56,6 +57,7 @@
           }
         },
         mounted:function () {
+          androidIos.judgeIphoneX("calculator",2);
           function Calculator($dom) {
             this.$dom = $($dom);
             // 历史运算
@@ -372,6 +374,14 @@
 </script>
 
 <style scoped>
+  #calculator{
+    position: absolute;
+    top:1.3rem;
+    bottom:0;
+    width:100%;
+    height: auto;
+    background: #f6f6f6;
+  }
   .calc-wrap {
     width: 8rem;
     margin:0.3rem auto;
