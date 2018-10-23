@@ -694,8 +694,8 @@ var androidIos = {
       paddingTop = api.safeArea.top + "px";
     }
     catch (e){
-      paddingBottom = 20 + "px";
-      paddingTop = 20 + "px";
+      paddingBottom = 0 + "px";
+      paddingTop = 0 + "px";
     }
     var docuId = document.getElementById(id);
     if(docuId == null){
