@@ -12,7 +12,7 @@
       <p class="active" i="0">承运商</p>
       <p i="1">司机</p>
     </div>-->
-    <div id="mescroll" class="mescroll">
+    <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
       </ul>
     </div>
@@ -35,6 +35,7 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("mescroll",2);
       androidIos.bridge(_this);
     },
     methods:{

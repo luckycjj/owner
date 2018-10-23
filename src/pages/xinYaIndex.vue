@@ -1,7 +1,7 @@
 <template>
     <div id="xinYaIndex">
       <div id="title" v-title data-title="欣阳物流"></div>
-      <div id="xinYaIndexBox">
+      <div id="xinYaIndexBox" style="top:1.3rem;">
         <div id="full_feature" class="swipslider">
           <ul class="sw-slides">
             <li class="sw-slide" v-for="(item) in banner">
@@ -99,6 +99,8 @@
         },
       mounted:function () {
           var _this = this;
+          androidIos.judgeIphoneX("xinYaIndexBox",2);
+          androidIos.judgeIphoneX("xinYaIndexBox",1);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
           androidIos.noviceguidance(1);

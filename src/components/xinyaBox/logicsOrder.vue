@@ -1,5 +1,5 @@
 <template>
-  <div id="logicsOrder">
+  <div id="logicsOrder" style="top:1.3rem;">
     <div id="title" v-title data-title="运单物流"></div>
     <div id="mescroll" class="mescroll" :style="{bottom : manage && productPk == ''?'1.2rem':0}">
       <ul id="dataList" class="data-list">
@@ -47,6 +47,7 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("logicsOrder",2);
       androidIos.bridge(_this);
     },
     methods:{

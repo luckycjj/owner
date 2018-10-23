@@ -5,7 +5,8 @@
 </template>
 
 <script>
-    export default {
+  import {androidIos} from "../js/app";
+  export default {
         name: "newOrder",
       data(){
           return{
@@ -17,12 +18,13 @@
         _this.$nextTick(function () {
           var html = location.href;
           if(html.indexOf("newOrder/histroyAddress")!=-1||html.indexOf("/newOrder/appoint")!=-1||html.indexOf("/newOrder/addressMessage")!=-1){
-            $("#newOrderBox").css("top",0);
+            $("#newOrderBox").css("top","0rem");
             $("#appBox").hide();
           }else{
             $("#newOrderBox").css("top","1.3rem");
             $("#appBox").show();
           }
+          androidIos.judgeIphoneX("newOrderBox",2);
         })
       },
       updated:function () {
@@ -30,12 +32,13 @@
         _this.$nextTick(function () {
           var html = location.href;
           if(html.indexOf("newOrder/histroyAddress")!=-1||html.indexOf("/newOrder/appoint")!=-1||html.indexOf("/newOrder/addressMessage")!=-1){
-            $("#newOrderBox").css("top",0);
+            $("#newOrderBox").css("top","0rem");
             $("#appBox").hide();
           }else{
             $("#newOrderBox").css("top","1.3rem");
             $("#appBox").show();
           }
+          androidIos.judgeIphoneX("newOrderBox",2);
         })
       }
     }

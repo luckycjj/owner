@@ -1,5 +1,5 @@
 <template>
-   <div id="addUser">
+   <div id="addUser" style="top:1.3rem;">
      <div id="title" v-title data-title="添加账号"></div>
      <div id="addUserBox">
        <div class="label border">
@@ -55,6 +55,7 @@
       },
       mounted:function () {
         var _this = this;
+        androidIos.judgeIphoneX("addUser",2);
         androidIos.bridge(_this);
       },
       methods:{

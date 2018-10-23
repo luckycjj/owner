@@ -9,7 +9,7 @@
         <p @click="sousuo()" id="sousuo">管理</p>
       </div>
     </div>
-    <div id="mescroll" class="mescroll">
+    <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
         <li v-for="(item,index) in pdlist" style="overflow: hidden">
           <div class="moveDiv" style="position: relative">
@@ -62,6 +62,7 @@
     mounted:function () {
       var _this = this;
       _this.addressType = _this.$route.query.type;
+      androidIos.judgeIphoneX("mescroll",2);
       androidIos.bridge(_this);
     },
     methods:{

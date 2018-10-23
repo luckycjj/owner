@@ -1,7 +1,7 @@
 <template>
   <div id="insuranceList">
     <div id="title" v-title data-title="保险"></div>
-    <div id="mescroll" class="mescroll">
+    <div id="mescroll" class="mescroll"  style="top:1.3rem">
       <ul id="dataList" class="data-list">
         <li v-for="item in pdlist" @click="chooseLine(item)">
           <span class="name">{{item.name}}</span>
@@ -27,6 +27,8 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("mescroll",2);
+      androidIos.judgeIphoneX("mescroll",1);
       androidIos.bridge(_this);
     },
     methods:{
@@ -91,7 +93,7 @@
   @import "../css/mescroll.css";
   @import "../css/scroll.css";
   #insuranceList .mescroll{
-    position: fixed;
+    position: absolute;
     top:1.3rem;
     bottom: 1.3rem;
     height: auto;

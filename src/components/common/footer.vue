@@ -58,6 +58,8 @@
         props: ['idx'],
         mounted:function () {
           var _this = this;
+          androidIos.judgeIphoneX("footer",1);
+          androidIos.judgeIphoneX("newOrderGo",1);
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
@@ -205,6 +207,7 @@
        bottom: 0;
        left:0;
        width:100%;
+       background: white;
      }
      #newOrderGo{
        position: absolute;

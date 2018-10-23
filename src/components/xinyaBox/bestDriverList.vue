@@ -1,5 +1,5 @@
 <template>
-  <div id="bestDriverList">
+  <div id="bestDriverList" style="top:1.3rem;">
     <div id="title" v-title data-title="优秀司机"></div>
     <div id="mescroll" class="mescroll" :style="{bottom : manage && productPk == ''?'1.2rem':0}">
       <ul id="dataList" class="data-list">
@@ -47,6 +47,7 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("bestDriverList",2);
       androidIos.bridge(_this);
     },
     methods:{
@@ -301,8 +302,8 @@
     width:0.6rem;
   }
   #bestDriverList .mescroll{
-    position: fixed;
-    top:1.3rem;
+    position: absolute;
+    top:0rem;
     bottom: 0;
     height: auto;
   }

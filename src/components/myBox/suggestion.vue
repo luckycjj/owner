@@ -1,5 +1,5 @@
 <template>
-  <div id="suggestion">
+  <div id="suggestion" style="top:1.3rem;">
     <div id="title" v-title data-title="建议反馈"></div>
     <div id="textarea">
        <textarea @keyup="changeGo()" placeholder="请写下您遇到的问题..." :maxlength="maxlength" v-model="suggest"></textarea>
@@ -24,6 +24,7 @@
         },
         mounted:function () {
           var _this = this;
+          androidIos.judgeIphoneX("suggestion",2);
           androidIos.bridge(_this);
         },
         methods:{

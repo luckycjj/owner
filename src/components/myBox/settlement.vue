@@ -1,5 +1,5 @@
 <template>
-  <div id="settlement">
+  <div id="settlement" style="top:1.3rem;">
     <div id="title" v-title data-title="结算中心"></div>
     <div id="showBox">
       <div class="wrapper" id="trackTab">
@@ -60,6 +60,7 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("settlement",2);
       sessionStorage.removeItem("weh");
       sessionStorage.removeItem("nowOrderCartype");
       sessionStorage.removeItem("dataStart");

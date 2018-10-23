@@ -8,7 +8,7 @@
         <p @click="sousuo()">搜索</p>
       </div>
     </div>
-    <div id="mescroll" class="mescroll">
+    <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
         <li v-for="item in pdlist" @click="chooseLine(item.pkInvoice)">
           <div class="firstBox">
@@ -40,6 +40,7 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("mescroll",2);
       androidIos.bridge(_this);
     },
     methods:{

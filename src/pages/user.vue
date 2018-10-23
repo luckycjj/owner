@@ -1,5 +1,5 @@
 <template>
-  <div id="user">
+  <div id="user" style="top:1.3rem;">
     <div id="title" v-title data-title="个人中心"></div>
     <div id="userBox">
       <div id="head">
@@ -115,6 +115,8 @@
     },
     mounted:function () {
       var _this = this;
+      androidIos.judgeIphoneX("userBox",1);
+      androidIos.judgeIphoneX("user",2);
       sessionStorage.removeItem("settlementTap");
       var ownerMessage = sessionStorage.getItem("ownerMessage");
       if(ownerMessage != null) {

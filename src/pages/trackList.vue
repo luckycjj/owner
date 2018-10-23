@@ -1,5 +1,5 @@
 <template>
-  <div id="trackList">
+  <div id="trackList" style="top:1.3rem;">
     <div id="title" v-title data-title="订单跟踪"></div>
     <div id="showBox">
       <div class="wrapper" id="trackTab">
@@ -79,6 +79,8 @@
          sessionStorage.removeItem("driverPk");
          sessionStorage.removeItem("ORDERSCREEN");
          sessionStorage.removeItem("orderType");
+         androidIos.judgeIphoneX("mescroll",1);
+         androidIos.judgeIphoneX("trackList",2);
          androidIos.bridge(_this);
          androidIos.noviceguidance(2);
        },
