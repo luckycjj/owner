@@ -76,9 +76,8 @@
                     center: [_this.startJ, _this.startW],//地图中心点
                     zoom: 13 //地图显示的缩放级别
                   });
-                  AMap.plugin(['AMap.ToolBar','AMap.Scale'],
+                  AMap.plugin(['AMap.Scale'],
                     function(){
-                      map.addControl(new AMap.ToolBar());
                       map.addControl(new AMap.Scale());
                     });
                   //构造路线导航类
