@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="title" v-title data-title="地图" v-if="navShow"></div>
+    <div id="title" v-title data-title="地图"></div>
     <div id="container"></div>
     <div id="panel"></div>
   </div>
