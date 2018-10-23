@@ -1,7 +1,7 @@
 <template>
   <div id="signIn">
     <div id="title" v-title data-title="签收"></div>
-    <div id="container"></div>
+    <div id="container" style="top:1.3rem;"></div>
     <div id="panel"></div>
     <div id="signYes">
       <div id="signYes1" v-if="signYes">
@@ -120,6 +120,7 @@
     },
     mounted: function () {
       var _this = this;
+      androidIos.judgeIphoneX("container",2);
       androidIos.bridge(_this);
     },
     methods: {
@@ -769,7 +770,7 @@
     display: none!important;
   }
   #container{
-    top: 1.3rem!important;
+    top: 1.3rem;
     height: auto!important;
   }
   #signYes{
