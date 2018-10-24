@@ -1,17 +1,17 @@
 <template>
   <div id="footer">
     <ul>
-      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)" :style="{marginLeft:index == 2 ? '20%':''}">
+      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)">
         <div class="imgBox"  :class='[ item.cls , {imgSure:index === idx} ]'><div :style="{marginRight:item.marginRight}" class="corner" v-show=" item.number > 0">{{item.number}}</div></div>
-        <div id="footerUserTX" v-if="index == 3" :style="{display: item.show ? 'block' : 'none'}"></div>
+        <div id="footerUserTX" v-if="index == 4" :style="{display: item.show ? 'block' : 'none'}"></div>
+        <div id="newOrderGo" @click="gonewOrder()" v-if="index == 2">
+          <div class="shuxian"></div>
+          <div class="hengxian"></div>
+        </div>
         {{item.name}}
       </li>
       <div class="clearBoth"></div>
     </ul>
-    <div id="newOrderGo" @click="gonewOrder()">
-      <div class="shuxian"></div>
-      <div class="hengxian"></div>
-    </div>
   </div>
 </template>
 
@@ -40,6 +40,13 @@
               {
                 number:0,
                 marginRight:0,
+                cls: "newOrder",
+                name: "发货",
+                push: "/newProlist"
+              },
+              {
+                number:0,
+                marginRight:0,
                 cls: "insurance",
                 name: "保险",
                 push: "/insuranceList"
@@ -59,7 +66,6 @@
         mounted:function () {
           var _this = this;
           androidIos.judgeIphoneX("footer",1);
-          androidIos.judgeIphoneX("newOrderGo",1);
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
@@ -118,9 +124,9 @@
                   if (driverBottomIcon.success == "1") {
                     _this.items[1].number = driverBottomIcon.orderCount * 1;
                     if(driverBottomIcon.myFlag == 1){
-                       _this.items[3].show = true;
+                       _this.items[4].show = true;
                     }else{
-                      _this.items[3].show = false;
+                      _this.items[4].show = false;
                     }
                     sessionStorage.setItem("messageCount", driverBottomIcon.count * 1);
                     _this.$nextTick(function () {
@@ -211,14 +217,13 @@
      }
      #newOrderGo{
        position: absolute;
-       width:1.6rem;
-       height: 1.6rem;
-       background: #2c9cff;
-       border-top-left-radius: 0.2rem;
-       border-top-right-radius: 0.2rem;
+       width:1.06rem;
+       height: 1.06rem;
+       background: #1D68A8;
+       border-radius: 50%;
        left:50%;
-       margin-left: -0.8rem;
-       bottom: 0;
+       margin-left: -0.503rem;
+       top: -0.25rem;
      }
      .shuxian{
        width:0.067rem;
@@ -279,7 +284,7 @@
        background-position: 0 100%!important;
      }
      .on{
-       color:#333!important;
+       color:#1D68A8!important;
      }
     #footer ul li {
       float: left;

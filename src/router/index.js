@@ -17,6 +17,7 @@ import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
 import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
+import newProlist from '../pages/newProlist'
 import trackList from '../pages/trackList'
 import newOrder from '../pages/newOrder'
 import calculator from '../pages/calculator'
@@ -37,6 +38,7 @@ import  newOrderEg from '@/components/newOrder/appoint'
 import  newOrderNi from '@/components/newOrder/insurance'
 import  newOrder11 from '@/components/newOrder/addressMessage'
 import  newOrder12 from '@/components/newOrder/needKnow'
+import  newOrder13 from '@/components/newOrder/inquiry'
 import  orderLogisticsF from '@/components/orderLogistics/orderLogisticsMore'
 import  orderLogisticsS from '@/components/orderLogistics/map'
 import  orderScreen from '@/components/orderLogistics/orderScreen'
@@ -117,6 +119,11 @@ Vue.filter('orderTypeName', function(value) {
 
 export default new Router({
   routes: [
+    {
+      path:'/newProlist',
+      name:'newProlist',
+      component:newProlist,
+    },
     {
       path:'/authentication',
       name:'authentication',
@@ -259,7 +266,8 @@ export default new Router({
         {path: 'appoint', component: newOrderEg},
         {path: 'insurance', component: newOrderNi},
         {path:"addressMessage",component:newOrder11},
-        {path:"needKnow",component:newOrder12}
+        {path:"needKnow",component:newOrder12},
+        {path:"inquiry",component:newOrder13}
       ]
     },
     {

@@ -12,12 +12,19 @@
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
-            <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
-            <h6 class="deliDateTime">{{items.deliDate}}</h6>
-            <h6 class="arriDateTime">{{items.arriDate}}</h6>
+            <div class="startEndBox">
+              <div class="startEnd"><div class="circleList"></div><span class="startEndSpan">{{items.deliAddr}}-{{items.arriAddr}}</span></div>
+              <div class="triangle_border_right"></div>
+              <div class="clearBoth"></div>
+            </div>
+            <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
             <div class="proBox">
-              <p class="startEnd"><span class="startEndSpan">{{items.deliAddr}}<img src="../images/addressImg.png">{{items.arriAddr}}</span><div class="clearBoth"></div></p>
-              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsCode}}/{{pro.goodsName}}/{{pro.num}}件/{{pro.weight*1}}吨/{{pro.volume*1}}立方米</div>
+              <h6 class="deliDateTime">{{items.deliDate}}</h6>
+              <h6 class="arriDateTime">{{items.arriDate}}</h6>
+              <h6 class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsCode}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></h6>
+              <h6 class="driver">{{items.deliContact}}</h6>
+              <h5 class="remark">{{items.memo}}</h5>
+              <div class="clearBoth"></div>
             </div>
             <h1>订单编号：{{items.vbillno}}</h1>
           </li>
@@ -44,19 +51,7 @@
                 number:0,
                 prolist:[]
              },{
-               name:"待确认",
-               number:0,
-               prolist:[]
-             },{
-               name:"未运输",
-               number:0,
-               prolist:[]
-             },{
-               name:"在途中",
-               number:0,
-               prolist:[]
-             },{
-               name:"已到货",
+               name:"运输中",
                number:0,
                prolist:[]
              },{
@@ -183,7 +178,7 @@
                      page:pageNum,
                      size:pageSize,
                      type:2,
-                     state:curNavIndex - 1 < 0 ? "" :curNavIndex - 1,
+                     state:curNavIndex == 0 ? "" : curNavIndex == 1 ? 7 : curNavIndex == 2 ? 8 : "",
                      userCode:sessionStorage.getItem("token"),
                      source:sessionStorage.getItem("source")
                    }),
@@ -231,11 +226,8 @@
              success: function (carrOrderListHeaderIcon) {
                if (carrOrderListHeaderIcon.success == "1") {
                  _this.list[0].number = carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
-                 _this.list[1].number = carrOrderListHeaderIcon.unconfirmedCount*1;
-                 _this.list[2].number = carrOrderListHeaderIcon.notTransportedCount*1;
-                 _this.list[3].number = carrOrderListHeaderIcon.onTheWayCount*1;
-                 _this.list[4].number = carrOrderListHeaderIcon.arrivedCount*1;
-                 _this.list[5].number = carrOrderListHeaderIcon.completedCount*1;
+                 _this.list[1].number = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                 _this.list[2].number = carrOrderListHeaderIcon.completedCount*1;
                }else{
                  androidIos.second(carrOrderListHeaderIcon.message);
                }
@@ -315,7 +307,7 @@
     line-height: 1rem;
     font-size: .4rem;
     text-align: center;
-    width:2rem;
+    width:3.333333rem;
   }
   .wrapper .scroller li a{
     color:#373737;
@@ -339,23 +331,48 @@
     margin: 0.2rem auto 0.08rem;
     background: white;
     border-radius:0.16rem;
-    padding:0.4rem 0 ;
+    padding:0.1rem 0 0.21rem 0;
     position: relative;
   }
   .data-list li h6{
     font-size:0.32rem ;
-    color:#999;
-    margin-left: 0.4rem;
+    color:#373737;
     margin-bottom: 0.01rem;
-    padding-left: 0.5rem;
+    padding-left: 5%;
+    margin-left: 2%;
     background-repeat: no-repeat;
-    background-size:0.213rem 0.213rem ;
+    background-size:0.27rem ;
     background-position: 0 50%;
+    width:43%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    float: left;
+    line-height: 0.44rem;
+    height: 0.44rem;
+    margin-bottom: 0.21rem;
+  }
+  .data-list li h5{
+    font-size:0.32rem ;
+    color:#373737;
+    margin-bottom: 0.01rem;
+    padding-left: 5%;
+    margin-left: 2%;
+    background-repeat: no-repeat;
+    background-size:0.27rem ;
+    background-position: 0 50%;
+    width:88%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    float: left;
+    line-height: 0.44rem;
+    height: 0.44rem;
   }
   .data-list li h1{
     font-size:0.34rem ;
     color:#999;
-    padding-top: 0.2rem;
+    padding-top: 0.25rem;
     margin-left: 0.5rem;
   }
   .data-list li h3{
@@ -363,68 +380,64 @@
     width:2rem;
     font-size: 0.375rem;
     right:0;
-    top:0.6rem;
+    bottom:0.21rem;
     line-height: 0.48rem;
     background-size: 0.48rem;
     background-repeat: no-repeat;
     background-position: 0 50%;
     padding-left: 0.6rem;
-  }
-  .trackList4{
-    background-image: url("../images/trackList4.png");
-    color:#FA6B18;
-  }
-  .trackList3{
-    background-image: url("../images/trackList3.png");
-    color:#4BC763;
-  }
-  .trackList2{
-    background-image: url("../images/trackList3.png");
-    color:#4BC763;
-  }
-  .trackList1{
-    background-image: url("../images/trackList2.png");
-    color:#557DE0;
-  }
-  .trackList0{
-    background-image: url("../images/trackList1.png");
-    color:#2C9CFF;
-  }
-  .trackList-1{
-    background-image: url("../images/trackList-1.png");
-    color:#d81e06;
+    color:#373737;
   }
   .deliDateTime{
-    background-image: url("../images/pickmessage.png");
+    background-image: url("../images/cc.png");
   }
   .arriDateTime{
-    background-image: url("../images/arrmessage.png");
-  }
-  .proBox{
-    width:85%;
-    padding: 0.5rem 0.45rem;
-    margin: 0.2rem auto;
-    border-radius: 0.1rem;
-    box-shadow: 0 0 0.13rem #e2e2e2;
-    border: 1px solid white;
-  }
-  .startEndSpan{
-    float: left;
-    font-size: 0.44rem;
-    font-weight:bold;
-    line-height: 0.56rem;
-    color:#333;
-    margin-bottom: 0.25rem;
-
-  }
-  .startEnd img{
-    display: inline-block;
-    margin:0rem 0.3rem 0.13rem 0.3rem;
-    width:0.45rem;
+    background-image: url("../images/cc.png");
   }
   .proBoxList{
-     color:#999;
-    font-size:0.35rem ;
-    margin-top: 0.1rem;
+    background-image: url("../images/tranprotype.png");
+  }
+  .driver{
+    background-image: url("../images/trandriver.png");
+  }
+  .remark{
+    background-image: url("../images/tranremark.png");
+  }
+  .proBox{
+    width:94%;
+    margin: 0.2rem auto;
+    border-radius: 0.1rem;
+    border: 1px solid white;
+  }
+  .startEnd{
+     background:#1D68A8 ;
+     padding: 0 0.92rem 0 0.7rem;
+    float: left;
+    position: relative;
+  }
+  .startEndSpan{
+    font-size: 0.375rem;
+    line-height: 0.6rem;
+    color:#fff;
+
+  }
+  .circleList{
+    width:0.22rem;
+    height: 0.22rem;
+    background: white;
+    position: absolute;
+    border-radius: 50%;
+    top:50%;
+    margin-top: -0.11rem;
+    left:0.29rem;
+  }
+  .triangle_border_right{
+    width:0;
+    height:0;
+    border-width:0.29rem 0rem 0.29rem 0.29rem;
+    border-style:solid;
+    border-color:transparent transparent transparent #1D68A8;/*透明 透明 透明 灰*/
+    position:relative;
+    float: left;
   }
 </style>

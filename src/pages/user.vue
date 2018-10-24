@@ -24,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <footComponent :idx='3'></footComponent>
+    <footComponent :idx='4'></footComponent>
     <transition name="slide-fade">
       <div id="shareBox" v-if="shareListTrue">
         <div id="shareBody">

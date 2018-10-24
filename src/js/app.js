@@ -65,9 +65,25 @@ var androidIos = {
   },
   ajaxHttp: function () {
     // var http = 'http://10.10.10.187:8085';
-    // var http = 'http://10.10.10.224:8085';
+    //var http = 'http://10.10.10.189:8085';
     var http = 'http://222.73.159.76:8085';
     return http;
+  },
+  uniq:function(array){
+    var temp = [];
+    var index = [];
+    var l = array.length;
+    for(var i = 0; i < l; i++) {
+      for(var j = i + 1; j < l; j++){
+        if (array[i].name === array[j].name){
+          i++;
+          j = i;
+        }
+      }
+      temp.push(array[i]);
+      index.push(i);
+    }
+    return temp;
   },
   addPageList: function () {
     var addPageList = window.sessionStorage.getItem("addPageList");
@@ -694,8 +710,8 @@ var androidIos = {
       paddingTop = api.safeArea.top + "px";
     }
     catch (e){
-      paddingBottom = 0 + "px";
-      paddingTop = 0 + "px";
+      paddingBottom = 20 + "px";
+      paddingTop = 20 + "px";
     }
     var docuId = document.getElementById(id);
     if(docuId == null){

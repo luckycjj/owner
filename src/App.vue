@@ -13,6 +13,7 @@
           <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
           <div id="messageLD" class="asd"  v-if="doNow == 7" @click="messageLD()"><div id="messageLDTX"></div></div>
           <h3  id="authenticationTab" style="display: none;" class="asd"  v-if="doNow==8"><span>上一步</span></h3>
+          <h3  id="xunjia" class="asd" @click="inquiry()"  v-if="doNow==9"><span>询价</span></h3>
         </div>
         <div id="table"></div>
       </div>
@@ -81,7 +82,7 @@
         });
         _this.$router.push({ path: '/xinYaIndex'});
       }else if(cookie == ""){
-        _this.$router.push({ path: '/xinYaIndex'});
+        _this.$router.push({ path: '/login'});
       }
       androidIos.bridge(_this);
     },
@@ -89,7 +90,7 @@
       var _this = this;
       _this.title = document.title;
       _this.html = location.href;
-      if(_this.html.indexOf("/login") != -1){
+      if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1){
         $("#appBox").hide();
       }else{
         $("#appBox").show();
@@ -115,6 +116,8 @@
         _this.doNow = 7;
       }else if( _this.html.indexOf("/authentication") != -1){
         _this.doNow = 8;
+      }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
+        _this.doNow = 9;
       }else{
         _this.doNow = "";
       }
@@ -124,7 +127,7 @@
       _this.$nextTick(function () {
         _this.title = document.title;
         _this.html = location.href;
-        if(_this.html.indexOf("/login") != -1){
+        if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1){
           $("#appBox").hide();
         }else{
           $("#appBox").show();
@@ -150,6 +153,8 @@
           _this.doNow = 7;
         }else if( _this.html.indexOf("/authentication") != -1){
           _this.doNow = 8;
+        }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
+          _this.doNow = 9;
         }else{
           _this.doNow = "";
         }
@@ -172,6 +177,11 @@
         var _this = this;
         androidIos.addPageList();
         _this.$router.push({ path: "/orderScreen"});
+      },
+      inquiry:function () {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: "/newOrder/inquiry"});
       },
       messageLD:function () {
         var _this = this;
