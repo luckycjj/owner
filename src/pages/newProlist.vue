@@ -27,6 +27,7 @@
               <div class="triangle_border_right"></div>
               <div class="clearBoth"></div>
             </div>
+            <div v-if="items.ifUrgent ==  'Y'" class="jinjiOrder">加急</div>
             <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
             <div class="proBox">
               <h6 class="deliDateTime">{{items.deliDate}}</h6>
@@ -452,11 +453,22 @@
     border-radius: 0.1rem;
     border: 1px solid white;
   }
+  .jinjiOrder{
+    position: absolute;
+    font-size: 0.3125rem;
+    right:0.3rem;
+    top:0.15rem;
+    color:#1D68A8;
+    border: 1px solid #1D68A8;
+    padding: 0.05rem 0.2rem;
+    border-radius: 0.3rem;
+  }
   .startEnd{
     background:#1D68A8 ;
     padding: 0 0.92rem 0 0.7rem;
     float: left;
     position: relative;
+    max-width: 5.5rem;
   }
   .imgscBox{
     width:1rem;

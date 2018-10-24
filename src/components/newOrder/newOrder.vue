@@ -73,6 +73,14 @@
           <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @click="tranType()"></p>
           <div class="clearBoth"></div>
         </div>
+        <div class="lablebox">
+          <span>几装几卸</span>
+          <div id="jizhuangjixie">
+            <div class="unit" id="Z08"  v-html="both.jizhuangjixie==''?'选择装卸方式':both.jizhuangjixie" :class="both.jizhuangjixie==''?'':'blackColor'"></div>
+            <div class="clearBoth"></div>
+          </div>
+          <div class="clearBoth"></div>
+        </div>
         <div class="lablebox borderno">
           <span>承运商</span>
           <p v-html="both.appoint==''?'请选择指定承运商':both.appoint" :class="both.appoint==''?'':'blackColor'" @click="appoint()"></p>
@@ -224,6 +232,7 @@
               }],
               tranType:"",
               tranTypeValue:"",
+              jizhuangjixie:"",
               appoint:"",
               pk_carrier:"",
               driver_name:"",
@@ -257,6 +266,28 @@
             vehicleBox:false,
             newordertrantype:"",
             lindanShow:true,
+            jizhuangjixie:[{
+              code:"0",
+              region:"请选择"
+            },{
+              code:"6",
+              region:"一装一卸"
+            },{
+              code:"1",
+              region:"一装两卸"
+            },{
+              code:"2",
+              region:"一装多卸"
+            },{
+              code:"3",
+              region:"两装一卸"
+            },{
+              code:"4",
+              region:"两装两卸"
+            },{
+              code:"5",
+              region:"多装多卸"
+            }],
             suremend: new Debounce(this.ajaxPost, 1000)
           }
        },
@@ -956,6 +987,28 @@
                       _this.both.productList[name.id.substr(4) * 1].unitWeight = name.firstVal;
                     }
                   }
+                }
+                var z = 0;
+                for(var i = 0; i < _this.jizhuangjixie.length;i++){
+                  if(_this.jizhuangjixie[i].region == _this.both.jizhuangjixie){
+                     z = i;
+                  }
+                }
+                var jizhuangjixie = new LArea();
+                jizhuangjixie.init({
+                  'trigger': '#Z08',
+                  'valueTo': '#Z08',
+                  'keys': {
+                    id: 'id',
+                    name: 'name'
+                  },
+                  'type': 1,
+                  'data': _this.jizhuangjixie
+                });
+                jizhuangjixie.value = [z];
+                jizhuangjixie.addPointer = function (name) {
+                  name = JSON.parse(name);
+                  _this.both.jizhuangjixie = name.firstCode == 0 ? "" :name.firstVal;
                 }
       /*          if(_this.pk == "" && _this.$route.query.type == undefined){
                   bridge.invoke("guide","1");
@@ -1671,7 +1724,7 @@
               if_insurance:self.insurance,
               pay:self.pay==1?"收货方":"发货方",
               est_amount:_this.price*1,
-              remark:self.remark,
+              remark:self.remark + self.jizhuangjixie,
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
             };
@@ -1974,10 +2027,14 @@
     white-space: nowrap;
     font-size: 0.375rem;
   }
-  #Z02,#pay{
+  #Z02,#pay,#jizhuangjixie{
     float: right;
     font-size: 0.375rem;
     margin-right: 5%;
+  }
+  #Z08{
+    width: 100% !important;
+    color: #bcbcbc;
   }
   #pay label{
     float: left;
