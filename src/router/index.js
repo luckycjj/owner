@@ -18,6 +18,7 @@ import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
 import newProlist from '../pages/newProlist'
+import message from '../pages/message'
 import haveCar from '../pages/haveCar'
 import trackList from '../pages/trackList'
 import newOrder from '../pages/newOrder'
@@ -124,6 +125,11 @@ export default new Router({
       path:'/newProlist',
       name:'newProlist',
       component:newProlist,
+    },
+    {
+      path:'/message',
+      name:'message',
+      component:message,
     },
     {
       path:'/haveCar',

@@ -78,6 +78,11 @@
           url:"/addUser",
           number:0,
         },{
+          name:"消息中心",
+          icon:require("../images/messageList.png"),
+          url:"/message",
+          number:0,
+        },{
           name:"扫码签收",
           icon:require("../images/saoyisao.png"),
           url:"",
@@ -177,6 +182,31 @@
             _this.tabList[0].number = getPayCount.paied*1 + getPayCount.unPaied*1;
           }else{
             androidIos.second(getPayCount.message);
+          }
+        },
+        complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+          if (status == 'timeout') { //超时,status还有success,error等值的情况
+            androidIos.second("当前状况下网络状态差，请检查网络！");
+          } else if (status == "error") {
+            androidIos.errorwife();
+          }
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: androidIos.ajaxHttp() + "/order/messageCount",
+        data: JSON.stringify({
+          userCode: sessionStorage.getItem("token"),
+          source: sessionStorage.getItem("source")
+        }),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        timeout: 30000,
+        success: function (driverBottomIcon) {
+          if (driverBottomIcon.success == "1") {
+            _this.tabList[2].number = driverBottomIcon.count * 1;
+          } else {
+            androidIos.second(driverBottomIcon.message);
           }
         },
         complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
@@ -540,7 +570,7 @@
     margin-left: 0.27rem;
     color:white;
     background: #2c9cff;
-    padding: 0.05rem 0.15rem;
+    padding: 0.1rem 0.2rem;
     border-radius: 0.25rem;
   }
   .marTop{
