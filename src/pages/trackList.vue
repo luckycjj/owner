@@ -31,7 +31,6 @@
         </ul>
       </div>
     </div>
-    <footComponent  ref="footcomponent" :idx='1'></footComponent>
   </div>
 </template>
 
@@ -74,7 +73,6 @@
          sessionStorage.removeItem("driverPk");
          sessionStorage.removeItem("ORDERSCREEN");
          sessionStorage.removeItem("orderType");
-         androidIos.judgeIphoneX("mescroll",1);
          androidIos.judgeIphoneX("trackList",2);
          androidIos.bridge(_this);
          androidIos.noviceguidance(2);
@@ -119,6 +117,8 @@
                  }
                  //更新标记
                  curNavIndex=i;
+               }else{
+                 $(".mescroll-totop").hide();
                }
              })
 
@@ -168,9 +168,6 @@
              function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
                //延时一秒,模拟联网
                setTimeout(function () {
-                 if(pageNum == 1){
-                   _this.$refs.footcomponent.go();
-                 }
                  $.ajax({
                    type: "POST",
                    url: androidIos.ajaxHttp() + "/order/loadInvoice",
@@ -285,7 +282,7 @@
   #showBox{
     position: absolute;
     top:0;
-    bottom: 1.3rem;
+    bottom: 0rem;
     height: auto;
     width:100%;
   }

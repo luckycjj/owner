@@ -34,8 +34,8 @@
                 number:0,
                 marginRight:0,
                 cls: "track",
-                name: "订单",
-                push: "/trackList"
+                name: "车源",
+                push: "/haveCar"
               },
               {
                 number:0,
@@ -122,7 +122,6 @@
                 timeout: 30000,
                 success: function (driverBottomIcon) {
                   if (driverBottomIcon.success == "1") {
-                    _this.items[1].number = driverBottomIcon.orderCount * 1;
                     if(driverBottomIcon.myFlag == 1){
                        _this.items[4].show = true;
                     }else{

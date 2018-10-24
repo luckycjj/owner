@@ -36,6 +36,7 @@
           androidIos.delCookie("BAIDUTOKEN");
           sessionStorage.removeItem("ownerMessage");
           sessionStorage.removeItem("trackTap");
+          sessionStorage.removeItem("newProTap");
           sessionStorage.removeItem("INDEXSCROLLTOP");
           sessionStorage.removeItem("driverBottomIcon");
           sessionStorage.removeItem("messageCount");

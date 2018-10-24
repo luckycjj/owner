@@ -18,6 +18,7 @@ import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
 import newProlist from '../pages/newProlist'
+import haveCar from '../pages/haveCar'
 import trackList from '../pages/trackList'
 import newOrder from '../pages/newOrder'
 import calculator from '../pages/calculator'
@@ -123,6 +124,11 @@ export default new Router({
       path:'/newProlist',
       name:'newProlist',
       component:newProlist,
+    },
+    {
+      path:'/haveCar',
+      name:'haveCar',
+      component:haveCar,
     },
     {
       path:'/authentication',
