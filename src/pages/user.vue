@@ -73,6 +73,11 @@
           url:"/settlement",
           number:0,
         },{
+          name:"我的订单",
+          icon:require("../images/userorderList.png"),
+          url:"/trackList",
+          number:0,
+        },{
           name:"添加账号",
           icon:require("../images/associated.png"),
           url:"/addUser",
@@ -204,7 +209,7 @@
         timeout: 30000,
         success: function (driverBottomIcon) {
           if (driverBottomIcon.success == "1") {
-            _this.tabList[2].number = driverBottomIcon.count * 1;
+            _this.tabList[3].number = driverBottomIcon.count * 1;
           } else {
             androidIos.second(driverBottomIcon.message);
           }
@@ -266,10 +271,10 @@
                url:"/addUser",
                number:0,
              }
-             _this.tabList.splice(1,1);
-             _this.tabList.splice(1,0,json);
+             _this.tabList.splice(2,1);
+             _this.tabList.splice(2,0,json);
            }else{
-              _this.tabList.splice(1,1);
+              _this.tabList.splice(2,1);
            }
         }
       },
