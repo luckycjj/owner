@@ -50,6 +50,10 @@
       _this.addressType = _this.$route.query.type;
       androidIos.judgeIphoneX("orderScreen",2);
       androidIos.judgeIphoneX("mescroll",2);
+      var keyword = _this.$route.query.keyword;
+      if(keyword != undefined){
+         _this.address = keyword;
+      }
       androidIos.bridge(_this);
     },
     methods:{

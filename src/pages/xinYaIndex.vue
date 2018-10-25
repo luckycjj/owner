@@ -1,21 +1,20 @@
 <template>
     <div id="xinYaIndex">
       <div id="title" v-title data-title="首页"></div>
-      <div id="xinYaIndexBox" style="top:1.3rem;">
+      <div id="xinYaIndexBox" style="top:0rem;">
          <div class="top">
             <div class="topLeft">
-              <p>订单统计<br><span>时间：{{time}}</span></p>
+              <input type="text" @keyup="keywordUp()"  @blur="keywordblur()" placeholder="请输入订单号" v-model="keyWord"/>
             </div>
             <div class="topRight">
               <div class="topRightF">
-                <p>{{todayOrder | toThousands}}<br><span>订单量</span></p>
+                <p>{{todayOrder | toThousands}}<br><span>今日订单量</span></p>
               </div>
               <div class="topRightF">
-                <p>￥{{todayPrice | toThousands}}<br><span>运输费用</span></p>
+                <p>￥{{todayPrice | toThousands}}<br><span>今日运输费用</span></p>
               </div>
               <div class="clearBoth"></div>
             </div>
-           <div class="clearBoth"></div>
          </div>
          <div class="center">
            <div class="title"> 我的订单<div class="clearBoth"></div></div>
@@ -46,6 +45,7 @@
              time :  (new Date()).getFullYear() + "/" + ((new Date()).getMonth() + 1) + "/" + (new Date()).getDate(),
              todayOrder :  0,
              todayPrice : 0,
+             keyWord:"",
              iconList:[{
                 name:"运输中",
                 number:0,
@@ -67,9 +67,11 @@
         },
       mounted:function () {
           var _this = this;
-          androidIos.judgeIphoneX("xinYaIndexBox",2);
+          androidIos.judgeIphoneX("top",0);
           androidIos.judgeIphoneX("xinYaIndexBox",1);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
+          _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
+          sessionStorage.removeItem("indexKeyword");
           androidIos.noviceguidance(1);
           androidIos.bridge(_this);
       },
@@ -82,6 +84,18 @@
               sessionStorage.removeItem("INDEXSCROLLTOP");
             }
           },
+        keywordUp:function () {
+          var _this = this;
+          _this.keyWord = _this.keyWord.replace(/[^\a-\z\A-\Z0-9\-]/g,'');
+        },
+        keywordblur:function () {
+          var _this = this;
+          if(_this.keyWord != ""){
+             androidIos.addPageList();
+             sessionStorage.setItem("indexKeyword",_this.keyWord);
+             _this.$router.push({path:"/orderScreen",query:{keyword:_this.keyWord}});
+          }
+        },
         getPageScroll:function() {
           var  yScroll;
           yScroll = document.getElementById("xinYaIndexBox").scrollTop;
@@ -94,7 +108,7 @@
 <style scoped>
   #xinYaIndexBox{
     position: absolute;
-    top:1.3rem;
+    top:0rem;
     bottom:1.3rem;
     background: #f6f6f6;
     height: auto;
@@ -104,50 +118,53 @@
   }
   .top{
     width:100%;
-    background: white;
     padding:0.27rem 0;
-    border-top: 1px solid #F5F5F5;
+    background: -webkit-linear-gradient( #47b2e8 , #1e72b2); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#47b2e8, #1e72b2); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#47b2e8, #1e72b2); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#47b2e8 , #1e72b2); /* 标准的语法 */
   }
   .topLeft{
-    float: left;
-    width:40%;
-    padding-top: 0.3rem;
+    width:100%;
+    padding-top: 1px;
   }
-  .topLeft p{
+  .topLeft input{
     font-size: 0.375rem;
     color:#373737;
     line-height: 0.375rem;
-    text-align: center;
-  }
-  .topLeft p span{
-    font-size: 0.3125rem;
-    color:#999;
-    line-height: 1rem;
+    text-align: left;
+    padding:0.2rem 0.8rem;
+    width:4.77rem;
+    height: 0.4rem;
+    margin: 0.7rem auto;
+    display: block;
+    border-radius: 0.4rem;
+    background-image: url("../images/sousuo2.png");
+    background-position: 0.2rem 50%;
+    background-repeat: no-repeat;
+    background-size: 0.375rem;
   }
   .topRight{
-    float: right;
-    width:60%;
+    width:100%;
     padding-top: 0.3rem;
-    box-sizing: border-box;
-    border-left: 1px solid #dadada;
   }
   .topRightF:nth-child(1){
     float: left;
-    width:40%;
+    width:50%;
   }
   .topRightF:nth-child(2){
     float: left;
     width:50%;
   }
   .topRightF p{
-    font-size: 0.5rem;
-    color:#373737;
-    line-height: 0.375rem;
+    font-size: 0.7rem;
+    color:#fff;
+    line-height: 0.7rem;
     text-align: center;
   }
   .topRightF p span{
-    font-size: 0.3125rem;
-    color:#999;
+    font-size: 0.35rem;
+    color:#fff;
     line-height: 1rem;
   }
   .center{
