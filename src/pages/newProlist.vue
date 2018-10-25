@@ -19,7 +19,7 @@
         </div>
         <div class="clearBoth"></div>
       </div>
-      <div style="top: 2.4rem;" v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
+      <div style="top: 2.6rem;" v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
             <div class="startEndBox">
@@ -305,7 +305,7 @@
   }
   .mescroll{
     position: absolute;
-    top:2.4rem;
+    top:2.6rem;
     bottom:0rem;
     height: auto!important;
   }
@@ -327,6 +327,7 @@
     float: left;
     margin:0 auto;
     background:white;
+    margin-top: 0.2rem;
   }
   .wrapper .scroller {
     position:absolute;
@@ -436,7 +437,7 @@
     position: fixed;
     width:1.5rem;
     height:1.5rem;
-    background: #1D68A8;
+    background-color: rgba(29,104,168,0.8);
     color:white;
     font-size: 0.35rem;
     border-radius: 50%;
@@ -487,6 +488,7 @@
     color:#1D68A8;
     box-sizing: border-box;
     border-left: 1px solid #dadada;
+    margin-top: 0.2rem;
   }
   .looktrackList img{
     width:1rem;
