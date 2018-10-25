@@ -5,20 +5,20 @@
       <div class="wrapper" id="trackTab">
         <div class="scroller">
           <ul class="clearfix">
-            <li v-for="(item,index) in list" :i="index"><a href="javascript:void(0)">{{item.name}}<span v-if="item.number*1 > 0">{{item.number}}</span></a></li>
+            <li v-for="(item,index) in list" :style="{width : 10 / list.length + 'rem'}" :i="index"><a href="javascript:void(0)">{{item.name}}<span v-if="item.number*1 > 0">{{item.number}}</span></a></li>
           </ul>
         </div>
       </div>
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
+          <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice ,index)">
             <div class="startEndBox">
               <div class="startEnd"><div class="circleList"></div><span class="startEndSpan">{{items.deliAddr}}-{{items.arriAddr}}</span></div>
               <div class="triangle_border_right"></div>
               <div class="clearBoth"></div>
             </div>
             <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
-            <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
+            <h3 v-html="type == null ? (items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : '') : ( index == 1 ? '待付款' : (items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : '') )"></h3>
             <div class="proBox">
               <h6 class="deliDateTime">{{items.deliDate}}</h6>
               <h6 class="arriDateTime">{{items.arriDate}}</h6>
@@ -51,6 +51,10 @@
                 number:0,
                 prolist:[]
              },{
+               name:"待付款",
+               number:0,
+               prolist:[]
+             },{
                name:"运输中",
                number:0,
                prolist:[]
@@ -60,6 +64,7 @@
                prolist:[]
              }],
             tabShow:0,
+            type:null,
           }
        },
        mounted:function () {
@@ -75,13 +80,25 @@
          sessionStorage.removeItem("ORDERSCREEN");
          sessionStorage.removeItem("orderType");
          androidIos.judgeIphoneX("trackList",2);
+         var type = _this.$route.query.type;
+         if(type != undefined){
+           _this.type = type;
+           var json = {
+               name:"待付款",
+               number:0,
+               prolist:[]
+             }
+           _this.list.splice(1,1);
+           _this.list.splice(1,0,json);
+         }else{
+           _this.list.splice(1,1);
+         }
          androidIos.bridge(_this);
          androidIos.noviceguidance(2);
        },
        methods:{
          go:function () {
              var _this = this;
-             _this.corner();
              var trackTap = sessionStorage.getItem("trackTap");
              if(trackTap != undefined){
                 _this.tabShow = trackTap*1;
@@ -169,6 +186,7 @@
              function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
                //延时一秒,模拟联网
                setTimeout(function () {
+                 _this.corner();
                  $.ajax({
                    type: "POST",
                    url: androidIos.ajaxHttp() + "/order/loadInvoice",
@@ -176,7 +194,7 @@
                      page:pageNum,
                      size:pageSize,
                      type:2,
-                     state:curNavIndex == 0 ? "" : curNavIndex == 1 ? 7 : curNavIndex == 2 ? 8 : "",
+                     state:curNavIndex == 0 ? "" : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 5 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
                      userCode:sessionStorage.getItem("token"),
                      source:sessionStorage.getItem("source")
                    }),
@@ -204,14 +222,19 @@
                },100)
              }
            },
-         lookTrackMore:function (pk) {
+         lookTrackMore:function (pk,index) {
             var _this = this;
            androidIos.addPageList();
-           _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+           if(_this.type != null && index == 1){
+             _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:2}});
+           }else{
+             _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+           }
          },
          corner:function () {
            var _this = this;
-           $.ajax({
+           var list0 = 0 ,list1 = 0 , list2 = 0,list3 = 0 ;
+           var ajax1 = $.ajax({
              type: "POST",
              url: androidIos.ajaxHttp() + "/order/getOrderCount",
              data:JSON.stringify({
@@ -223,9 +246,15 @@
              timeout: 30000,
              success: function (carrOrderListHeaderIcon) {
                if (carrOrderListHeaderIcon.success == "1") {
-                 _this.list[0].number = carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
-                 _this.list[1].number = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
-                 _this.list[2].number = carrOrderListHeaderIcon.completedCount*1;
+                 if(_this.type == null){
+                   list0 =  carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
+                   list1 = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                   list2 = carrOrderListHeaderIcon.completedCount*1;
+                 }else{
+                   list0 = carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
+                   list2 = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                   list3 = carrOrderListHeaderIcon.completedCount*1;
+                 }
                }else{
                  androidIos.second(carrOrderListHeaderIcon.message);
                }
@@ -238,6 +267,46 @@
                }
              }
            });
+           var ajax2 ;
+           if(_this.type != null){
+             ajax2 = $.ajax({
+               type: "POST",
+               url: androidIos.ajaxHttp() + "/order/getPayCount",
+               data:JSON.stringify({
+                 userCode:sessionStorage.getItem("token"),
+                 source:sessionStorage.getItem("source")
+               }),
+               contentType: "application/json;charset=utf-8",
+               dataType: "json",
+               timeout: 30000,
+               success: function (getPayCount) {
+                 if (getPayCount.success == "1") {
+                   list1 = getPayCount.unPaied*1;
+                 }else{
+                   androidIos.second(getPayCount.message);
+                 }
+               },
+               complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                 if (status == 'timeout') { //超时,status还有success,error等值的情况
+                   androidIos.second("当前状况下网络状态差，请检查网络！");
+                 } else if (status == "error") {
+                   androidIos.errorwife();
+                 }
+               }
+             });
+           }
+           Promise.all([ajax1, ajax2]).then(function(values) {
+             if(_this.type == null){
+               _this.list[0].number = list0;
+               _this.list[1].number = list1;
+               _this.list[2].number = list2;
+             }else{
+               _this.list[0].number = list0 + list1;
+               _this.list[1].number = list1;
+               _this.list[2].number = list2;
+               _this.list[3].number = list3;
+             }
+           })
          },
        },
       beforeDestroy:function () {

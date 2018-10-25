@@ -75,7 +75,7 @@
         },{
           name:"我的订单",
           icon:require("../images/userorderList.png"),
-          url:"/trackList",
+          url:"/trackList?type=1",
           number:0,
         },{
           name:"添加账号",
@@ -128,6 +128,7 @@
       androidIos.judgeIphoneX("userBox",1);
       androidIos.judgeIphoneX("user",2);
       sessionStorage.removeItem("settlementTap");
+      sessionStorage.removeItem("trackTap");
       var ownerMessage = sessionStorage.getItem("ownerMessage");
       if(ownerMessage != null) {
         ownerMessage = JSON.parse(ownerMessage);
@@ -222,6 +223,60 @@
           }
         }
       });
+      var list0 = 0 ,list1 = 0 ;
+      var ajax1 = $.ajax({
+        type: "POST",
+        url: androidIos.ajaxHttp() + "/order/getOrderCount",
+        data:JSON.stringify({
+          userCode:sessionStorage.getItem("token"),
+          source:sessionStorage.getItem("source"),
+        }),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        timeout: 30000,
+        success: function (carrOrderListHeaderIcon) {
+          if (carrOrderListHeaderIcon.success == "1") {
+              list0 = carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
+          }else{
+            androidIos.second(carrOrderListHeaderIcon.message);
+          }
+        },
+        complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+          if (status == 'timeout') { //超时,status还有success,error等值的情况
+            androidIos.second("当前状况下网络状态差，请检查网络！");
+          } else if (status == "error") {
+            androidIos.errorwife();
+          }
+        }
+      });
+      var ajax2  = $.ajax({
+          type: "POST",
+          url: androidIos.ajaxHttp() + "/order/getPayCount",
+          data:JSON.stringify({
+            userCode:sessionStorage.getItem("token"),
+            source:sessionStorage.getItem("source")
+          }),
+          contentType: "application/json;charset=utf-8",
+          dataType: "json",
+          timeout: 30000,
+          success: function (getPayCount) {
+            if (getPayCount.success == "1") {
+              list1 = getPayCount.unPaied*1;
+            }else{
+              androidIos.second(getPayCount.message);
+            }
+          },
+          complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+            if (status == 'timeout') { //超时,status还有success,error等值的情况
+              androidIos.second("当前状况下网络状态差，请检查网络！");
+            } else if (status == "error") {
+              androidIos.errorwife();
+            }
+          }
+        });
+      Promise.all([ajax1, ajax2]).then(function(values) {
+          _this.tabList[1].number = list0  + list1;
+      })
       androidIos.bridge(_this);
     },
     methods:{

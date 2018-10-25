@@ -65,7 +65,7 @@ var androidIos = {
   },
   ajaxHttp: function () {
     // var http = 'http://10.10.10.187:8085';
-    var http = 'http://10.10.10.189:8085';
+    //var http = 'http://10.10.10.189:8085';
    var http = 'http://222.73.159.76:8085';
     return http;
   },
