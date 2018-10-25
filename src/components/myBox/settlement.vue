@@ -15,17 +15,21 @@
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
+            <div class="startEndBox">
+              <div class="startEnd"><div class="circleList"></div><span class="startEndSpan">{{items.deliAddr}}-{{items.arriAddr}}</span></div>
+              <div class="triangle_border_right"></div>
+              <div class="clearBoth"></div>
+            </div>
+            <h3>支付</h3>
             <div class="proBox">
-              <p class="startEnd"><span class="startEndSpan">{{items.deliAddr}} - {{items.arriAddr}}</span></p>
-              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsCode}}/{{pro.num}}件<span v-html="pro.weight*1 > 0 ? '/' +pro.weight/1000 + '吨' : ''"></span><span v-html="pro.volume*1 > 0 ? '/' + pro.volume*1 + '立方米' : ''"></span></div>
+              <h6 class="deliDateTime">{{items.deliDate}}</h6>
+              <h6 class="arriDateTime">{{items.arriDate}}</h6>
+              <h6 class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsCode}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></h6>
+              <h6 class="driver">{{items.deliContact}}</h6>
+              <h5 class="remark">{{items.memo}}</h5>
+              <div class="clearBoth"></div>
             </div>
             <h1>订单编号：{{items.vbillno}}</h1>
-            <h6>下单时间：{{items.deliDate}}</h6>
-            <div class="payBoth">
-                   ￥{{items.amount*1}}
-              <button>支付</button>
-            </div>
-            <div class="clearBoth"></div>
           </li>
         </ul>
       </div>
@@ -312,85 +316,129 @@
     width:100%;
   }
   .data-list li{
-    width:100%;
+    width:94%;
     margin: 0.2rem auto 0.08rem;
     background: white;
-    padding:0.4rem 0 ;
+    border-radius:0.16rem;
+    padding:0.1rem 0 0.21rem 0;
     position: relative;
   }
   .data-list li h6{
     font-size:0.32rem ;
-    color:#999;
-    width: 85.2%;
-    margin: 0 auto;
-    padding: 0.2rem 0.54rem 0 0.54rem;
-    background-image: url("../../images/time.png");
-    background-position: 0 0.28rem;
+    color:#373737;
+    margin-bottom: 0.01rem;
+    padding-left: 5%;
+    margin-left: 2%;
     background-repeat: no-repeat;
-    background-size: 0.35rem;
+    background-size:0.27rem ;
+    background-position: 0 50%;
+    width:43%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    float: left;
+    line-height: 0.44rem;
+    height: 0.44rem;
+    margin-bottom: 0.21rem;
+  }
+  .data-list li h5{
+    font-size:0.32rem ;
+    color:#373737;
+    margin-bottom: 0.01rem;
+    padding-left: 5%;
+    margin-left: 2%;
+    background-repeat: no-repeat;
+    background-size:0.27rem ;
+    background-position: 0 50%;
+    width:88%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    float: left;
+    line-height: 0.44rem;
+    height: 0.44rem;
   }
   .data-list li h1{
-    font-size:0.32rem ;
+    font-size:0.34rem ;
     color:#999;
-    width: 85.2%;
-    margin: 0 auto;
-    padding: 0.33rem 0.54rem 0 0.54rem;
-    background-image: url("../../images/settlementNumber.png");
-    background-position: 0 0.4rem;
-    background-repeat: no-repeat;
-    background-size: 0.35rem;
+    padding-top: 0.25rem;
+    margin-left: 0.5rem;
   }
   .data-list li h3{
     position: absolute;
-    width:2rem;
+    width:1.2rem;
     font-size: 0.375rem;
-    right:0;
-    top:0.6rem;
-    line-height: 0.48rem;
+    right:0.3rem;
+    bottom:0.21rem;
     background-size: 0.48rem;
     background-repeat: no-repeat;
     background-position: 0 50%;
     padding-left: 0.6rem;
+    color:#fff;
+    background: #1D68A8;
+    line-height: 0.8rem;
+    border-radius: 0.2rem;
+  }
+  .jinjiOrder{
+    position: absolute;
+    font-size: 0.3125rem;
+    right:0.3rem;
+    top:0.15rem;
+    color:#1D68A8;
+    width:1rem;
+  }
+  .deliDateTime{
+    background-image: url("../../images/cc.png");
+  }
+  .arriDateTime{
+    background-image: url("../../images/cc.png");
+  }
+  .proBoxList{
+    background-image: url("../../images/tranprotype.png");
+  }
+  .driver{
+    background-image: url("../../images/trandriver.png");
+  }
+  .remark{
+    background-image: url("../../images/tranremark.png");
   }
   .proBox{
-    width:96%;
-    margin: 0 auto;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid #e5e5e5;
+    width:94%;
+    margin: 0.2rem auto;
+    border-radius: 0.1rem;
+    border: 1px solid white;
   }
   .startEnd{
-    padding:0 0.54rem ;
-    background-image: url("../../images/settlementAdress.png");
-    background-position: 0 0.1rem;
-    background-repeat: no-repeat;
-    background-size:0.35rem ;
+    background:#1D68A8 ;
+    padding: 0 0.92rem 0 0.7rem;
+    float: left;
+    position: relative;
+    max-width: 5.5rem;
   }
   .startEndSpan{
     font-size: 0.375rem;
-    font-weight:bold;
-    line-height: 0.56rem;
-    color:#373737;
-    margin-bottom: 0.25rem;
+    line-height: 0.6rem;
+    color:#fff;
 
   }
-  .startEnd img{
-    display: inline-block;
-    margin:0rem 0.3rem 0.13rem 0.3rem;
-    width:0.45rem;
+  .circleList{
+    width:0.22rem;
+    height: 0.22rem;
+    background: white;
+    position: absolute;
+    border-radius: 50%;
+    top:50%;
+    margin-top: -0.11rem;
+    left:0.29rem;
   }
-  .proBoxList{
-    color:#999;
-    font-size:0.375rem ;
-    margin-top: 0.1rem;
-    padding:0 0.54rem ;
-    background-image: url("../../images/product.png");
-    background-position: 0 0.1rem;
-    background-repeat: no-repeat;
-    background-size:0.35rem ;
-  }
-  .proBoxList span{
-    color:#999;
-    font-size:0.375rem ;
+  .triangle_border_right{
+    width:0;
+    height:0;
+    border-width:0.29rem 0rem 0.29rem 0.29rem;
+    border-style:solid;
+    border-color:transparent transparent transparent #1D68A8;/*透明 透明 透明 灰*/
+    position:relative;
+    float: left;
   }
 
 </style>
