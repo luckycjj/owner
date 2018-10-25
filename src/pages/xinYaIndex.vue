@@ -19,13 +19,12 @@
          <div class="center">
            <div class="title"> 我的订单<div class="clearBoth"></div></div>
            <ul>
-             <li v-for="(item,index) in iconList">
-                 <div class="iconListImg">
-                   <img :src="item.icon">
+             <li v-for="(item,index) in iconList" @click="lookTrackList(index)">
+                 <div class="iconListImg" :style="{backgroundImage :'url(' + item.icon +')'}">
+                   <div class="Indexcorner" v-if="item.number > 0"  :style="{marginRight:item.marginRight}">{{item.number}}</div>
                  </div>
                  {{item.name}}
              </li>
-             <div class="clearBoth"></div>
            </ul>
          </div>
       </div>
@@ -49,19 +48,23 @@
              iconList:[{
                 name:"运输中",
                 number:0,
-                icon:require("../images/trackList1.png")
+                icon:require("../images/trackList1.png"),
+                marginRight:0,
              },{
                name:"已完成",
                number:0,
-               icon:require("../images/trackList2.png")
+               icon:require("../images/trackList2.png"),
+               marginRight:0,
              },{
                name:"对账单",
                number:0,
-               icon:require("../images/trackList3.png")
+               icon:require("../images/trackList3.png"),
+               marginRight:0,
              },{
                name:"异常单",
                number:0,
-               icon:require("../images/trackList4.png")
+               icon:require("../images/trackList4.png"),
+               marginRight:0,
              }]
            }
         },
@@ -71,13 +74,20 @@
           androidIos.judgeIphoneX("xinYaIndexBox",1);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
+          if(sessionStorage.getItem("indexCorner") != undefined){
+            _this.iconList = JSON.parse(sessionStorage.getItem("indexCorner"));
+          }
           sessionStorage.removeItem("indexKeyword");
+          sessionStorage.removeItem("trackTap");
+          sessionStorage.removeItem("settlementTap");
           androidIos.noviceguidance(1);
           androidIos.bridge(_this);
       },
       methods:{
         go:function () {
             var _this = this;
+            _this.marginWidth();
+            _this.corner();
             var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
             if(INDEXSCROLLTOP != null){
               $("#xinYaIndexBox").animate({scrollTop: INDEXSCROLLTOP}, 0);
@@ -96,10 +106,95 @@
              _this.$router.push({path:"/orderScreen",query:{keyword:_this.keyWord}});
           }
         },
+        corner:function () {
+          var _this = this;
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "/order/getPayCount",
+            data:JSON.stringify({
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (getPayCount) {
+              if (getPayCount.success == "1") {
+                _this.iconList[2].number = getPayCount.paied*1;
+                _this.$nextTick(function () {
+                  _this.marginWidth();
+                })
+              }else{
+                androidIos.second(getPayCount.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                androidIos.errorwife();
+              }
+            }
+          });
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "/order/getOrderCount",
+            data:JSON.stringify({
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source"),
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (carrOrderListHeaderIcon) {
+              if (carrOrderListHeaderIcon.success == "1") {
+                _this.iconList[0].number = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                _this.iconList[1].number = carrOrderListHeaderIcon.completedCount*1;
+                sessionStorage.setItem("indexCorner",JSON.stringify(_this.iconList));
+                _this.$nextTick(function () {
+                  _this.marginWidth();
+                })
+              }else{
+                androidIos.second(carrOrderListHeaderIcon.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                androidIos.errorwife();
+              }
+            }
+          });
+        },
+        lookTrackList:function (type) {
+          var _this = this;
+          if(type ==0 || type == 1){
+            androidIos.addPageList();
+            sessionStorage.setItem("trackTap",type + 1);
+            _this.$router.push({path:"/trackList"});
+          }else if(type == 2){
+            androidIos.addPageList();
+            sessionStorage.setItem("settlementTap",1);
+            _this.$router.push({path:"/settlement"});
+          }
+        },
         getPageScroll:function() {
           var  yScroll;
           yScroll = document.getElementById("xinYaIndexBox").scrollTop;
           sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
+        },
+        marginWidth:function () {
+          var _this = this;
+          var corner = document.getElementsByClassName("Indexcorner");
+          for(var i = 0; i< corner.length;i++){
+            var width = corner[i].scrollWidth;
+            _this.iconList[i].marginRight = - width / (2*(_this.htmlSize())) + 0.05+ "rem";
+            corner[i].style.marginRight = - width / (2*(_this.htmlSize())) + 0.05+ "rem";
+          }
+        },
+        htmlSize:function () {
+          return document.getElementsByTagName("html")[0].style.fontSize.replace("px","");
         }
       }
     }
@@ -194,21 +289,43 @@
   }
   .center ul {
     width:100%;
-    padding: 0.6rem 0 0.5rem 0;
+    padding: 1px 0 0.5rem 0;
+    overflow: hidden;
   }
   .center ul li{
-    width:25%;
+    width:50%;
     float: left;
     text-align: center;
     font-size: 0.32rem;
     color:#373737;
+    margin-top:0.6rem ;
   }
   .center ul li .iconListImg{
-    width:0.587rem;
+    width:1rem;
+    height: 1rem;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    background-position: 50% 50%;
     margin: 0 auto 0.175rem auto;
     position: relative;
   }
   .iconListImg img{
     width:100%;
+  }
+  .iconListImg p {
+     position: absolute;
+  }
+  .Indexcorner{
+    background: white;
+    font-size: 0.3125rem;
+    color:#1d68a9;
+    position: absolute;
+    top:0;
+    right:0;
+    padding: 0.01rem 0.16rem;
+    border-radius: 0.3rem;
+    margin-top: -0.2rem;
+    margin-right:-0.17667rem ;
+    border: 1px solid #1d68a9;
   }
 </style>

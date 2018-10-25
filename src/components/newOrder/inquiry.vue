@@ -23,7 +23,7 @@
             <span class="required">货品名称</span>
             <div class="inputBox">
                <input type="text" maxlength="30" @blur="problur()" @keyup="prokeyup()" @focus="profocus()" v-model="message.pro" placeholder="请填写货品名称"/>
-               <ul v-if="listShow">
+               <ul v-if="listShow && (message.prolist.length > 0 || message.historylist.length > 0)">
                  <li v-for="(item,index) in message.historylist" @click="clicklist(item.name,$event)">{{item.name}}<div @click="closedHis(index)" class="closed" ></div></li>
                  <li v-for="(item,index) in message.prolist" @click="clicklist(item.name,$event)" :class="index == message.prolist.length - 1 ? 'borderno' : ''">{{item.name}}</li>
                </ul>

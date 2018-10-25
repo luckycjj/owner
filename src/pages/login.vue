@@ -36,10 +36,12 @@
           androidIos.delCookie("BAIDUTOKEN");
           sessionStorage.removeItem("ownerMessage");
           sessionStorage.removeItem("trackTap");
+          sessionStorage.removeItem("settlementTap");
           sessionStorage.removeItem("newProTap");
           sessionStorage.removeItem("INDEXSCROLLTOP");
           sessionStorage.removeItem("driverBottomIcon");
           sessionStorage.removeItem("messageCount");
+          sessionStorage.removeItem("indexCorner");
           localStorage.removeItem("noviceguidance1");
           localStorage.removeItem("noviceguidance2");
           localStorage.removeItem("noviceguidance3");
