@@ -192,7 +192,7 @@
                 page:pageNum,
                 size:pageSize,
                 type:2,
-                state:curNavIndex == 0 ? "" : curNavIndex == 1 ? 7 : curNavIndex == 2 ? 8 : "",
+                state:curNavIndex == 0 ? "" : curNavIndex == 1 ? 8 : curNavIndex == 2 ? 8 : "",
                 userCode:sessionStorage.getItem("token"),
                 source:sessionStorage.getItem("source")
               }),
@@ -233,7 +233,7 @@
       lookTrackMore:function (pk) {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+        _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:3}});
       },
       corner:function () {
         var _this = this;

@@ -11,7 +11,6 @@
           <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
           <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
           <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
-          <div id="messageLD" class="asd"  v-if="doNow == 7" @click="messageLD()"><div id="messageLDTX"></div></div>
           <h3  id="authenticationTab" style="display: none;" class="asd"  v-if="doNow==8"><span>上一步</span></h3>
           <h3  id="xunjia" class="asd" @click="inquiry()"  v-if="doNow==9"><span>询价</span></h3>
         </div>
@@ -112,8 +111,6 @@
         _this.doNow = 5;
       }else if( _this.html.indexOf("/trackList") != -1){
         _this.doNow = 6;
-      }else if( _this.html.indexOf("/xinYaIndex") != -1){
-        _this.doNow = 7;
       }else if( _this.html.indexOf("/authentication") != -1){
         _this.doNow = 8;
       }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
@@ -149,8 +146,6 @@
           _this.doNow = 5;
         }else if( _this.html.indexOf("/trackList") != -1){
           _this.doNow = 6;
-        }else if( _this.html.indexOf("/xinYaIndex") != -1){
-          _this.doNow = 7;
         }else if( _this.html.indexOf("/authentication") != -1){
           _this.doNow = 8;
         }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
@@ -182,76 +177,6 @@
         var _this = this;
         androidIos.addPageList();
         _this.$router.push({ path: "/newOrder/inquiry"});
-      },
-      messageLD:function () {
-        var _this = this;
-        var cookie = androidIos.getcookie("MESSAGEDRIVER");
-          androidIos.messageSite(2);
-          if(cookie != "") {
-              $("#sitechoosesite,#siteLine").show();
-          }else{
-            $("#sitechoosesite,#siteLine").hide();
-
-          }
-          $("#sitechoosesite").unbind("click").click(function () {
-            androidIos.addPageList();
-            var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
-            sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
-            _this.$router.push({path:"/logicsOrder"});
-          })
-          $("#sitedismantling").unbind("click").click(function () {
-            androidIos.addPageList();
-            var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
-            sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
-            _this.$router.push({path:"/messageList"});
-          })
-          var  messageCount = sessionStorage.getItem("messageCount");
-          if(messageCount != undefined && messageCount > 0){
-            $("#sitechoosesite span").show();
-            $("#sitechoosesite span").text(messageCount);
-            sessionStorage.removeItem("messageCount");
-          }else{
-            $("#sitechoosesite span").hide();
-          }
-          $.ajax({
-            type: "POST",
-            url: androidIos.ajaxHttp() + "/order/messageCount",
-            data: JSON.stringify({
-              userCode: sessionStorage.getItem("token"),
-              source: sessionStorage.getItem("source")
-            }),
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            timeout: 30000,
-            success: function (driverBottomIcon) {
-              if (driverBottomIcon.success == "1") {
-                if(driverBottomIcon.count > 0){
-                  $("#sitechoosesite span").show();
-                  $("#sitechoosesite span").text(messageCount);
-                  sessionStorage.setItem("messageCount", driverBottomIcon.count * 1);
-                }else{
-                  $("#sitechoosesite span").hide();
-                }
-              } else {
-                androidIos.second(driverBottomIcon.message);
-              }
-            },
-            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-              if (status == 'timeout') { //超时,status还有success,error等值的情况
-                androidIos.second("当前状况下网络状态差，请检查网络！");
-              } else if (status == "error") {
-                androidIos.errorwife();
-              }
-            }
-          });
-   /*     }else if(cookie == ""){
-          androidIos.first("尚未登录,请登录！");
-          $(".tanBox-yes").unbind('click').click(function(){
-            $(".tanBox-bigBox").remove();
-            _this.$router.push({path:"/login"});
-          });
-        }*/
-
       }
     }
   }

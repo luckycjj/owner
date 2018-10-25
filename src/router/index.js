@@ -76,7 +76,9 @@ Vue.filter('companyTypeName', function(value) {
   }
   return valueTypeName
 });
-
+Vue.filter('toThousands',function (num) {
+  return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+})
 Vue.filter('orderTypeName', function(value) {
   value = value*1;
   var valueTypeName  ="";

@@ -165,7 +165,7 @@
               <button @click="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
-            <div class="go" v-else-if="type=='1001' && orderSource == 1">
+            <div class="go" v-else-if="(type=='1001' && orderSource == 1) || orderSource == 3">
               <button class="zhifu" @click="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
@@ -844,7 +844,7 @@
     setTimeout(function () {
       thisThat.carList = [];
       thisThat.$nextTick(function () {
-        if(thisThat.$route.query.type == 1 || thisThat.$route.query.type == 2){
+        if(thisThat.$route.query.type == 1 || thisThat.$route.query.type == 2 || thisThat.$route.query.type == 3){
           $.ajax({
             type: "POST",
             url: androidIos.ajaxHttp()+"/order/invoiceDetail",

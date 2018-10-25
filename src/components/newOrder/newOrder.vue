@@ -624,6 +624,7 @@
                       pk_carrier:invoiceDetail.carrierDto.pkCarrier,
                       driver_name:"",
                       insurance:"",
+                      jizhuangjixie:"",
                       remark:invoiceDetail.remark,
                       pay:0,
                       read:true,
@@ -1724,7 +1725,7 @@
               if_insurance:self.insurance,
               pay:self.pay==1?"收货方":"发货方",
               est_amount:_this.price*1,
-              remark:self.remark + self.jizhuangjixie,
+              remark:self.remark + self.jizhuangjixie + ",",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
             };
