@@ -116,7 +116,7 @@
       </div>
       <div v-if="pk==''" id="read"  style="margin: 0 auto; width: 94%;background: transparent;height: 1.4rem;line-height: 1.4rem;">
         <div class=" borderno">
-          <label><div class="circleBox" @click="readChoose()"><div class="circletrue" v-if="both.read"></div></div><span style="font-size: 0.35rem;color:#999999;">已阅读</span><span @click="needKnow()"  style="font-size: 0.35rem;color:#999999;">《发货须知》</span><span @click="calculatorGo()" style="font-size: 0.35rem; color:#999;float: right;"> 计算器</span><div class="clearBoth"></div></label>
+          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><span @click="calculatorGo()" style="font-size: 0.35rem; color:#999;float: right;"> 计算器</span><div class="clearBoth"></div></label>
         </div>
       </div>
       <button id="submit" class="gogogo" @click="submitGo()">提交</button>
@@ -239,7 +239,7 @@
               insurance:"",
               remark:"",
               pay:0,
-              read:true,
+              read:false,
               scrollTop:0,
               initialWeight:0,
               price:"",
@@ -327,7 +327,7 @@
               _this.price=(_this.price.toString().match(/\d+(\.\d{0,2})?/)||[''])[0];
               _this.both.cartypeOther = (_this.both.cartypeOther.toString().match(/\d+(\.\d{0,1})?/)||[''])[0];
               if(_this.pk == ""){
-                if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.read&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30)){
+                if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30)){
                   for(var i = 0;i<self.productList.length;i++) {
                     if(_this.price!=""){
                       if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -390,7 +390,7 @@
               for(var i = 0;i<self.productList.length;i++) {
                 weightBoth =  weightBoth + self.productList[i].wight * self.productList[i].wightTen;
               }
-              if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.read&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30) ){
+              if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30) ){
                 for(var i = 0;i<self.productList.length;i++) {
                   if(_this.price!=""){
                     if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -625,9 +625,9 @@
                       driver_name:"",
                       insurance:"",
                       jizhuangjixie:"",
-                      remark:invoiceDetail.remark,
+                      remark:invoiceDetail.remark == null ? "" : invoiceDetail.remark,
                       pay:0,
-                      read:true,
+                      read:false,
                       scrollTop:0,
                       initialWeight:_this.both.initialWeight,
                       price:invoiceDetail.price,
@@ -1072,7 +1072,7 @@
             volumn = volumn*1 + _this.both.productList[x].weight * _this.both.productList[x].weightTen;
           }
           if(_this.pk == ""){
-            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.read &&((self.tranType != self.tranTypeValue && weight <= 30) ||  weight > 30)){
+            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" &&((self.tranType != self.tranTypeValue && weight <= 30) ||  weight > 30)){
               if(( weight*1 > 0 || volumn*1 > 0) && _this.both.price == ""){
                 var carListSureValueList = self.carListSureValue.split(",");
                 var carListSureValue = "";
@@ -1152,7 +1152,7 @@
           }
           var self = _this.both;
           if(_this.pk == ""){
-            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.read&&((self.tranType != ""&& weight <= 30) ||  weight > 30)){
+            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weight <= 30) ||  weight > 30)){
               for(var i = 0;i<self.productList.length;i++) {
                 if(_this.price!=""){
                   if (self.productList[i].goodsType == "") {
@@ -1646,10 +1646,6 @@
                   bomb.first("请选择运输类别");
                   return false;
                 }
-                if(!self.read){
-                  bomb.first("请勾选发货须知");
-                  return false;
-                }
               }
             }
         },
@@ -1695,6 +1691,7 @@
               }
             }
             carTypeListSureValue = carTypeListSureValueList.join(",");
+            var remarkBox = self.jizhuangjixie == "" ?  self.remark : self.remark + self.jizhuangjixie + ",";
             var json = {
               userCode:sessionStorage.getItem("token"),
               source:sessionStorage.getItem("source"),
@@ -1725,7 +1722,8 @@
               if_insurance:self.insurance,
               pay:self.pay==1?"收货方":"发货方",
               est_amount:_this.price*1,
-              remark:self.remark + self.jizhuangjixie + ",",
+              remark:remarkBox,
+              if_urgent:self.read ? "Y" : "N",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
             };
@@ -2044,18 +2042,16 @@
   #pay .circleBox,#read .circleBox{
     width:0.35rem;
     height: 0.35rem;
-    border: 1px solid #2c9cff;
+    border: 1px solid #333;
     float: left;
-    border-radius: 50%;
     margin-top: 0.5rem;
     margin-right: 0.1rem;
   }
-   #pay .circleBox .circletrue,#read .circleBox .circletrue{
-     width:0.2rem;
-     height: 0.2rem;
-     background: #2c9cff;
-     border-radius: 50%;
-     margin:0.08rem 0.075rem 0 0.075rem;
+   .circletrue{
+     background-image: url("../../images/checkTrue.png");
+     background-position: 50% 50%;
+     background-repeat: no-repeat;
+     background-size: 0.3rem;
    }
    #pay label{
      margin-left: 0.2rem;
