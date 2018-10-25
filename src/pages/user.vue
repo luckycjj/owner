@@ -136,8 +136,7 @@
         _this.message.name = ownerMessage.name;
         _this.message.status = ownerMessage.status;
       }
-      _this.jrisdiction();
-      $.ajax({
+      var ajax = $.ajax({
         type: "POST",
         url: androidIos.ajaxHttp() + "/getUserInfo",
         data:JSON.stringify({
@@ -188,31 +187,6 @@
             _this.tabList[0].number = getPayCount.paied*1 + getPayCount.unPaied*1;
           }else{
             androidIos.second(getPayCount.message);
-          }
-        },
-        complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-          if (status == 'timeout') { //超时,status还有success,error等值的情况
-            androidIos.second("当前状况下网络状态差，请检查网络！");
-          } else if (status == "error") {
-            androidIos.errorwife();
-          }
-        }
-      });
-      $.ajax({
-        type: "POST",
-        url: androidIos.ajaxHttp() + "/order/messageCount",
-        data: JSON.stringify({
-          userCode: sessionStorage.getItem("token"),
-          source: sessionStorage.getItem("source")
-        }),
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        timeout: 30000,
-        success: function (driverBottomIcon) {
-          if (driverBottomIcon.success == "1") {
-            _this.tabList[3].number = driverBottomIcon.count * 1;
-          } else {
-            androidIos.second(driverBottomIcon.message);
           }
         },
         complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
@@ -276,6 +250,41 @@
         });
       Promise.all([ajax1, ajax2]).then(function(values) {
           _this.tabList[1].number = list0  + list1;
+      })
+      Promise.all([ajax]).then(function(values) {
+        $.ajax({
+          type: "POST",
+          url: androidIos.ajaxHttp() + "/order/messageCount",
+          data: JSON.stringify({
+            userCode: sessionStorage.getItem("token"),
+            source: sessionStorage.getItem("source")
+          }),
+          contentType: "application/json;charset=utf-8",
+          dataType: "json",
+          timeout: 30000,
+          success: function (driverBottomIcon) {
+            if (driverBottomIcon.success == "1") {
+              var ownerMessage =  sessionStorage.getItem("ownerMessage");
+              if(ownerMessage != null) {
+                // 1业务员 2审核员 3管理员
+                if (JSON.parse(ownerMessage).role.indexOf(3) != -1) {
+                  _this.tabList[3].number = driverBottomIcon.count * 1;
+                }else{
+                  _this.tabList[2].number = driverBottomIcon.count * 1;
+                }
+              }
+            } else {
+              androidIos.second(driverBottomIcon.message);
+            }
+          },
+          complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+            if (status == 'timeout') { //超时,status还有success,error等值的情况
+              androidIos.second("当前状况下网络状态差，请检查网络！");
+            } else if (status == "error") {
+              androidIos.errorwife();
+            }
+          }
+        });
       })
       androidIos.bridge(_this);
     },
