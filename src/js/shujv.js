@@ -222,6 +222,65 @@ var shujvyuan = {
       }]
     }
     return list;
+  },
+  sixth:function () {
+    var list = [{
+       name:"普货险",
+       number:12000,
+       img:require("../images/veer-134703036.jpg"),
+       price:123
+    },{
+      name:"鲜货险",
+      number:1200,
+      img:require("../images/veer-159279785.jpg"),
+      price:123
+    },{
+      name:"易碎品险",
+      number:12000,
+      img:require("../images/veer-134703036.jpg"),
+      price:1243
+    },{
+      name:"生命安全险",
+      number:12000,
+      img:require("../images/veer-134703036.jpg"),
+      price:1
+    },{
+      name:"车险",
+      number:12000,
+      img:require("../images/veer-134703036.jpg"),
+      price:123
+    },{
+      name:"危险品险",
+      number:12000,
+      img:require("../images/veer-159282503.jpg"),
+      price:123
+    },{
+      name:"人险",
+      number:12000,
+      img:require("../images/veer-159279785.jpg"),
+      price:123
+    },{
+      name:"冷链险",
+      number:12000,
+      img:require("../images/veer-316360254.jpg"),
+      price:1233
+    },{
+      name:"轮胎险",
+      number:12000,
+      img:require("../images/veer-159282503.jpg"),
+      price:1232
+    },{
+      name:"牛险",
+      number:12000,
+      img:require("../images/veer-159282503.jpg"),
+      price:122223
+    },{
+      name:"老满险",
+      number:12000,
+      img:require("../images/veer-159282503.jpg"),
+      price:12224423
+    }]
+    return list;
   }
 }
 export {

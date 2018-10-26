@@ -1,6 +1,7 @@
 <template>
   <div id="trackList" style="top:1.3rem;">
-    <div id="title" v-title data-title="订单跟踪"></div>
+    <div id="title" v-if="type != null" v-title data-title="我的订单"></div>
+    <div id="title" v-else v-title data-title="运单"></div>
     <div id="showBox">
       <div class="wrapper" id="trackTab">
         <div class="scroller">
@@ -67,6 +68,13 @@
             type:null,
           }
        },
+        beforeMount:function () {
+          var _this = this;
+          var type = _this.$route.query.type;
+          if(type != undefined) {
+            _this.type = type;
+          }
+        },
        mounted:function () {
          var _this = this;
          sessionStorage.removeItem("weh");
