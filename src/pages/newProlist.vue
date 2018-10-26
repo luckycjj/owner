@@ -6,7 +6,7 @@
         <div class="wrapper" id="trackTab">
           <div class="scroller">
             <ul class="clearfix">
-              <li v-for="(item,index) in list" :i="index">
+              <li v-for="(item,index) in list" :i="index"  tapmode="">
                 <div class="imgscBox" :style="{backgroundImage:'url(' + item.img + ')'}"></div>
                 <a href="javascript:void(0)">{{item.name}}</a>
               </li>

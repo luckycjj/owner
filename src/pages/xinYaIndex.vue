@@ -17,12 +17,12 @@
             </div>
          </div>
          <div class="center">
-           <div class="title"> 我的订单<div class="clearBoth"></div></div>
            <ul>
              <li v-for="(item,index) in iconList" @click="lookTrackList(index)">
-                 <div class="iconListImg" :style="{backgroundImage :'url(' + item.icon +')'}">
+                 <!--<div class="iconListImg" :style="{backgroundImage :'url(' + item.icon +')'}">
                    <div class="Indexcorner" v-if="item.number > 0"  :style="{marginRight:item.marginRight}">{{item.number}}</div>
-                 </div>
+                 </div>-->
+               <p :style="{ color : index== 3 ? '#FF4500' : '#404060'}">{{item.number | toThousands}}</p>
                  {{item.name}}
              </li>
            </ul>
@@ -46,22 +46,22 @@
              todayPrice : 0,
              keyWord:"",
              iconList:[{
-                name:"运输中",
+                name:"运输中订单",
                 number:0,
                 icon:require("../images/trackList1.png"),
                 marginRight:0,
              },{
-               name:"已完成",
+               name:"已完成订单",
                number:0,
                icon:require("../images/trackList2.png"),
                marginRight:0,
              },{
-               name:"对账单",
+               name:"待分配订单",
                number:0,
                icon:require("../images/trackList3.png"),
                marginRight:0,
              },{
-               name:"异常单",
+               name:"异常订单",
                number:0,
                icon:require("../images/trackList4.png"),
                marginRight:0,
@@ -86,7 +86,7 @@
       methods:{
         go:function () {
             var _this = this;
-            _this.marginWidth();
+
             _this.corner();
             var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
             if(INDEXSCROLLTOP != null){
@@ -110,22 +110,20 @@
           var _this = this;
           $.ajax({
             type: "POST",
-            url: androidIos.ajaxHttp() + "/order/getPayCount",
+            url: androidIos.ajaxHttp() + "/order/homeStatistics",
             data:JSON.stringify({
               userCode:sessionStorage.getItem("token"),
-              source:sessionStorage.getItem("source")
+              source:sessionStorage.getItem("source"),
             }),
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             timeout: 30000,
-            success: function (getPayCount) {
-              if (getPayCount.success == "1") {
-                _this.iconList[2].number = getPayCount.paied*1;
-                _this.$nextTick(function () {
-                  _this.marginWidth();
-                })
+            success: function (homeStatistics) {
+              if (homeStatistics.success == "1") {
+                 _this.todayOrder = homeStatistics.orderTotal * 1;
+                 _this.todayPrice = homeStatistics.todayFee*1;
               }else{
-                androidIos.second(getPayCount.message);
+                androidIos.second(homeStatistics.message);
               }
             },
             complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
@@ -148,12 +146,11 @@
             timeout: 30000,
             success: function (carrOrderListHeaderIcon) {
               if (carrOrderListHeaderIcon.success == "1") {
-                _this.iconList[0].number = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                _this.iconList[0].number = carrOrderListHeaderIcon.onTheWayCount*1;
                 _this.iconList[1].number = carrOrderListHeaderIcon.completedCount*1;
+                _this.iconList[2].number = carrOrderListHeaderIcon.pendingAllocation*1;
+                _this.iconList[3].number = carrOrderListHeaderIcon.abnormalCount*1;
                 sessionStorage.setItem("indexCorner",JSON.stringify(_this.iconList));
-                _this.$nextTick(function () {
-                  _this.marginWidth();
-                })
               }else{
                 androidIos.second(carrOrderListHeaderIcon.message);
               }
@@ -214,10 +211,10 @@
   .top{
     width:100%;
     padding:0.27rem 0;
-    background: -webkit-linear-gradient( #47b2e8 , #1e72b2); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(#47b2e8, #1e72b2); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(#47b2e8, #1e72b2); /* Firefox 3.6 - 15 */
-    background: linear-gradient(#47b2e8 , #1e72b2); /* 标准的语法 */
+    background: -webkit-linear-gradient( #47b2e8 , #1a6bac); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#47b2e8, #1a6bac); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#47b2e8, #1a6bac); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#47b2e8 , #1a6bac); /* 标准的语法 */
   }
   .topLeft{
     width:100%;
@@ -258,15 +255,14 @@
     text-align: center;
   }
   .topRightF p span{
-    font-size: 0.35rem;
+    font-size: 0.32rem;
     color:#fff;
     line-height: 1rem;
   }
   .center{
-    width:96%;
+    width:100%;
     margin:0.32rem auto 0 auto ;
     background: white;
-    border-radius: 0.2rem;
   }
   .center .title{
     font-size: 0.375rem;
@@ -289,16 +285,28 @@
   }
   .center ul {
     width:100%;
-    padding: 1px 0 0.5rem 0;
+    padding: 0.13rem 0 0rem 0;
     overflow: hidden;
   }
   .center ul li{
-    width:50%;
+    width:47.8%;
     float: left;
     text-align: center;
-    font-size: 0.32rem;
-    color:#373737;
-    margin-top:0.6rem ;
+    font-size: 0.34rem;
+    margin-left: 1.46666%;
+    color:#999;
+    background:#F3F5F8 ;
+    margin-bottom: 0.13rem;
+    padding: 0.267rem 0 ;
+  }
+  .center ul li p{
+     text-align: center;
+     font-size: 0.61rem;
+     color:#404060;
+    line-height: 0.9rem;
+  }
+  .center ul li p:nth-child(4){
+    color : #FF4500 !important;
   }
   .center ul li .iconListImg{
     width:1rem;

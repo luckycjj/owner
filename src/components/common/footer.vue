@@ -249,11 +249,11 @@
        background: white;
      }
      .imgBox{
-       width:0.67rem;
-       height: 0.67rem;
-       margin: 0.12rem  auto 0 auto;
+       width:0.58rem;
+       height: 0.58rem;
+       margin: 0.2rem  auto 0 auto;
        background-position: 0 0;
-       background-size: 0.67rem 1.34rem;
+       background-size: 0.58rem 1.16rem;
        background-repeat: no-repeat;
        position: relative;
      }

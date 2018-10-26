@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="bigbigtest appBox">
     <div id="appBox">
+      <div id="iphoneXX"></div>
       <div id="carTitleBox">
         <div class="carTitleBox">
           <div class="carTitleback" @click="goback()" ></div>
@@ -40,7 +41,7 @@
     mounted:function () {
       var _this = this;
       _this.title = document.title;
-      androidIos.judgeIphoneX("carTitleBox",0);
+      androidIos.judgeIphoneX("iphoneXX",4);
       var cookie = androidIos.getcookie("MESSAGEDRIVER");
       sessionStorage.setItem("source",1);
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
@@ -515,5 +516,9 @@
     top:0.40rem;
     right:0;
     display:none;
+  }
+  #iphoneXX{
+    width:100%;
+    height: 0;
   }
 </style>

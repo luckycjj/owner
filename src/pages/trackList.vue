@@ -6,7 +6,7 @@
       <div class="wrapper" id="trackTab">
         <div class="scroller">
           <ul class="clearfix">
-            <li v-for="(item,index) in list" :style="{width : 10 / list.length + 'rem'}" :i="index"><a href="javascript:void(0)">{{item.name}}<span v-if="item.number*1 > 0">{{item.number}}</span></a></li>
+            <li  tapmode="" v-for="(item,index) in list" :style="{width : 10 / list.length + 'rem'}" :i="index"><a href="javascript:void(0)">{{item.name}}<span v-if="item.number*1 > 0">{{item.number}}</span></a></li>
           </ul>
         </div>
       </div>
@@ -255,12 +255,13 @@
              success: function (carrOrderListHeaderIcon) {
                if (carrOrderListHeaderIcon.success == "1") {
                  if(_this.type == null){
-                   list0 =  carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
-                   list1 = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                   list0 =  carrOrderListHeaderIcon.totalCount*1;
+                   list1 = carrOrderListHeaderIcon.onTheWayCount*1;
                    list2 = carrOrderListHeaderIcon.completedCount*1;
                  }else{
-                   list0 = carrOrderListHeaderIcon.unconfirmedCount*1 + carrOrderListHeaderIcon.notTransportedCount*1 + carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1 + carrOrderListHeaderIcon.completedCount*1;
-                   list2 = carrOrderListHeaderIcon.onTheWayCount*1 + carrOrderListHeaderIcon.arrivedCount*1;
+                   list0 = carrOrderListHeaderIcon.myTotalCount*1;
+                   list1 =  carrOrderListHeaderIcon.unPaied*1;
+                   list2 = carrOrderListHeaderIcon.onTheWayCount*1;
                    list3 = carrOrderListHeaderIcon.completedCount*1;
                  }
                }else{
@@ -275,41 +276,13 @@
                }
              }
            });
-           var ajax2 ;
-           if(_this.type != null){
-             ajax2 = $.ajax({
-               type: "POST",
-               url: androidIos.ajaxHttp() + "/order/getPayCount",
-               data:JSON.stringify({
-                 userCode:sessionStorage.getItem("token"),
-                 source:sessionStorage.getItem("source")
-               }),
-               contentType: "application/json;charset=utf-8",
-               dataType: "json",
-               timeout: 30000,
-               success: function (getPayCount) {
-                 if (getPayCount.success == "1") {
-                   list1 = getPayCount.unPaied*1;
-                 }else{
-                   androidIos.second(getPayCount.message);
-                 }
-               },
-               complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-                 if (status == 'timeout') { //超时,status还有success,error等值的情况
-                   androidIos.second("当前状况下网络状态差，请检查网络！");
-                 } else if (status == "error") {
-                   androidIos.errorwife();
-                 }
-               }
-             });
-           }
-           Promise.all([ajax1, ajax2]).then(function(values) {
+           Promise.all([ajax1]).then(function(values) {
              if(_this.type == null){
                _this.list[0].number = list0;
                _this.list[1].number = list1;
                _this.list[2].number = list2;
              }else{
-               _this.list[0].number = list0 + list1;
+               _this.list[0].number = list0;
                _this.list[1].number = list1;
                _this.list[2].number = list2;
                _this.list[3].number = list3;
