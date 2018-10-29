@@ -25,7 +25,7 @@
                <input type="text" maxlength="30" @blur="problur()" @keyup="prokeyup()" @focus="profocus()" v-model="message.pro" placeholder="请填写货品名称"/>
                <ul v-if="listShow && (message.prolist.length > 0 || message.historylist.length > 0)">
                  <li v-for="(item,index) in message.historylist" @click="clicklist(item.name,$event)">{{item.name}}<div @click="closedHis(index)" class="closed" ></div></li>
-                 <li v-for="(item,index) in message.prolist" @click="clicklist(item.name,$event)" :class="index == message.prolist.length - 1 ? 'borderno' : ''">{{item.name}}</li>
+                 <li v-for="(item,index) in message.prolist" @click="clicklist(item.displayName,$event)" :class="index == message.prolist.length - 1 ? 'borderno' : ''">{{item.displayName}}</li>
                </ul>
             </div>
             <div class="clearBoth"></div>
@@ -87,7 +87,7 @@
                  check:false,
                }]
             },
-            suremend: new Debounce(this.prolist, 300),
+            suremend: new Debounce(this.prolist, 500),
             listShow:false,
           }
        },
@@ -97,7 +97,7 @@
           var _this = this;
           _this.message.weight=(_this.message.weight.toString().match(/\d+(\.\d{0,3})?/)||[''])[0];
           _this.message.volume=(_this.message.volume.toString().match(/\d+(\.\d{0,3})?/)||[''])[0];
-          _this.message.pro = _this.message.pro.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\-]/g,'');
+          _this.message.pro = _this.message.pro.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\-\(\)]/g,'');
         },
         deep:true
       }
@@ -206,7 +206,32 @@
           }
         },
         prolist:function () {
-          console.log(1)
+          var _this = this;
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/settings/getGoodsTypeByName",
+            data:{
+               name:_this.message.pro
+            },
+            dataType: "json",
+            timeout: 10000,
+            async:false,
+            success: function (getGoodsTypeByName) {
+              if(getGoodsTypeByName.success=="1"){
+                _this.message.prolist = getGoodsTypeByName.list;
+              }else if(getGoodsTypeByName.success=="-1"){
+                androidIos.second(getGoodsTypeByName.message)
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
+
         },
         inquiryGet:function () {
           var _this = this.message;

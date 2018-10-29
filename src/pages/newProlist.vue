@@ -192,7 +192,7 @@
                 page:pageNum,
                 size:pageSize,
                 type:2,
-                state:curNavIndex == 0 ? "" : curNavIndex == 1 ? 8 : curNavIndex == 2 ? 8 : "",
+                state:curNavIndex == 0 ? 9 : curNavIndex == 1 ? 8 : curNavIndex == 2 ? 11 : "",
                 userCode:sessionStorage.getItem("token"),
                 source:sessionStorage.getItem("source")
               }),

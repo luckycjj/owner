@@ -202,7 +202,7 @@
                      page:pageNum,
                      size:pageSize,
                      type:2,
-                     state:curNavIndex == 0 ? "" : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 5 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
+                     state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 5 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
                      userCode:sessionStorage.getItem("token"),
                      source:sessionStorage.getItem("source")
                    }),
