@@ -120,7 +120,14 @@ Vue.filter('orderTypeName', function(value) {
   }
   return valueTypeName
 });
-
+Vue.filter('time',function (time) {
+  var list0 = time.split(" ");
+  var list1 = list0[0].split("-");
+  var list2 = list0[1].split(":");
+  list1.splice(0,1);
+  list2.splice(2,1);
+  return list1.join("-") + " " + list2.join(":")
+})
 export default new Router({
   routes: [
     {

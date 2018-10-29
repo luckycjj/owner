@@ -1,5 +1,5 @@
 <template>
-    <div id="orderLogistics" style="top:1.3rem">
+    <div id="orderLogistics">
       <router-view/>
     </div>
 </template>
@@ -10,7 +10,7 @@
         name: "orderLogistics",
       mounted: function () {
         var _this = this;
-        androidIos.judgeIphoneX("orderLogistics", 2);
+     /*   androidIos.judgeIphoneX("orderLogistics", 2);*/
       }
     }
 </script>
@@ -21,7 +21,7 @@
   #orderLogistics{
     width:100%;
     height:auto;
-    top:1.3rem;
+    top:0rem;
     bottom:0;
     position: absolute;
     overflow: scroll;

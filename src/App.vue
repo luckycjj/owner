@@ -90,7 +90,7 @@
       var _this = this;
       _this.title = document.title;
       _this.html = location.href;
-      if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1 || _this.html.indexOf("/xinYaIndex") != -1){
+      if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1 || _this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/orderLogistics/orderLogisticsMore") != -1){
         $("#appBox").hide();
       }else{
         $("#appBox").show();
@@ -125,7 +125,7 @@
       _this.$nextTick(function () {
         _this.title = document.title;
         _this.html = location.href;
-        if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1  || _this.html.indexOf("/xinYaIndex") != -1){
+        if(_this.html.indexOf("/login") != -1 || _this.html.indexOf("/newProlist") != -1  || _this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/orderLogistics/orderLogisticsMore") != -1){
           $("#appBox").hide();
         }else{
           $("#appBox").show();

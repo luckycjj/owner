@@ -97,7 +97,6 @@
           var _this = this;
           _this.message.weight=(_this.message.weight.toString().match(/\d+(\.\d{0,3})?/)||[''])[0];
           _this.message.volume=(_this.message.volume.toString().match(/\d+(\.\d{0,3})?/)||[''])[0];
-          _this.message.pro = _this.message.pro.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\-\(\)]/g,'');
         },
         deep:true
       }
