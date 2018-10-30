@@ -382,6 +382,10 @@
     height: 0.44rem;
     margin-bottom: 0.21rem;
   }
+  .data-list li h6 span{
+    font-size:0.32rem ;
+    color:#373737;
+  }
   .data-list li h5{
     font-size:0.32rem ;
     color:#373737;

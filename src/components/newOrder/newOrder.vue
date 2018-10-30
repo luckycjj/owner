@@ -116,7 +116,7 @@
       </div>
       <div v-if="pk==''" id="read"  style="margin: 0 auto; width: 94%;background: transparent;height: 1.4rem;line-height: 1.4rem;">
         <div class=" borderno">
-          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><span @click="calculatorGo()" style="font-size: 0.35rem; color:#999;float: right;"> 计算器</span><div class="clearBoth"></div></label>
+          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><div class="clearBoth"></div></label>
         </div>
       </div>
       <button id="submit" class="gogogo" @click="submitGo()">提交</button>

@@ -4,7 +4,10 @@
       <div id="xinYaIndexBox" style="top:0rem;">
          <div class="top">
             <div class="topLeft">
-              <input type="text" @keyup="keywordUp()"  @blur="keywordblur()" placeholder="请输入订单号" v-model="keyWord"/>
+              <div class="topleftInputBox">
+                <input type="text" @click="keywordblur()"   placeholder="请输入订单号" v-model="keyWord"/>
+              </div>
+
             </div>
             <div class="topRight">
               <div class="topRightF">
@@ -86,7 +89,6 @@
       methods:{
         go:function () {
             var _this = this;
-
             _this.corner();
             var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
             if(INDEXSCROLLTOP != null){
@@ -100,11 +102,9 @@
         },
         keywordblur:function () {
           var _this = this;
-          if(_this.keyWord != ""){
-             androidIos.addPageList();
-             sessionStorage.setItem("indexKeyword",_this.keyWord);
-             _this.$router.push({path:"/orderScreen",query:{keyword:_this.keyWord}});
-          }
+         androidIos.addPageList();
+         sessionStorage.setItem("indexKeyword",_this.keyWord);
+         _this.$router.push({path:"/orderScreen",query:{keyword:_this.keyWord}});
         },
         corner:function () {
           var _this = this;
@@ -220,21 +220,28 @@
     width:100%;
     padding-top: 1px;
   }
+  .topleftInputBox{
+    width:4.77rem;
+    height:0.8rem;
+    padding: 0rem 0.8rem;
+    background-color:white ;
+    background-image: url("../images/sousuo2.png");
+    background-position: 0.2rem 50%;
+    background-repeat: no-repeat;
+    background-size: 0.375rem;
+    border-radius: 0.4rem;
+    margin: 0.7rem auto;
+    border:1px solid white;
+  }
   .topLeft input{
     font-size: 0.375rem;
     color:#373737;
     line-height: 0.375rem;
     text-align: left;
-    padding:0.2rem 0.8rem;
-    width:4.77rem;
+    width:100%;
     height: 0.4rem;
-    margin: 0.7rem auto;
+    margin-top: 0.2rem;
     display: block;
-    border-radius: 0.4rem;
-    background-image: url("../images/sousuo2.png");
-    background-position: 0.2rem 50%;
-    background-repeat: no-repeat;
-    background-size: 0.375rem;
   }
   .topRight{
     width:100%;

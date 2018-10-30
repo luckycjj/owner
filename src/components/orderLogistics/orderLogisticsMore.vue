@@ -49,6 +49,16 @@
               <button @click="orderAgain(3)" class="zhifu">修改订单</button>
               <div class="clearBoth"></div>
             </div>
+            <div class="go" v-else-if="type == '10' && orderSource == 1">
+              <button  class="zhifu"   @click="closedOrder(1)">取消订单</button>
+              <button @click="shengcheng()">生成委托</button>
+              <div class="clearBoth"></div>
+            </div>
+            <div class="go" v-else-if=" type == '0' && orderSource == 1">
+              <button class="zhifu" @click="shenhe()">确认</button>
+              <button @click="closedOrder(2)">驳回</button>
+              <div class="clearBoth"></div>
+            </div>
             <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
               <button class="zhifu"  @click="orderAgain(2)">再下一单</button>
               <button @click="scoreYes(1)">评价</button>
@@ -376,6 +386,46 @@
         Promise.all([ajax]).then(function(values) {
           androidIos.bridge(_this);
         })
+      },
+      shenhe:function () {
+        var _this = this;
+        if(_this.payStatus != 30 && _this.pdlist[0].pickPay.type == '现结'){
+          _this.payOrder();
+        }else{
+          androidIos.loading("正在确认");
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/order/orderConfirm",
+            data:JSON.stringify({
+              pk:_this.$route.query.pk,
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 10000,
+            async:false,
+            success: function (orderConfirm) {
+              if(orderConfirm.success == "1"){
+                _this.$cjj("确认成功");
+                setTimeout(function () {
+                  _this.ajaxorder();
+                },500)
+              }else{
+                androidIos.second(orderConfirm.message);
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              $("#common-blackBox").remove();
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
+        }
+
       },
       mapLook:function () {
         var _this = this;
