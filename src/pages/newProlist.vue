@@ -28,7 +28,7 @@
               <div class="clearBoth"></div>
             </div>
             <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
-            <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
+            <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款': items.status == 5 ? '已签收' : ''"></h3>
             <div class="proBox">
               <h6 class="deliDateTime">{{items.deliDate}}</h6>
               <h6 class="arriDateTime">{{items.arriDate}}</h6>
