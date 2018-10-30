@@ -3,9 +3,11 @@
     <div id="title" v-title data-title="订单详情"></div>
     <div id="titleText"  style="top:0.72rem">
       <div id="titleGoback"  @click="goback()" ></div>
-        {{pdlist[0].orderTypeName}}
+      <p v-html="orderSource == 2 ? (type == '10000' ? '待支付' : '已支付') : pdlist[0].orderTypeName"></p>
     </div>
-    <li v-for="item in pdlist" style="position: absolute;bottom:0rem;width:100%;">
+    <div id="container"></div>
+    <div id="panel"></div>
+    <li id="messageBigBox" :class="moveSure ? 'move' : ''" v-for="item in pdlist">
           <div class="message">
             <div class="goodsmessage">
               <p :data-start="item.pickMessage.address" :data-end="item.endMessage.address" class="startEnd"><span style="float: left;font-size: 0.42rem;color:#373737;">{{item.goodsmessage.startAddress}}<img style="display: inline-block;margin:0rem 0.3rem 0.13rem 0.3rem;width:0.41rem;" src="../../images/addressImg.png">{{item.goodsmessage.endAddress}}</span><div class="clearBoth"></div></p>
@@ -38,7 +40,7 @@
             </li>
           </ul>
           <div id="sure">
-            <div class="go" v-if="type=='10000' && orderSource == 2 && pdlist[0].fabu.indexOf('2') != -1 " >
+            <div class="go" v-if="type=='10000' && orderSource == 2 " >
               <button  @click="payOrder()" class="zhifu">支付</button>
               <div class="clearBoth"></div>
             </div>
@@ -56,9 +58,16 @@
               <button class="zhifu" @click="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
+            <div class="go" v-else>
+              <button style="border-color:white;"></button>
+              <div class="clearBoth"></div>
+            </div>
           </div>
         </li>
-    <div id="scoreBox" v-show="scoreBox">
+    <div id="lookOrderMore" v-if="moveSure"  @click="mapLookS()">
+       查看
+    </div>
+    <div id="scoreBox"v-show="scoreBox">
       <div id="score">
         <div id="scoreTitle">
           <img src="../../images/closed.png" @click="scoreClosed()">
@@ -102,6 +111,7 @@
   import bridge from '../../js/bridge';
   import  "../../js/markingSystem";
   import "../../js/swipeslider";
+  import AMap from 'AMap'
   export default {
     name: "robbingMore",
     data(){
@@ -175,185 +185,205 @@
         scoreBox:false,
         cancelReason:[],
         scoreList:"",
-        mescroll:"",
         scorereason:"",
         cancelreason:"",
         httpurl:"",
         closedType:1,
         carList:[],
-        errorlogo: 'this.src="' + require('../../images/chengyunshang.png') + '"',
-        errorlogo2: 'this.src="' + require('../../images/carpeople.png') + '"',
+        startJ :0,
+        startW :0,
+        endJ:0,
+        endW:0,
+        moveSure:false,
       }
     },
     mounted:function () {
       var _this = this;
       androidIos.judgeIphoneX("titleText",2);
-      $.ajax({
-            type: "POST",
-            url: androidIos.ajaxHttp()+"/order/invoiceDetail",
-            data:JSON.stringify({pk:_this.$route.query.pk,userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")}),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            timeout: 10000,
-            success: function (invoiceDetail) {
-              if(invoiceDetail.success == "" || invoiceDetail.success == "1"){
-                var list=[];
-                for(var i =0;i<invoiceDetail.invPackDao.length;i++){
-                  var weight = invoiceDetail.invPackDao[i].weigthUnit==3?invoiceDetail.invPackDao[i].weight*1000:invoiceDetail.invPackDao[i].weight*1;
-                  var listJson = {
-                    goods:invoiceDetail.invPackDao[i].goodsName+"-"+invoiceDetail.invPackDao[i].goodsTypeName,
-                    number:invoiceDetail.invPackDao[i].num,
-                    weight : weight/1000 - 1 <0 ? weight + "千克" : weight/1000 + "吨",
-                    volume:invoiceDetail.invPackDao[i].volume*1 - 1 < 0 ? invoiceDetail.invPackDao[i].volume*1000 + "升" : invoiceDetail.invPackDao[i].volume*1 + "立方米",
-                  }
-                  list.push(listJson);
-                }
-                var tracking=[];
-                for(var i =0 ;i<invoiceDetail.tracking.length;i++){
-                  var trackingJson = {
-                    type:invoiceDetail.tracking[i].tackingStatus == invoiceDetail.tracking[i].tackingMemo ? invoiceDetail.tracking[i].tackingStatus : invoiceDetail.tracking[i].tackingStatus + ":" +invoiceDetail.tracking[i].tackingMemo,
-                    time:invoiceDetail.tracking[i].tackingTime,
-                  }
-                  tracking.push(trackingJson);
-                }
-                // 新建=0 已确认=10 司机发车=20 部分提货=30 已提货=40 部分到货=50 已到货=60 部分签收=70 已签收=80 已回单=90 关闭=100
-                // $route.query.type 1发货方2付款3收货方
-                var trackingStatusValue = "";
-                if(_this.$route.query.type == "1"  || _this.$route.query.type == "3"){
-                  if(invoiceDetail.trackingStatusValue == "80" && invoiceDetail.ifAppraise == "N"){
-                    trackingStatusValue = 1000;
-                  }else if(invoiceDetail.trackingStatusValue == "80" && invoiceDetail.ifAppraise == "Y"){
-                    trackingStatusValue = 1001;
-                  }else{
-                    trackingStatusValue = invoiceDetail.trackingStatusValue;
-                  }
-                }else if(_this.$route.query.type == "2"){
-                  if(invoiceDetail.payStatus != "30"){
-                    trackingStatusValue = 10000;
-                  }
-                }
-                sessionStorage.setItem("dataStart",invoiceDetail.delivery.addressLatAndLon);
-                sessionStorage.setItem("dataEnd",invoiceDetail.arrival.addressLatAndLon);
-                _this.payStatus = invoiceDetail.payStatus;
-                var tranTypeBoth = invoiceDetail.transType;
-                if(invoiceDetail.carLength !=  "" && invoiceDetail.carLength !=  null){
-                  tranTypeBoth = tranTypeBoth + "(" + invoiceDetail.carLength + "米)";
-                }
-                if(invoiceDetail.carModel != ""  && invoiceDetail.carModel !=  null){
-                  tranTypeBoth = tranTypeBoth + "(" + invoiceDetail.carModel + ")";
-                }
-                var startTime = invoiceDetail.deliDate.split(":");
-                startTime.splice(2,1);
-                var endTime = invoiceDetail.arriDate.split(":");
-                endTime.splice(2,1);
-                var pdlist = [{
-                  orderType:trackingStatusValue,
-                  orderTypeName:invoiceDetail.trackingStatus,
-                  logistics:tracking,
-                  evaluate:{
-                    grade:invoiceDetail.appraiseScore==""?0:invoiceDetail.appraiseScore
-                  },
-                  goodsmessage:{
-                    startAddress:invoiceDetail.delivery != null ? invoiceDetail.delivery.area:"",
-                    endAddress:invoiceDetail.arrival != null ? invoiceDetail.arrival.area:"",
-                    distance:"0",
-                    tranType:tranTypeBoth,
-                    productList:list,
-                    money:invoiceDetail.price*1,
-                    startTime:startTime.join(":"),
-                    endTime:endTime.join(":")
-                  },
-                  pickMessage:{
-                    name:invoiceDetail.delivery!=null?invoiceDetail.delivery.contact:"",
-                    tel:invoiceDetail.delivery!=null?invoiceDetail.delivery.mobile:"",
-                    company:invoiceDetail.delivery!=null?invoiceDetail.delivery.addrName:"",
-                    address:invoiceDetail.delivery!=null?invoiceDetail.delivery.province+invoiceDetail.delivery.area+invoiceDetail.delivery.detailAddr:"",
-                  },
-                  endMessage:{
-                    name:invoiceDetail.arrival!=null?invoiceDetail.arrival.contact:"",
-                    tel:invoiceDetail.arrival!=null?invoiceDetail.arrival.mobile:"",
-                    company:invoiceDetail.arrival!=null?invoiceDetail.arrival.addrName:"",
-                    address:invoiceDetail.arrival!=null?invoiceDetail.arrival.province+invoiceDetail.arrival.area+invoiceDetail.arrival.detailAddr:"",
-                  },
-                  insurance:{
-                    name:"",
-                    price:"200"
-                  },
-                  pickPay:{
-                    people:"发货方",
-                    type:invoiceDetail.balatype == null?"":invoiceDetail.balatype,
-                    remark:invoiceDetail.remark
-                  },
-                  carPeople:{
-                    logo:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverImg:"",
-                    year:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?(invoiceDetail.driverDto[0].driverAge*1 < 1 ?"小于一年":invoiceDetail.driverDto[0].driverAge*1+'年'):"",
-                    grade:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].score*1:"",
-                    name:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverName:"",
-                    tel:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].mobile:"",
-                    yes:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?true:false,
-                  },
-                  carrier:{
-                    logo:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.carrierImg:"",
-                    company:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.carrierName:"",
-                    tranType: invoiceDetail.carrierDto!=null ? (invoiceDetail.carrierDto.tranType == "" ||  invoiceDetail.carrierDto.tranType == null ? "陆运" : invoiceDetail.carrierDto.tranType):"",
-                    year:invoiceDetail.carrierDto!=null?((((new Date()).getTime()-(new Date(invoiceDetail.carrierDto.createDate.replace('-','/').replace('-','/'))).getTime())/1000/60/60/24/365 -0.5)<0?"不到半年":androidIos.fixed(((new Date()).getTime()-(new Date(invoiceDetail.carrierDto.createDate.replace('-','/').replace('-','/'))).getTime())/1000/60/60/24/365 ,1)+"年"):"",
-                    grade:invoiceDetail.carrierDto!=null?(invoiceDetail.carrierDto.score == null || invoiceDetail.carrierDto.score == "" ? 0:invoiceDetail.carrierDto.score*1):"0",
-                    phone:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.mobile:"",
-                    pkCarrier:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.pkCarrier:"",
-                  },
-                  tranNumber:"123321334343",
-                  fabu:invoiceDetail.userRole,
-                  number:invoiceDetail.orderNo,
-                  time:invoiceDetail.createTime,
-                }]
-                // fabu 1业务员 2审核员 3管理员
-                if(invoiceDetail.driverDto != null && invoiceDetail.driverDto.length != 0){
-                  sessionStorage.setItem("driverPk",invoiceDetail.driverDto[0].pkDriver);
-                }
-                _this.carList = [];
-                for(var i = 0; i < invoiceDetail.driverDto.length ; i++ ){
-                  var json = {
-                    logo:invoiceDetail.driverDto[i].driverImg,
-                    name:invoiceDetail.driverDto[i].driverName,
-                    year:invoiceDetail.driverDto[i].driverAge*1 < 1 ? "小于1" : invoiceDetail.driverDto[i].driverAge,
-                    tel:invoiceDetail.driverDto[i].mobile,
-                    startJ :invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[0],
-                    startW : invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[1],
-                    endJ:invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[0],
-                    endW:invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[1],
-                    pkDriver:invoiceDetail.driverDto[i].pkDriver,
-                    peopleJ:invoiceDetail.driverDto[i].driverPosition.split(",")[0],
-                    peopleW:invoiceDetail.driverDto[i].driverPosition.split(",")[1],
-                    ordertype:invoiceDetail.trackingStatusValue*1,
-                    price:invoiceDetail.driverDto[i].score*1,
-                    length:"",
-                  }
-                  _this.carList.push(json);
-                }
-                var data=pdlist;
-                var listData=data;//模拟分页数据
-                _this.pdlist = listData;
-              }else{
-                androidIos.second(invoiceDetail.message);
-              }
+      var ajax =  _this.ajaxorder();
 
-            },
-            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
-              _this.carloading = false;
-              if(status=='timeout'){//超时,status还有success,error等值的情况
-                androidIos.second("网络请求超时");
-              }else if(status=='error'){
-                androidIos.errorwife();
-              }
-            }
-          });
-      androidIos.bridge(_this);
     },
     methods:{
-      mapGoSS:function(order){
+      ajaxorder:function () {
         var _this = this;
-        androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogistics/map'});
+        var ajax = $.ajax({
+          type: "POST",
+          url: androidIos.ajaxHttp()+"/order/invoiceDetail",
+          data:JSON.stringify({pk:_this.$route.query.pk,userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")}),
+          dataType: "json",
+          contentType: "application/json;charset=utf-8",
+          timeout: 10000,
+          success: function (invoiceDetail) {
+            if(invoiceDetail.success == "" || invoiceDetail.success == "1"){
+              var list=[];
+              for(var i =0;i<invoiceDetail.invPackDao.length;i++){
+                var weight = invoiceDetail.invPackDao[i].weigthUnit==3?invoiceDetail.invPackDao[i].weight*1000:invoiceDetail.invPackDao[i].weight*1;
+                var listJson = {
+                  goods:invoiceDetail.invPackDao[i].goodsName+"-"+invoiceDetail.invPackDao[i].goodsTypeName,
+                  number:invoiceDetail.invPackDao[i].num,
+                  weight : weight/1000 - 1 <0 ? weight + "千克" : weight/1000 + "吨",
+                  volume:invoiceDetail.invPackDao[i].volume*1 - 1 < 0 ? invoiceDetail.invPackDao[i].volume*1000 + "升" : invoiceDetail.invPackDao[i].volume*1 + "立方米",
+                }
+                list.push(listJson);
+              }
+              var tracking=[];
+              for(var i =0 ;i<invoiceDetail.tracking.length;i++){
+                var trackingJson = {
+                  type:invoiceDetail.tracking[i].tackingStatus == invoiceDetail.tracking[i].tackingMemo ? invoiceDetail.tracking[i].tackingStatus : invoiceDetail.tracking[i].tackingStatus + ":" +invoiceDetail.tracking[i].tackingMemo,
+                  time:invoiceDetail.tracking[i].tackingTime,
+                }
+                tracking.push(trackingJson);
+              }
+              // 新建=0 已确认=10 司机发车=20 部分提货=30 已提货=40 部分到货=50 已到货=60 部分签收=70 已签收=80 已回单=90 关闭=100
+              // $route.query.type 1发货方2付款3收货方
+              var trackingStatusValue = "";
+              if(_this.$route.query.type == "1"  || _this.$route.query.type == "3"){
+                if(invoiceDetail.trackingStatusValue == "80" && invoiceDetail.ifAppraise == "N"){
+                  trackingStatusValue = 1000;
+                }else if(invoiceDetail.trackingStatusValue == "80" && invoiceDetail.ifAppraise == "Y"){
+                  trackingStatusValue = 1001;
+                }else{
+                  trackingStatusValue = invoiceDetail.trackingStatusValue;
+                }
+              }else if(_this.$route.query.type == "2"){
+                if(invoiceDetail.payStatus != "30"){
+                  trackingStatusValue = 10000;
+                }else{
+                  trackingStatusValue = 10001;
+                }
+              }
+              _this.type = trackingStatusValue;
+              sessionStorage.setItem("dataStart",invoiceDetail.delivery.addressLatAndLon);
+              sessionStorage.setItem("dataEnd",invoiceDetail.arrival.addressLatAndLon);
+              _this.payStatus = invoiceDetail.payStatus;
+              var tranTypeBoth = invoiceDetail.transType;
+              if(invoiceDetail.carLength !=  "" && invoiceDetail.carLength !=  null){
+                tranTypeBoth = tranTypeBoth + "(" + invoiceDetail.carLength + "米)";
+              }
+              if(invoiceDetail.carModel != ""  && invoiceDetail.carModel !=  null){
+                tranTypeBoth = tranTypeBoth + "(" + invoiceDetail.carModel + ")";
+              }
+              var startTime = invoiceDetail.deliDate.split(":");
+              startTime.splice(2,1);
+              var endTime = invoiceDetail.arriDate.split(":");
+              endTime.splice(2,1);
+              var pdlist = [{
+                orderType:trackingStatusValue,
+                ordertypeType:invoiceDetail.trackingStatusValue,
+                orderTypeName:invoiceDetail.trackingStatus,
+                logistics:tracking,
+                evaluate:{
+                  grade:invoiceDetail.appraiseScore==""?0:invoiceDetail.appraiseScore
+                },
+                goodsmessage:{
+                  startAddress:invoiceDetail.delivery != null ? invoiceDetail.delivery.area:"",
+                  endAddress:invoiceDetail.arrival != null ? invoiceDetail.arrival.area:"",
+                  distance:"0",
+                  tranType:tranTypeBoth,
+                  productList:list,
+                  money:invoiceDetail.price*1,
+                  startTime:startTime.join(":"),
+                  endTime:endTime.join(":")
+                },
+                pickMessage:{
+                  name:invoiceDetail.delivery!=null?invoiceDetail.delivery.contact:"",
+                  tel:invoiceDetail.delivery!=null?invoiceDetail.delivery.mobile:"",
+                  company:invoiceDetail.delivery!=null?invoiceDetail.delivery.addrName:"",
+                  address:invoiceDetail.delivery!=null?invoiceDetail.delivery.province+invoiceDetail.delivery.area+invoiceDetail.delivery.detailAddr:"",
+                },
+                endMessage:{
+                  name:invoiceDetail.arrival!=null?invoiceDetail.arrival.contact:"",
+                  tel:invoiceDetail.arrival!=null?invoiceDetail.arrival.mobile:"",
+                  company:invoiceDetail.arrival!=null?invoiceDetail.arrival.addrName:"",
+                  address:invoiceDetail.arrival!=null?invoiceDetail.arrival.province+invoiceDetail.arrival.area+invoiceDetail.arrival.detailAddr:"",
+                },
+                insurance:{
+                  name:"",
+                  price:"200"
+                },
+                pickPay:{
+                  people:"发货方",
+                  type:invoiceDetail.balatype == null?"":invoiceDetail.balatype,
+                  remark:invoiceDetail.remark
+                },
+                carPeople:{
+                  logo:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverImg:"",
+                  year:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?(invoiceDetail.driverDto[0].driverAge*1 < 1 ?"小于一年":invoiceDetail.driverDto[0].driverAge*1+'年'):"",
+                  grade:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].score*1:"",
+                  name:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverName:"",
+                  tel:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].mobile:"",
+                  yes:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?true:false,
+                },
+                carrier:{
+                  logo:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.carrierImg:"",
+                  company:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.carrierName:"",
+                  tranType: invoiceDetail.carrierDto!=null ? (invoiceDetail.carrierDto.tranType == "" ||  invoiceDetail.carrierDto.tranType == null ? "陆运" : invoiceDetail.carrierDto.tranType):"",
+                  year:invoiceDetail.carrierDto!=null?((((new Date()).getTime()-(new Date(invoiceDetail.carrierDto.createDate.replace('-','/').replace('-','/'))).getTime())/1000/60/60/24/365 -0.5)<0?"不到半年":androidIos.fixed(((new Date()).getTime()-(new Date(invoiceDetail.carrierDto.createDate.replace('-','/').replace('-','/'))).getTime())/1000/60/60/24/365 ,1)+"年"):"",
+                  grade:invoiceDetail.carrierDto!=null?(invoiceDetail.carrierDto.score == null || invoiceDetail.carrierDto.score == "" ? 0:invoiceDetail.carrierDto.score*1):"0",
+                  phone:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.mobile:"",
+                  pkCarrier:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.pkCarrier:"",
+                },
+                tranNumber:"123321334343",
+                fabu:invoiceDetail.userRole,
+                number:invoiceDetail.orderNo,
+                time:invoiceDetail.createTime,
+              }]
+              // fabu 1业务员 2审核员 3管理员
+              if(invoiceDetail.driverDto != null && invoiceDetail.driverDto.length != 0){
+                sessionStorage.setItem("driverPk",invoiceDetail.driverDto[0].pkDriver);
+              }
+              _this.carList = [];
+              _this.startJ  = invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[0];
+              _this.startW  = invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[1];
+              _this.endJ = invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[0];
+              _this.endW = invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[1];
+              for(var i = 0; i < invoiceDetail.driverDto.length ; i++ ){
+                var json = {
+                  logo:invoiceDetail.driverDto[i].driverImg,
+                  name:invoiceDetail.driverDto[i].driverName,
+                  year:invoiceDetail.driverDto[i].driverAge*1 < 1 ? "小于1" : invoiceDetail.driverDto[i].driverAge,
+                  tel:invoiceDetail.driverDto[i].mobile,
+                  startJ :invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[0],
+                  startW : invoiceDetail.delivery.addressLatAndLon == ""||invoiceDetail.delivery.addressLatAndLon == null ? "" :invoiceDetail.delivery.addressLatAndLon.split(",")[1],
+                  endJ:invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[0],
+                  endW:invoiceDetail.arrival.addressLatAndLon == "" ||invoiceDetail.arrival.addressLatAndLon == null ? "" :invoiceDetail.arrival.addressLatAndLon.split(",")[1],
+                  pkDriver:invoiceDetail.driverDto[i].pkDriver,
+                  peopleJ:invoiceDetail.driverDto[i].driverPosition.split(",")[0],
+                  peopleW:invoiceDetail.driverDto[i].driverPosition.split(",")[1],
+                  ordertype:invoiceDetail.trackingStatusValue*1,
+                  price:invoiceDetail.driverDto[i].score*1,
+                  length:"",
+                }
+                _this.carList.push(json);
+              }
+              var data=pdlist;
+              var listData=data;//模拟分页数据
+              _this.pdlist = listData;
+            }else{
+              androidIos.second(invoiceDetail.message);
+            }
+
+          },
+          complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+            _this.carloading = false;
+            if(status=='timeout'){//超时,status还有success,error等值的情况
+              androidIos.second("网络请求超时");
+            }else if(status=='error'){
+              androidIos.errorwife();
+            }
+          }
+        });
+        Promise.all([ajax]).then(function(values) {
+          androidIos.bridge(_this);
+        })
+      },
+      mapLook:function () {
+        var _this = this;
+        _this.moveSure = true;
+      },
+      mapLookS:function () {
+        var _this = this;
+        _this.moveSure = !_this.moveSure;
       },
       filterInput:function () {
         var _this = this;
@@ -363,6 +393,33 @@
       go:function () {
         var self = this;
         self.orderSource = self.$route.query.type;
+        /*var centerJ = self.pdlist[0].ordertypeType ==*/
+        var map = new AMap.Map("container", {
+          resizeEnable: true,
+          center: [self.startJ,  self.startW],//地图中心点
+          zoom: 13 //地图显示的缩放级别
+        });
+        map.on("click",function () {
+          self.mapLook();
+        })
+        AMap.plugin(['AMap.Scale'],
+          function(){
+            map.addControl(new AMap.Scale());
+          });
+        //构造路线导航类
+        var driving = new AMap.Driving({
+          map: map,
+          panel: "panel"
+        });
+        driving.search([self.startJ, self.startW],[self.endJ,self.endW], function(status, result) {});
+        for(var i = 0 ; i < self.carList.length;i++){
+          var marker;
+          marker = new AMap.Marker({
+            icon:require('../../images/start1.png'),
+            position: [self.carList[i].peopleJ,self.carList[i].peopleW],
+          });
+          marker.setMap(map);
+        }
         self.$nextTick(function () {
           $(document).unbind("click").on("click",".scorelistscore .set_image_item",function () {
             var idname = $(this).parents(".scorelistscore").attr("id");
@@ -434,46 +491,6 @@
         }else{
            bomb.addClass("errorAbnormalChangeImg","gray");
         }
-      },
-      shenhe:function () {
-        var _this = this;
-        if(_this.payStatus != 30 && _this.pdlist[0].pickPay.type == '现结'){
-          _this.payOrder();
-        }else{
-          androidIos.loading("正在确认");
-          $.ajax({
-            type: "POST",
-            url: androidIos.ajaxHttp()+"/order/orderConfirm",
-            data:JSON.stringify({
-              pk:_this.$route.query.pk,
-              userCode:sessionStorage.getItem("token"),
-              source:sessionStorage.getItem("source")
-            }),
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            timeout: 10000,
-            async:false,
-            success: function (orderConfirm) {
-              if(orderConfirm.success == "1"){
-                _this.$cjj("确认成功");
-                setTimeout(function () {
-                  _this.mescroll.resetUpScroll();
-                },500)
-              }else{
-                androidIos.second(orderConfirm.message);
-              }
-            },
-            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
-              $("#common-blackBox").remove();
-              if(status=='timeout'){//超时,status还有success,error等值的情况
-                androidIos.second("网络请求超时");
-              }else if(status=='error'){
-                androidIos.errorwife();
-              }
-            }
-          })
-        }
-
       },
       cancelReasonClosed:function(){
         var _this = this;
@@ -572,7 +589,7 @@
                 var orderMessage = _this.closedType == 1 ? "关闭成功" : "驳回成功";
                 _this.$cjj(orderMessage);
                 setTimeout(function () {
-                  _this.mescroll.resetUpScroll();
+                   _this.ajaxorder();
                 },500);
               }else{
                 androidIos.second(closeOrder.message);
@@ -626,7 +643,7 @@
                 bomb.addClass("gogogo","gogogo");
                 if(clientAppraisal.success == "1"){
                   _this.scoreBox = false;
-                  _this.mescroll.resetUpScroll();
+                  _this.ajaxorder();
                 }else{
                   androidIos.second(clientAppraisal.message);
                 }
@@ -938,6 +955,7 @@
     line-height: 0.73rem;
     border-radius: 0.2rem;
     float: right;
+    min-height: 0rem;
   }
   .noYes{
     width:50%!important;
@@ -1323,6 +1341,11 @@
     font-size: 0.43rem;
     color:#666;
     border-radius: 0.3rem;
+    z-index:99;
+  }
+  #titleText p{
+    font-size: 0.43rem;
+    color:#666;
   }
   #titleGoback{
     position: absolute;
@@ -1336,4 +1359,45 @@
     background-repeat: no-repeat;
     background-size: 0.2rem 0.3714rem;
   }
+  #panel {
+    position: fixed;
+    background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
+    top: 10px;
+    right: 10px;
+    width: 280px;
+    display: none!important;
+  }
+  #messageBigBox{
+    position: absolute;
+    bottom:0rem;
+    width:100%;
+    -webkit-transition: all 0.5s ease-in;
+    -moz-transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in;
+    opacity:1
+  }
+  .move {
+    bottom: -15rem !important;
+    opacity: 0 !important;
+    -webkit-transition: all 1.5s ease-out !important;
+    -moz-transition: all 1.5s ease-out !important;
+    transition: all 1.5s ease-out !important;
+  }
+ #lookOrderMore{
+   position: fixed;
+   width: 1.5rem;
+   height: 1.5rem;
+   background-color: rgba(29,104,168,0.8);
+   color: white;
+   font-size: 0.35rem;
+   border-radius: 50%;
+   bottom: 15%;
+   right: 5%;
+   text-align: center;
+   line-height: 1.5rem;
+   letter-spacing: 2px;
+   z-index: 100;
+ }
 </style>

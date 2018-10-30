@@ -93,7 +93,7 @@
   #orderLogisticsMore  #star_grade .set_image_top img,#orderLogisticsMore  #star_gradeF .set_image_top img,#orderLogisticsMore  #star_gradeS .set_image_top img{
     width:0.4rem;
   }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi){
+/*  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi){
     #orderLogistics .amap-lib-marker-to{
       background-image: none;
     }
@@ -106,7 +106,7 @@
   }
   #orderLogistics  .amap-lib-marker-to{
     background-image: none;
-  }
+  }*/
   #orderLogistics .amaplibmarkerto{
     background-image: url("../images/end.png")!important;
     background-size:cover!important;

@@ -18,7 +18,6 @@
         endW:sessionStorage.getItem("dataEnd") == "" || sessionStorage.getItem("dataEnd") == null || sessionStorage.getItem("dataEnd") == "null" ? "" :sessionStorage.getItem("dataEnd").split(",")[1],
         peopleJ:120.40,
         peopleW:30.26,
-        setTime:"",
         json:{
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
