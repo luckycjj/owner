@@ -168,12 +168,12 @@
           var _this = this;
           if(type ==0 || type == 1){
             androidIos.addPageList();
-            sessionStorage.setItem("trackTap",type + 1);
-            _this.$router.push({path:"/trackList"});
+            sessionStorage.setItem("trackTap",type + 2);
+            _this.$router.push({path:"/trackList",query:{type:1,today:1}});
           }else if(type == 2){
             androidIos.addPageList();
-            sessionStorage.setItem("settlementTap",1);
-            _this.$router.push({path:"/settlement"});
+            sessionStorage.setItem("trackTap",0);
+            _this.$router.push({path:"/trackList",query:{type:1,today:1}});
           }
         },
         getPageScroll:function() {

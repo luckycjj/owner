@@ -7,37 +7,29 @@
           <div class="scroller">
             <ul class="clearfix">
               <li v-for="(item,index) in list" :i="index"  tapmode="">
-                <div class="imgscBox" :style="{backgroundImage:'url(' + item.img + ')'}"></div>
-                <a href="javascript:void(0)">{{item.name}}</a>
+                <a href="javascript:void(0)"><span>{{item.name}}</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="looktrackList" @click="looktrackList()">
-           <img src="../images/trackLookMore.png">
            运单
         </div>
         <div class="clearBoth"></div>
       </div>
-      <div style="top: 2.6rem;" v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
+      <div style="top: 2.16rem;" v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
-            <div class="startEndBox">
-              <div class="startEnd"><div class="circleList"></div><span class="startEndSpan">{{items.deliAddr}}-{{items.arriAddr}}</span></div>
-              <div class="triangle_border_right"></div>
-              <div class="clearBoth"></div>
-            </div>
-            <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
-            <h3 v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款': items.status == 5 ? '已签收' : ''"></h3>
-            <div class="proBox">
-              <h6 class="deliDateTime">{{items.deliDate}}</h6>
-              <h6 class="arriDateTime">{{items.arriDate}}</h6>
-              <h6 class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsCode}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></h6>
-              <h6 class="driver">{{items.deliContact}}</h6>
-              <h5 class="remark">{{items.memo}}</h5>
-              <div class="clearBoth"></div>
-            </div>
             <h1>订单编号：{{items.vbillno}}</h1>
+            <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
+            <div class="proBox">
+              <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
+              <img v-if="items.expFlag == 'Y'" class="yichangOrder" src="../images/yichang.png">
+              <p class="startEnd"><span class="startEndSpan">{{items.deliAddr}}<img src="../images/addressImg.png">{{items.arriAddr}}</span><div class="clearBoth"></div></p>
+              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsCode}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
+            </div>
+            <h6 class="deliDateTime">{{items.deliDate}} - {{items.arriDate}}</h6>
+            <h5 class="remark">{{items.memo}}</h5>
           </li>
         </ul>
       </div>
@@ -223,6 +215,7 @@
       looktrackList:function () {
         var _this = this;
         androidIos.addPageList();
+        sessionStorage.setItem("trackTap",1);
         _this.$router.push({ path: '/trackList'});
       },
       gonewOrder:function () {
@@ -322,8 +315,8 @@
   }
   .wrapper {
     position:relative;
-    height: 2rem;
-    width: 80%;
+    height: 1.56rem;
+    width: 74%;
     float: left;
     margin:0 auto;
     background:white;
@@ -333,25 +326,27 @@
     position:absolute;
   }
   .wrapper .scroller li {
-    height: 2rem;
+    height:  1.56rem;
     color:#373737;
     float: left;
     font-size: .4rem;
     text-align: center;
-    width:2.666666666667rem;
+    width:2.466666666667rem;
   }
   .wrapper .scroller li a{
-    color:#373737;
+    color:#999;
     display:block;
-    font-size: 0.35rem;
-    margin:0 0.1rem;
+    font-size: 0.375rem;
+    margin:0.9rem 0.1rem 0 0.1rem;
   }
   .wrapper .scroller li a span{
-    color:#1D68A8;
-    font-size: 0.3125rem;
+    color:#999;
+    font-size: 0.375rem;
+    padding: 0 0.2rem 0.2rem 0.2rem;
   }
-  .wrapper .scroller li.cur a{
+  .wrapper .scroller li.cur a span{
     color:#1D68A8;
+    border-bottom: 1px solid #1D68A8;
   }
   .data-list{
     width:100%;
@@ -365,77 +360,118 @@
     position: relative;
   }
   .data-list li h6{
-    font-size:0.32rem ;
-    color:#373737;
+    font-size:0.375rem ;
+    color:#999;
+    margin-left: 0.4rem;
     margin-bottom: 0.01rem;
-    padding-left: 5%;
-    margin-left: 2%;
+    padding-left: 0.5rem;
     background-repeat: no-repeat;
-    background-size:0.27rem ;
+    background-size:0.375rem 0.375rem ;
     background-position: 0 50%;
-    width:43%;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    float: left;
-    line-height: 0.44rem;
-    height: 0.44rem;
-    margin-bottom: 0.21rem;
-  }
-  .data-list li h6 span{
-    font-size:0.32rem ;
-    color:#373737;
   }
   .data-list li h5{
-    font-size:0.32rem ;
-    color:#373737;
+    font-size:0.375rem ;
+    color:#999;
+    margin-left: 0.4rem;
     margin-bottom: 0.01rem;
-    padding-left: 5%;
-    margin-left: 2%;
+    padding-left: 0.5rem;
     background-repeat: no-repeat;
-    background-size:0.27rem ;
+    background-size:0.375rem 0.375rem ;
     background-position: 0 50%;
-    width:88%;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    float: left;
-    line-height: 0.44rem;
-    height: 0.44rem;
+    margin-top: 0.2rem;
+    width:8.2rem;
+    background-image: url("../images/tranremark.png");
   }
   .data-list li h1{
-    font-size:0.34rem ;
-    color:#999;
-    padding-top: 0.25rem;
+    font-size:0.33rem ;
+    color:#666;
+    padding-top: 0.2rem;
     margin-left: 0.5rem;
+    padding-bottom: 0.1rem;
   }
   .data-list li h3{
     position: absolute;
     width:2rem;
     font-size: 0.375rem;
     right:0;
-    bottom:0.21rem;
+    top:0.3rem;
     line-height: 0.48rem;
     background-size: 0.48rem;
     background-repeat: no-repeat;
     background-position: 0 50%;
     padding-left: 0.6rem;
-    color:#373737;
+  }
+  .trackList4{
+    background-image: url("../images/trackList4.png");
+    color:#FA6B18;
+  }
+  .trackList3{
+    background-image: url("../images/trackList3.png");
+    color:#38A2FF;
+  }
+  .trackList2{
+    background-image: url("../images/trackList3.png");
+    color:#38A2FF;
+  }
+  .trackList1{
+    background-image: url("../images/trackList2.png");
+    color:#557DE0;
+  }
+  .trackList0{
+    background-image: url("../images/trackList1.png");
+    color:#2C9CFF;
+  }
+  .trackList-1{
+    background-image: url("../images/trackList-1.png");
+    color:#d81e06;
   }
   .deliDateTime{
-    background-image: url("../images/cc.png");
+    background-image: url("../images/time.png");
   }
-  .arriDateTime{
-    background-image: url("../images/cc.png");
+  .proBox{
+    width:85%;
+    padding: 0.3rem 0.45rem;
+    margin: 0.2rem auto;
+    border-radius: 0.1rem;
+    box-shadow: 0 0 0.13rem #e2e2e2;
+    border: 1px solid white;
+    position: relative;
+  }
+  .startEndSpan{
+    float: left;
+    font-size: 0.44rem;
+    font-weight:bold;
+    line-height: 0.56rem;
+    color:#333;
+    margin-bottom: 0.2rem;
+
+  }
+  .startEnd img{
+    display: inline-block;
+    margin:0rem 0.3rem 0.13rem 0.3rem;
+    width:0.45rem;
   }
   .proBoxList{
-    background-image: url("../images/tranprotype.png");
+    color:#999;
+    font-size:0.35rem ;
   }
-  .driver{
-    background-image: url("../images/trandriver.png");
+  .proBoxList span{
+    color:#999;
+    font-size:0.35rem ;
   }
-  .remark{
-    background-image: url("../images/tranremark.png");
+  .jinjiOrder{
+    position: absolute;
+    font-size: 0.3125rem;
+    right:0rem;
+    top:0rem;
+    width:0.64rem;
+  }
+  .yichangOrder{
+    position: absolute;
+    font-size: 0.3125rem;
+    right:0.44rem;
+    top:0.65rem;
+    width:0.667rem;
   }
   #gonewOrder{
     position: fixed;
@@ -452,27 +488,6 @@
     letter-spacing: 2px;
     z-index: 100;
   }
-  .proBox{
-    width:94%;
-    margin: 0.2rem auto;
-    border-radius: 0.1rem;
-    border: 1px solid white;
-  }
-  .jinjiOrder{
-    position: absolute;
-    font-size: 0.3125rem;
-    right:0.3rem;
-    top:0.15rem;
-    color:#1D68A8;
-    width:1rem;
-  }
-  .startEnd{
-    background:#1D68A8 ;
-    padding: 0 0.92rem 0 0.7rem;
-    float: left;
-    position: relative;
-    max-width: 5.5rem;
-  }
   .imgscBox{
     width:1rem;
     height: 1rem;
@@ -482,43 +497,23 @@
     margin: 0.2rem auto;
   }
   .looktrackList{
-    width:20%;
-    height: 2rem;
+    width:2.55rem;
+    height:  0.57rem;
+    margin-top: 1.1rem;
     float: left;
-    text-align: center;
-    font-size: 0.35rem;
+    padding-left: 1.05rem;
+    font-size: 0.375rem;
+    line-height: 0.57rem;
     color:#1D68A8;
     box-sizing: border-box;
     border-left: 1px solid #dadada;
-    margin-top: 0.2rem;
+    background-size: 0.48rem;
+    background-repeat: no-repeat;
+    background-position: 20% 50%;
+    background-image: url("../images/newPeolistlooktrack.png");
   }
   .looktrackList img{
     width:1rem;
     margin:0.2rem auto;
-  }
-  .startEndSpan{
-    font-size: 0.375rem;
-    line-height: 0.6rem;
-    color:#fff;
-
-  }
-  .circleList{
-    width:0.22rem;
-    height: 0.22rem;
-    background: white;
-    position: absolute;
-    border-radius: 50%;
-    top:50%;
-    margin-top: -0.11rem;
-    left:0.29rem;
-  }
-  .triangle_border_right{
-    width:0;
-    height:0;
-    border-width:0.29rem 0rem 0.29rem 0.29rem;
-    border-style:solid;
-    border-color:transparent transparent transparent #1D68A8;/*透明 透明 透明 灰*/
-    position:relative;
-    float: left;
   }
 </style>

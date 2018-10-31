@@ -64,7 +64,7 @@
               <button @click="scoreYes(1)">评价</button>
               <div class="clearBoth"></div>
             </div>
-            <div class="go" v-else-if="(type=='1001' && orderSource == 1) || orderSource == 3">
+            <div class="go" v-else-if="(type=='1001' && orderSource == 1) || (type=='100' && orderSource == 1) || orderSource == 3">
               <button class="zhifu" @click="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
