@@ -4,7 +4,7 @@
      <div id="addUserBox">
        <div class="label border">
          <span>添加姓名</span>
-         <input @keyup="filterInput()" type="text" placeholder="请输入被添加人的姓名" v-model="name"/>
+         <input @input="filterInput()" type="text" placeholder="请输入被添加人的姓名" v-model="name"/>
        </div>
        <div class="label border">
          <span>添加账号</span>
@@ -12,7 +12,7 @@
        </div>
        <div class="label">
          <span>设置密码</span>
-         <input @keyup="filterInput()"  type="password" placeholder="请设置密码" maxlength="25" v-model="password"/>
+         <input @input="filterInput()"  type="password" placeholder="请设置密码" maxlength="25" v-model="password"/>
        </div>
      </div>
      <div id="zhiwuBox">

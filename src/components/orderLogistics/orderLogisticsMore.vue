@@ -105,7 +105,7 @@
             {{item.displayName}}
           </li>
           <div class="clearBoth"></div>
-          <input type="text"  @keyup="filterInput()" maxlength="30" placeholder="其他原因" v-model="cancelreason">
+          <input type="text"  @input="filterInput()" maxlength="30" placeholder="其他原因" v-model="cancelreason">
         </ul>
         <button @click="cancelReasonChange()" id="gogogo" class="gogogo">提交</button>
       </div>

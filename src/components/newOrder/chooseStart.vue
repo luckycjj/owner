@@ -4,19 +4,19 @@
     <div id="title" v-title data-title="收货地址" v-if="addressType == 2"></div>
     <div id="inputKeyup">
       <div class="name">
-        <input @keyup="filterInput()" type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
+        <input @input="filterInput()" type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
         <div class="lineBox"><div class="line"></div></div>
         <input @keyup="filterInput()" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
         <div class="clearBoth"></div>
       </div>
       <div class="company inputUp">
-        <input @keyup="filterInput()" type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
+        <input @input="filterInput()" type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
       </div>
       <div class="company inputUp">
         <p id="X00" :class="start.province!=''?'blackColor':''" v-html="start.province==''?'选择省市区':start.province+'-'+start.city+'-'+start.area"></p>
       </div>
       <div class="address inputUp">
-        <input @keyup="filterInput()" type="text" maxlength="40" placeholder="详细地址"  v-model="start.address"/>
+        <input @input="filterInput()" type="text" maxlength="40" placeholder="详细地址"  v-model="start.address"/>
       </div>
       <div class="address inputUp" style=" color:#666;line-height:1rem;font-size: 0.35rem;border: none" v-if="addressType == 1">
         设置默认

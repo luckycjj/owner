@@ -2,7 +2,7 @@
   <div id="suggestion" style="top:1.3rem;">
     <div id="title" v-title data-title="建议反馈"></div>
     <div id="textarea">
-       <textarea @keyup="changeGo()" placeholder="请写下您遇到的问题..." :maxlength="maxlength" v-model="suggest"></textarea>
+       <textarea @input="changeGo()" placeholder="请写下您遇到的问题..." :maxlength="maxlength" v-model="suggest"></textarea>
        <p>{{suggest.length}}/{{maxlength}}</p>
       <div class="clearBoth"></div>
     </div>

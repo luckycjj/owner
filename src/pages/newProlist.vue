@@ -477,9 +477,9 @@
     position: fixed;
     width:1.5rem;
     height:1.5rem;
-    background-color: rgba(29,104,168,0.8);
+    background-color: rgba(29,104,168,0.5);
     color:white;
-    font-size: 0.35rem;
+    font-size: 0.375rem;
     border-radius: 50%;
     bottom:15%;
     right:5%;

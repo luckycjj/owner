@@ -146,8 +146,8 @@
             timeout: 30000,
             success: function (carrOrderListHeaderIcon) {
               if (carrOrderListHeaderIcon.success == "1") {
-                _this.iconList[0].number = carrOrderListHeaderIcon.onTheWayCount*1;
-                _this.iconList[1].number = carrOrderListHeaderIcon.completedCount*1;
+                _this.iconList[0].number = carrOrderListHeaderIcon.todayOnTheWayCount*1;
+                _this.iconList[1].number = carrOrderListHeaderIcon.todayCompletedCount*1;
                 _this.iconList[2].number = carrOrderListHeaderIcon.pendingAllocation*1;
                 _this.iconList[3].number = carrOrderListHeaderIcon.abnormalCount*1;
                 sessionStorage.setItem("indexCorner",JSON.stringify(_this.iconList));

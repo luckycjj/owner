@@ -32,7 +32,7 @@
            </li>
            <div class="clearBoth"></div>
          </ul>
-         <textarea placeholder="其他想说的，可以填在这里" maxlength="100" @keyup="remarkKeyup(1)" v-model="normalSignRemark"></textarea>
+         <textarea placeholder="其他想说的，可以填在这里" maxlength="100" @input="remarkKeyup(1)" v-model="normalSignRemark"></textarea>
         <div class="addImg">
           <h1>货物</h1>
           <div class="imgBox"  v-for="(item,index) in imgList">
@@ -55,7 +55,7 @@
           </li>
           <div class="clearBoth"></div>
         </ul>
-        <textarea placeholder="其他异常情况，请如实填写，稍后将有客服人员与 您电话联系" @keyup="remarkKeyup(2)"  maxlength="100" v-model="errorSignRemark"></textarea>
+        <textarea placeholder="其他异常情况，请如实填写，稍后将有客服人员与 您电话联系" @input="remarkKeyup(2)"  maxlength="100" v-model="errorSignRemark"></textarea>
         <div class="addImg">
            <h1>货物缺损图片</h1>
            <div class="imgBox"  v-for="(item,index) in imgList">

@@ -5,7 +5,7 @@
       <li v-for="(item,index) in remarkList" class="ulli" :class="item.show ? 'chooseTrue': ''" @click="chooseLine(item,index,$event)">{{item.displayName}}</li>
       <div class="clearBoth"></div>
     </ul>
-    <textarea placeholder="请填写备注" v-model="remark" @keyup="remarkKeyUp()"></textarea>
+    <textarea placeholder="请填写备注" v-model="remark" @input="remarkKeyUp()"></textarea>
     <button @click="save()">保存</button>
   </div>
 </template>
