@@ -22,7 +22,7 @@
             <div class="inputBox">
                <input type="text" maxlength="30" @blur="problur()" @input="prokeyup()" @focus="profocus()" v-model="message.pro" placeholder="请填写货品名称"/>
                <ul v-if="listShow && (message.prolist.length > 0 || message.historylist.length > 0)">
-                 <li v-for="(item,index) in message.historylist" @click="clicklist(item.name,$event)" >{{item.name}}<div @click="closedHis(index)" class="closed" ></div></li>
+                 <li v-for="(item,index) in message.historylist" @click="clicklist(item.name,$event)" ><img class="cookieTime" src="../../images/cookieTime.png"><h6>{{item.name}}</h6><div class="clearBoth"></div><div @click="closedHis(index)" class="closed" ></div></li>
                  <li v-for="(item,index) in message.prolist" @click="clicklist(item.displayName,$event)" >{{item.displayName}}</li>
                </ul>
             </div>
@@ -420,6 +420,18 @@
     box-sizing: border-box;
     border-left: 1px solid #dadada;
     margin-bottom: 0.3rem;
+  }
+  .cookieTime{
+    float: left;
+    margin-right: 0.3rem;
+    width:0.6rem;
+    margin-top: 0.47rem;
+  }
+  .inputBox ul li h6{
+    float: left;
+    line-height:1.54rem ;
+    color: #333;
+    font-size: 0.4rem;
   }
   .inputWBox input{
      width:60%;
