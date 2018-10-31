@@ -14,7 +14,7 @@
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
             <h1>订单编号：{{items.vbillno}}</h1>
-            <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '待确认': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '待付款' : ''"></h3>
+            <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '新建': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '已到货': items.status == 5 ? '已签收': items.status == 6 ? '已失效' : ''"></h3>
             <div class="proBox">
               <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
               <img v-if="items.expFlag == 'Y'" class="yichangOrder" src="../images/yichang.png">
@@ -395,9 +395,10 @@
     padding-left: 0.5rem;
     background-repeat: no-repeat;
     background-size:0.375rem 0.375rem ;
-    background-position: 0 50%;
+    background-position: 0 0.13rem;
     margin-top: 0.2rem;
     width:8.2rem;
+    min-height: 0.5rem;
     background-image: url("../images/tranremark.png");
   }
   .data-list li h1{
@@ -409,7 +410,7 @@
   }
   .data-list li h3{
     position: absolute;
-    width:2rem;
+    width:1.5rem;
     font-size: 0.375rem;
     right:0;
     top:0.3rem;
@@ -419,29 +420,37 @@
     background-position: 0 50%;
     padding-left: 0.6rem;
   }
-  .trackList4{
+  .trackList6{
     background-image: url("../images/trackList4.png");
-    color:#FA6B18;
+    color:#4681B4;
+  }
+  .trackList5{
+    background-image: url("../images/trackList5.png");
+    color:#C3D94D;
+  }
+  .trackList4{
+    background-image: url("../images/trackList3.png");
+    color:#38A2FF;
   }
   .trackList3{
-    background-image: url("../images/trackList3.png");
+    background-image: url("../images/trackList7.png");
     color:#38A2FF;
   }
   .trackList2{
-    background-image: url("../images/trackList3.png");
-    color:#38A2FF;
+    background-image: url("../images/trackList6.png");
+    color:#49C661;
   }
   .trackList1{
     background-image: url("../images/trackList2.png");
     color:#557DE0;
   }
   .trackList0{
-    background-image: url("../images/trackList1.png");
-    color:#2C9CFF;
+    background-image: url("../images/trackList0.png");
+    color:#3094E3;
   }
   .trackList-1{
     background-image: url("../images/trackList-1.png");
-    color:#d81e06;
+    color:#719CED;
   }
   .deliDateTime{
     background-image: url("../images/time.png");
