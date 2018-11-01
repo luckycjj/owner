@@ -4,6 +4,7 @@
     <div id="titleText"  style="top:0.72rem">
       <div id="titleGoback"  @click="goback()" ></div>
       <p v-html="orderSource == 2 ? (type == '10000' ? '待支付' : '已支付') : pdlist[0].orderTypeName"></p>
+      <div class="callUs" @click="telCall('021-50929122')"><div class="callUsLine"></div>物流客服</div>
     </div>
     <div id="container"></div>
     <div id="panel"></div>
@@ -214,6 +215,9 @@
 
     },
     methods:{
+      telCall:function (tel) {
+        androidIos.telCall(tel);
+      },
       ajaxorder:function () {
         var _this = this;
         var ajax = $.ajax({
@@ -1450,4 +1454,26 @@
    letter-spacing: 2px;
    z-index: 100;
  }
+  .callUs{
+    position: absolute;
+    top:0.2rem;
+    right:0.4rem;
+    color:#999;
+    font-size: 0.3125rem;
+    background-image: url("../../images/kefuicon.png");
+    background-repeat: no-repeat;
+    background-size:0.48rem ;
+    background-position: 50% 0;
+    line-height: 0.3125rem;
+    padding: 0.6rem 0.4rem 0 0.4rem;
+  }
+  .callUsLine{
+    position: absolute;
+    left:0;
+    top:50%;
+    width:1px;
+    height:0.6rem;
+    margin-top: -0.3rem;
+    background: #D8D8D8;
+  }
 </style>
