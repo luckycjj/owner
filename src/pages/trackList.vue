@@ -250,7 +250,7 @@
              success: function (carrOrderListHeaderIcon) {
                if (carrOrderListHeaderIcon.success == "1") {
                  if(_this.type == null){
-                   list0 =  carrOrderListHeaderIcon.totalCount*1;
+                   list0 =  carrOrderListHeaderIcon.onTheWayCount*1 +carrOrderListHeaderIcon.completedCount*1;
                    list1 = carrOrderListHeaderIcon.onTheWayCount*1;
                    list2 = carrOrderListHeaderIcon.completedCount*1;
                  }else{

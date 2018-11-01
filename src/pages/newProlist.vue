@@ -184,7 +184,7 @@
                 page:pageNum,
                 size:pageSize,
                 type:2,
-                state:curNavIndex == 0 ? 9 : curNavIndex == 1 ? 8 : curNavIndex == 2 ? 11 : "",
+                state:curNavIndex == 0 ? 9 : curNavIndex == 1 ? 12 : curNavIndex == 2 ? 11 : "",
                 userCode:sessionStorage.getItem("token"),
                 source:sessionStorage.getItem("source")
               }),
@@ -342,11 +342,11 @@
   .wrapper .scroller li a span{
     color:#999;
     font-size: 0.375rem;
-    padding: 0 0.2rem 0.2rem 0.2rem;
+    padding: 0 0.1rem 0.2rem 0.1rem;
   }
   .wrapper .scroller li.cur a span{
     color:#1D68A8;
-    border-bottom: 1px solid #1D68A8;
+    border-bottom: 2px solid #1D68A8;
   }
   .data-list{
     width:100%;
@@ -404,7 +404,7 @@
   }
   .trackList6{
     background-image: url("../images/trackList4.png");
-    color:#FA6B18;
+    color:#4681B4;
   }
   .trackList5{
     background-image: url("../images/trackList5.png");
