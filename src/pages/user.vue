@@ -361,6 +361,9 @@
         var _this = this;
         if(item.url != ""){
           androidIos.addPageList();
+          if(item.url.indexOf("trackList") != -1){
+            sessionStorage.setItem("trackTap",1);
+          }
           _this.$router.push({ path: item.url});
         }else{
           if(item.name.indexOf("扫") == -1){
