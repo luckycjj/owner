@@ -141,6 +141,44 @@ Vue.filter('time',function (time) {
   list2.splice(2,1);
   return list1.join("-") + " " + list2.join(":")
 })
+Vue.filter('distanceWidth',function (address) {
+  if(address >= 1000){
+    address = (address/1000).toFixed(3)*1 + "公里";
+  }else{
+    address = address.toFixed(3)*1 + "米";
+  }
+  return address
+})
+Vue.filter('timeCheck',function (timeCheck) {
+  var timeCheckDate;
+  if(timeCheck == ""){
+    timeCheckDate = (new Date()).getTime();
+  }else{
+    timeCheckDate = (new Date(timeCheck.replace(/-/g,"/"))).getTime();
+  }
+  var nowDate = (new Date()).getTime();
+  var time = (nowDate - timeCheckDate)/1000/60/60;
+  if( time > 2){
+    timeCheck = timeCheck;
+  }else{
+    if( time > 1){
+      timeCheck = Math.floor(time) + "小时前";
+    }else{
+       var min  = (nowDate - timeCheckDate)/1000/60;
+       if(min > 1){
+         timeCheck = Math.floor(min) + "分钟前";
+       }else{
+         var sec = (nowDate - timeCheckDate)/1000;
+         if(sec > 1){
+           timeCheck = Math.floor(sec) + "秒钟前";
+         }else{
+           timeCheck = "刚刚";
+         }
+       }
+    }
+  }
+  return timeCheck
+})
 export default new Router({
   routes: [
     {

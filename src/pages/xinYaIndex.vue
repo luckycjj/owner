@@ -5,7 +5,7 @@
          <div class="top">
             <div class="topLeft">
               <div class="topleftInputBox">
-                <input type="text" @click="keywordblur()"   placeholder="请输入订单号" v-model="keyWord"/>
+                <input type="text" @click="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
               </div>
 
             </div>
@@ -260,6 +260,7 @@
     color:#fff;
     line-height: 0.7rem;
     text-align: center;
+    word-wrap:break-word
   }
   .topRightF p span{
     font-size: 0.32rem;
