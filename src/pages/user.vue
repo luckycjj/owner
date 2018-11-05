@@ -78,12 +78,7 @@
           url:"/trackList?type=1",
           number:0,
         },{
-          name:"添加账号",
-          icon:require("../images/associated.png"),
-          url:"/addUser",
-          number:0,
-        },{
-          name:"消息中心",
+          name:"我的消息",
           icon:require("../images/messageList.png"),
           url:"/message",
           number:0,
@@ -98,21 +93,16 @@
           url:"/newOrder/addressMessage?type=1",
           number:0,
         },{
-          name:"分享",
-          icon:require("../images/share.png"),
-          url:"",
-          number:0,
-        },{
           name:"建议反馈",
           icon:require("../images/feedback.png"),
           url:"/suggestion",
           number:0,
-        },{
+        }/*,{
           name:"关于我们",
           icon:require("../images/aboutUs.png"),
           url:"/aboutUs",
           number:0,
-        }/*,{
+        }*//*,{
           name:"新手指引",
           icon:require("../images/noviceguidance.png"),
           url:"/noviceguidance",
@@ -242,11 +232,11 @@
               var ownerMessage =  sessionStorage.getItem("ownerMessage");
               if(ownerMessage != null) {
                 // 1业务员 2审核员 3管理员
-                if (JSON.parse(ownerMessage).role.indexOf(3) != -1) {
+                /*if (JSON.parse(ownerMessage).role.indexOf(3) != -1) {
                   _this.tabList[3].number = driverBottomIcon.count * 1;
-                }else{
+                }else{*/
                   _this.tabList[2].number = driverBottomIcon.count * 1;
-                }
+                /*}*/
               }
             } else {
               androidIos.second(driverBottomIcon.message);
@@ -301,7 +291,7 @@
       jrisdiction:function () {
         var _this = this;
         var ownerMessage =  sessionStorage.getItem("ownerMessage");
-        if(ownerMessage != null){
+        /*if(ownerMessage != null){
           // 1业务员 2审核员 3管理员
            if(JSON.parse(ownerMessage).role.indexOf(3) != -1){
              var json = {
@@ -315,7 +305,7 @@
            }else{
               _this.tabList.splice(2,1);
            }
-        }
+        }*/
       },
       jiexi:function (enevt) {
         var _this = this;
@@ -612,11 +602,10 @@
     margin-left: 0.27rem;
   }
   li p span{
-    color:#373737;
     font-size: 0.3125rem;
     margin-left: 0.27rem;
     color:white;
-    background: #2c9cff;
+    background:#1D68A8;
     padding: 0.1rem 0.2rem;
     border-radius: 0.25rem;
   }
