@@ -65,7 +65,7 @@ var androidIos = {
   },
   ajaxHttp: function () {
     // var http = 'http://10.10.10.187:8085';
-    var http = 'http://10.10.10.155:8085';
+    var http = 'http://10.10.10.217:8085';
    //var http = 'http://222.73.159.76:8085';
     return http;
   },
@@ -729,8 +729,8 @@ var androidIos = {
       paddingTop = api.safeArea.top + "px";
     }
     catch (e){
-      paddingBottom = 30 + "px";
-      paddingTop =30 + "px";
+      paddingBottom = 15 + "px";
+      paddingTop =15 + "px";
     }
     var docuId = document.getElementById(id);
     if(docuId == null){

@@ -45,6 +45,7 @@
           localStorage.removeItem("noviceguidance1");
           localStorage.removeItem("noviceguidance2");
           localStorage.removeItem("noviceguidance3");
+          sessionStorage.removeItem("searchDate");
           androidIos.bridge(_this);
       },
       methods:{

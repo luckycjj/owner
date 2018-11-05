@@ -3,6 +3,7 @@
       <div id="title" v-title data-title="首页"></div>
       <div id="xinYaIndexBox" style="top:0rem;">
          <div class="top">
+            <img src="../images/date.png" id="date" style="top:0.375rem;" @click="searchDateBoxTrue()">
             <div class="topLeft">
               <div class="topleftInputBox">
                 <input type="text" @click="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
@@ -11,10 +12,10 @@
             </div>
             <div class="topRight">
               <div class="topRightF">
-                <p>{{todayOrder | toThousands}}<br><span>今日订单量</span></p>
+                <p>{{todayOrder | toThousands}}<br><span><span v-html="serchorderType == 0 ? '今天' : serchorderType == 1 ? '昨日' : serchorderType == 3 ? '最近3天' : serchorderType == 7 ? '最近7天' : serchorderType == 30 ? '最近30天' : serchorderType == 60 ? '最近60天' : ''"></span>订单量</span></p>
               </div>
               <div class="topRightF">
-                <p>￥{{todayPrice | toThousands}}<br><span>今日运输费用</span></p>
+                <p>￥{{todayPrice | toThousands}}<br><span><span v-html="serchorderType == 0 ? '今天' : serchorderType == 1 ? '昨日' : serchorderType == 3 ? '最近3天' : serchorderType == 7 ? '最近7天' : serchorderType == 30 ? '最近30天' : serchorderType == 60 ? '最近60天' : ''"></span>运输费用</span></p>
               </div>
               <div class="clearBoth"></div>
             </div>
@@ -32,6 +33,22 @@
          </div>
       </div>
       <footComponent :idx='0'></footComponent>
+      <transition name="slide-fade">
+        <div id="searchDateBox" v-if="searchDateBox">
+          <div id="searchDate">
+            <p>选择时间</p>
+            <img src="../images/closed2.png" class="searchClosed"  @click="searchDateBox = false">
+            <ul>
+              <li v-for="(item,index) in searchList">
+                <h1>{{item.name}}</h1>
+                <div class="circle" @click="circleChooese(index)"><div class="circleTrue" v-if="item.check"></div></div>
+                <div class="clearBoth"></div>
+              </li>
+            </ul>
+            <button @click="searchDateGo()">确定</button>
+          </div>
+        </div>
+      </transition>
     </div>
 </template>
 
@@ -46,8 +63,35 @@
            return{
              time :  (new Date()).getFullYear() + "/" + ((new Date()).getMonth() + 1) + "/" + (new Date()).getDate(),
              todayOrder :  0,
+             serchorderType:0,
              todayPrice : 0,
              keyWord:"",
+             searchDateBox:false,
+             searchList:[{
+               name:"今天",
+               value:0,
+               check:true,
+             },{
+               name:"昨天",
+               value:1,
+               check:false,
+             },{
+               name:"最近3天",
+               value:3,
+               check:false,
+             },{
+               name:"最近7天",
+               value:7,
+               check:false,
+             },{
+               name:"最近30天",
+               value:30,
+               check:false,
+             },{
+               name:"最近60天",
+               value:60,
+               check:false,
+             }],
              iconList:[{
                 name:"运输中订单",
                 number:0,
@@ -75,7 +119,9 @@
           var _this = this;
           androidIos.judgeIphoneX("top",0);
           androidIos.judgeIphoneX("xinYaIndexBox",1);
+          androidIos.judgeIphoneX("date",2);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
+          _this.serchorderType = sessionStorage.getItem("searchDate");
           _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
           if(sessionStorage.getItem("indexCorner") != undefined){
             _this.iconList = JSON.parse(sessionStorage.getItem("indexCorner"));
@@ -87,6 +133,35 @@
           androidIos.bridge(_this);
       },
       methods:{
+        circleChooese:function (index) {
+          var _this = this;
+          for(var i = 0 ; i < _this.searchList.length ; i++){
+             _this.searchList[i].check = false;
+          }
+          _this.searchList[index].check = true;
+        },
+        searchDateBoxTrue:function () {
+          var _this = this;
+          for(var i = 0 ; i < _this.searchList.length ; i++){
+            if(_this.serchorderType ==_this.searchList[i].value ){
+              _this.searchList[i].check = true;
+            }else{
+              _this.searchList[i].check = false;
+            }
+          }
+          _this.searchDateBox = true;
+        },
+        searchDateGo:function () {
+          var _this = this;
+          for(var i = 0 ; i < _this.searchList.length ; i++){
+            if(_this.searchList[i].check){
+              _this.serchorderType = _this.searchList[i].value;
+            }
+          }
+          _this.searchDateBox = false;
+          sessionStorage.setItem("searchDate", _this.serchorderType);
+          _this.corner();
+        },
         go:function () {
             var _this = this;
             _this.corner();
@@ -114,6 +189,7 @@
             data:JSON.stringify({
               userCode:sessionStorage.getItem("token"),
               source:sessionStorage.getItem("source"),
+              type:_this.serchorderType,
             }),
             contentType: "application/json;charset=utf-8",
             dataType: "json",
@@ -211,10 +287,17 @@
   .top{
     width:100%;
     padding:0.27rem 0;
+    position: relative;
     background: -webkit-linear-gradient( #47b2e8 , #1a6bac); /* Safari 5.1 - 6.0 */
     background: -o-linear-gradient(#47b2e8, #1a6bac); /* Opera 11.1 - 12.0 */
     background: -moz-linear-gradient(#47b2e8, #1a6bac); /* Firefox 3.6 - 15 */
     background: linear-gradient(#47b2e8 , #1a6bac); /* 标准的语法 */
+  }
+  #date{
+    position: absolute;
+    width:0.48rem;
+    left:0.54rem;
+    top:0.375rem;
   }
   .topLeft{
     width:100%;
@@ -230,7 +313,7 @@
     background-repeat: no-repeat;
     background-size: 0.375rem;
     border-radius: 0.4rem;
-    margin: 0.7rem auto;
+    margin: 0.15rem auto 0.7rem auto;
     border:1px solid white;
   }
   .topLeft input{
@@ -249,18 +332,23 @@
   }
   .topRightF:nth-child(1){
     float: left;
-    width:50%;
+    width:48%;
+    margin-left: 1%;
   }
   .topRightF:nth-child(2){
     float: left;
-    width:50%;
+    width:48%;
+    margin-left: 2%;
   }
   .topRightF p{
     font-size: 0.7rem;
     color:#fff;
     line-height: 0.7rem;
     text-align: center;
-    word-wrap:break-word
+    word-wrap:break-word;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .topRightF p span{
     font-size: 0.32rem;
@@ -343,5 +431,89 @@
     margin-top: -0.2rem;
     margin-right:-0.17667rem ;
     border: 1px solid #1d68a9;
+  }
+  #searchDateBox{
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    width:auto;
+    height: auto;
+    background-color: rgba(0,0,0,0.2);
+  }
+  #searchDate{
+    position: absolute;
+    width:7.1rem;
+    left:50%;
+    margin-left: -3.55rem;
+    background: white;
+    top:25%;
+  }
+  #searchDate p {
+     color:#373737;
+     font-size: 0.43rem;
+     text-align: center;
+     line-height:1.547rem ;
+    border-bottom: 1px solid #E9EFF3;
+  }
+  #searchDate li{
+    width:100%;
+    border-bottom: 1px solid #E9EFF3;
+  }
+  #searchDate li h1{
+     float: left;
+    line-height: 1.17rem;
+    color:#373737;
+    font-size: 0.4rem;
+    margin-left: 0.6rem;
+  }
+  #searchDate li .circle{
+     float: right;
+    margin-right:0.54rem ;
+    width:0.5rem;
+    height: 0.5rem;
+    border: 0.0625rem solid #1D68A8;
+    border-radius: 50%;
+    margin-top: 0.2725rem;
+    position: relative;
+  }
+  #searchDate li .circle .circleTrue{
+    width:0.26rem;
+    height: 0.26rem;
+    background: #1D68A8;
+    position: absolute;
+    border-radius: 50%;
+    left:50%;
+    top:50%;
+    margin-left: -0.13rem;
+    margin-top: -0.13rem;
+  }
+  #searchDate button{
+    width:2.7rem;
+    height:0.88rem;
+    background: #1D68A8;
+    color:white;
+    border-radius:0.15rem ;
+    margin: 0.6133rem auto;
+    display: block;
+    font-size: 0.375rem;
+  }
+  .searchClosed{
+    position: absolute;
+    width:0.3rem;
+    right:0.36rem;
+    top:0.36rem;
+  }
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(0.13rem);
+    opacity: 0;
   }
 </style>

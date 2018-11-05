@@ -37,7 +37,10 @@
           </ul>
         </div>
       </div>
-      <div  style="top:2.53rem;" v-for="(item,index) in tab" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
+      <div id="searchInput">
+         <input type="text" placeholder="通过车牌号、手机号搜索司机"/>
+      </div>
+      <div  style="top:3.73rem;" v-for="(item,index) in tab" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist">
             <div class="first">
@@ -62,7 +65,7 @@
                 <img src="../images/haveCarMessage.png">
                 <p>短信</p>
               </div>
-              <div v-if="tabShow == 1" class="imgcaozuo" @click="caozuo(4,items.pkCar + ',' + items.pkDriver)">
+              <div v-if="tabShow == 1" class="imgcaozuo" @click="caozuo(4,items.pkCar)">
                 <img src="../images/haveCarYesCar.png">
                 <p>熟车</p>
               </div>
@@ -248,6 +251,16 @@
           androidIos.bridge(_this);
         },
         methods:{
+          caozuoZ:function () {
+            var _this = this;
+            _this.mescrollArrList[_this.tabShow].resetUpScroll();
+            if(_this.mescrollArrList[1-_this.tabShow] != null){
+              _this.mescrollArrList[1-_this.tabShow] = null;
+              _this.tab[1-_this.tabShow].prolist = [] ;
+              $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
+              $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
+            }
+          },
           go:function () {
             var _this = this;
             $('.wrapper').navbarscroll({defaultSelect:0});
@@ -255,7 +268,7 @@
             var mescrollArr=new Array(_this.tab.length);//4个菜单所对应的4个mescroll对象
             //初始化首页
             mescrollArr[_this.tabShow]=initMescroll("mescroll" + _this.tabShow, "dataList" + _this.tabShow);
-
+            _this.mescrollArrList = mescrollArr;
             /*初始化菜单*/
             $("#trackTab li").click(function(){
               var i=Number($(this).attr("i"));
@@ -335,47 +348,49 @@
             function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
               //延时一秒,模拟联网
               setTimeout(function () {
-                $.ajax({
-                  type: "POST",
-                  url: androidIos.ajaxHttp() + "/driver/findCarAndDriver",
-                  data:JSON.stringify({
-                    page:pageNum,
-                    size:pageSize,
-                    carLength:_this.searchList.carLength,
-                    carModel:_this.searchList.distance == 0 ? "" : _this.searchList.distance,
-                    startCity:_this.searchList.startAdd,
-                    endCity:_this.searchList.endAdd,
-                    phone:"",
-                    carno:"",
-                    location:"121.47,31.23",
-                    userCode:sessionStorage.getItem("token"),
-                    source:sessionStorage.getItem("source"),
-                  }),
-                  contentType: "application/json;charset=utf-8",
-                  dataType: "json",
-                  timeout: 30000,
-                  success: function (loadInvoice) {
-                    if (loadInvoice.success == "1") {
-                      successCallback(loadInvoice.list);
-                    }else{
-                      androidIos.second(loadInvoice.message);
-                      successCallback([]);
+                var http = curNavIndex == 0 ? "/driver/findCarSourceCollect" : "/driver/findCarAndDriver";
+                  $.ajax({
+                    type: "POST",
+                    url: androidIos.ajaxHttp() + http,
+                    data:JSON.stringify({
+                      page:pageNum,
+                      size:pageSize,
+                      carLength:_this.searchList.carLength,
+                      carModel:_this.searchList.distance == 0 ? "" : _this.searchList.distance,
+                      startCity:_this.searchList.startAdd,
+                      endCity:_this.searchList.endAdd,
+                      phone:"",
+                      carno:"",
+                      location:"121.47,31.23",
+                      userCode:sessionStorage.getItem("token"),
+                      source:sessionStorage.getItem("source"),
+                    }),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    timeout: 30000,
+                    success: function (loadInvoice) {
+                      if (loadInvoice.success == "1") {
+                        successCallback(loadInvoice.list);
+                      }else{
+                        androidIos.second(loadInvoice.message);
+                        successCallback([]);
+                      }
+                    },
+                    complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                      if (status == 'timeout') { //超时,status还有success,error等值的情况
+                        androidIos.second("当前状况下网络状态差，请检查网络！");
+                        successCallback([]);
+                      } else if (status == "error") {
+                       /* androidIos.errorwife();*/
+                        successCallback([]);
+                      }
                     }
-                  },
-                  complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-                    if (status == 'timeout') { //超时,status还有success,error等值的情况
-                      androidIos.second("当前状况下网络状态差，请检查网络！");
-                      successCallback([]);
-                    } else if (status == "error") {
-                      androidIos.errorwife();
-                      successCallback([]);
-                    }
-                  }
-                });
+                  });
               },100)
             }
           },
           caozuo:function (type,message) {
+            var _this = this;
             if(type == 1){
                if(message == "" && message == null){
                    androidIos.second("暂无司机位置信息");
@@ -385,7 +400,42 @@
             }else if(type == 3){
               androidIos.shortMessageCall(message);
             }else if(type == 4){
-             console.log(message);
+              androidIos.first("确认添加为熟车吗?");
+              $(".tanBox-yes").unbind('click').click(function(){
+                $(".tanBox-bigBox").remove();
+                $.ajax({
+                  type: "POST",
+                  url: androidIos.ajaxHttp() + "/driver/collectCarAndDriver",
+                  data:JSON.stringify({
+                    pk:message,
+                    userCode:sessionStorage.getItem("token"),
+                    source:sessionStorage.getItem("source"),
+                  }),
+                  contentType: "application/json;charset=utf-8",
+                  dataType: "json",
+                  timeout: 30000,
+                  success: function (collectCarAndDriver) {
+                    if (collectCarAndDriver.success == "1") {
+                      _this.$cjj("添加成功");
+                      if(_this.mescrollArrList[1-_this.tabShow] != null){
+                        _this.mescrollArrList[1-_this.tabShow] = null;
+                        _this.tab[1-_this.tabShow].prolist = [] ;
+                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
+                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
+                      }
+                    }else{
+                      androidIos.second(collectCarAndDriver.message);
+                    }
+                  },
+                  complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                    if (status == 'timeout') { //超时,status还有success,error等值的情况
+                      androidIos.second("当前状况下网络状态差，请检查网络！");
+                    } else if (status == "error") {
+                      androidIos.errorwife();
+                    }
+                  }
+                });
+              });
             }
           },
           compare : function(name){
@@ -854,6 +904,27 @@
   text-align: center;
   display: inline-block;
 }
+#searchInput{
+  width:100%;
+  height:1.2rem;
+  background: white;
+  border-top:1px solid #ececec;
+}
+  #searchInput input{
+    width:7.5rem;
+    padding:0.15rem 0.9rem ;
+    color:#333;
+    font-size: 0.34rem;
+    line-height: 0.36rem;
+    border-radius: 0.33rem;
+    margin: 0.27rem auto 0 auto;
+    background-color: #F3F6FB;
+    display: block;
+    background-image: url("../images/sousuo2.png");
+    background-position: 0.2rem 50%;
+    background-repeat: no-repeat;
+    background-size: 0.375rem;
+  }
 .distanceLine{
   position: absolute;
   width:1px;
@@ -1104,6 +1175,7 @@
   border-top: 1px solid white;
   border-bottom: 1px solid #ececec;
   margin-top: 2px;
+  position: relative;
 }
   .first{
     width:1rem;
@@ -1145,8 +1217,9 @@
     line-height:0.347rem ;
   }
   .third{
-    float: right;
-    margin-top: 0.21rem;
+    right:0;
+    top:0.15rem;
+    position: absolute;
   }
   .third .imgcaozuo{
     width:0.67rem;
@@ -1160,6 +1233,6 @@
     font-size: 0.3125rem;
     text-align: center;
     color:#1D68A8;
-    margin-top:0.08rem ;
+    margin-top:0.06rem ;
   }
 </style>
