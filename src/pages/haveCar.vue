@@ -124,6 +124,7 @@
             <div class="selectcity" v-if="normalCityList.length > 0 && normalAreaList.length == 0">
               <h1>选择城市</h1>
               <ul id="selectcityUl">
+                <li @click="hotAddressListChoose(addtype == 0 ?  searchList.searchStartPro : searchList.searchEndPro,2)"><div class="shouzimu"></div><h3 v-html="addtype == 0 ? '全' + searchList.searchStartPro : '全' + searchList.searchEndPro"></h3></li>
                 <li v-for="(item ,index) in normalCityList" :class="item.checked ? 'addCheckTrue' : ''" @click="chooseCity(item,index)"><div class="shouzimu">{{item.PinyinFirst}}</div>{{item.region}}</li>
                 <div class="clearBoth"></div>
               </ul>
@@ -131,6 +132,7 @@
             <div class="selectarea" v-if="normalAreaList.length > 0">
               <h1>选择区/县</h1>
               <ul id="selectareaUl">
+                <li @click="hotAddressListChoose(addtype == 0 ?  searchList.searchStartCity : searchList.searchEndCity,2)"><div class="shouzimu"></div><h3 v-html="addtype == 0 ? '全' + searchList.searchStartCity : '全' + searchList.searchEndCity"></h3></li>
                 <li v-for="(item ,index) in normalAreaList" :class="item.checked ? 'addCheckTrue' : ''" @click="hotAddressListChoose(item,1)"><div class="shouzimu">{{item.PinyinFirst}}</div>{{item.region}}</li>
                 <div class="clearBoth"></div>
               </ul>
@@ -171,6 +173,10 @@
             distanceList:[],
             carLengthList:[],
             hotAddressList:[{
+              name:"全国",
+              region:"",
+              chescked:false,
+            },{
               name:"北京市",
               region:"北京市",
               chescked:false,
@@ -217,10 +223,6 @@
             },{
               name:"成都市",
               region:"成都市",
-              chescked:false,
-            },{
-              name:"全国",
-              region:"",
               chescked:false,
             }],
             normalAddressList:[],
@@ -504,7 +506,7 @@
             for(var i =0 ; i < _this.normalCityList.length;i++){
               _this.normalCityList[i].checked = false;
             }
-            if(type == 0){
+           /* if(type == 0){
               _this.searchStartPro =  _this.searchList.searchStartPro;
               _this.searchStartCity = _this.searchList.searchStartCity;
               if(_this.searchList.startAdd != "" && _this.searchList.searchStartPro == ""){
@@ -518,9 +520,12 @@
                 for(var i = 0 ; i < _this.normalAddressList.length ; i++){
                   if(_this.searchList.searchStartPro == _this.normalAddressList[i].region){
                     _this.normalCityList = _this.normalAddressList[i].child;
-                    for(var x = 0; x < _this.normalCityList.length ; x++){
+                    for(var x = 0 ; x < _this.normalCityList.length ;x++){
                       _this.normalCityList[x].PinyinFirst = ConvertPinyin(_this.normalCityList[x].region).substring(0,1).toUpperCase();
-                      _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                    }
+                    _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                    _this.unique1(_this.normalCityList);
+                    for(var x = 0; x < _this.normalCityList.length ; x++){
                       if(_this.searchList.searchStartCity == _this.normalCityList[x].region){
                         _this.normalAreaList = _this.normalCityList[x].child;
                         for(var z = 0 ; z < _this.normalAreaList.length ;z++){
@@ -559,9 +564,12 @@
                 for(var i = 0 ; i < _this.normalAddressList.length ; i++){
                   if(_this.searchList.searchEndPro == _this.normalAddressList[i].region){
                     _this.normalCityList = _this.normalAddressList[i].child;
-                    for(var x = 0; x < _this.normalCityList.length ; x++){
+                    for(var x = 0 ; x < _this.normalCityList.length ;x++){
                       _this.normalCityList[x].PinyinFirst = ConvertPinyin(_this.normalCityList[x].region).substring(0,1).toUpperCase();
-                      _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                    }
+                    _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                    _this.unique1(_this.normalCityList);
+                    for(var x = 0; x < _this.normalCityList.length ; x++){
                       if(_this.searchList.searchEndCity == _this.normalCityList[x].region){
                          _this.normalAreaList = _this.normalCityList[x].child;
                         for(var z = 0 ; z< _this.normalAreaList.length ;z++){
@@ -585,15 +593,17 @@
                   }
                 }
               }
-            }
+            }*/
           },
           hotAddressListno:function () {
             var _this = this;
             _this.screenAddressTrue = false;
             if(_this.addtype == 0){
               _this.searchList.searchStartPro = _this.searchStartPro;
+              _this.searchList.searchStartCity = _this.searchStartCity;
             }else if(_this.addtype == 1){
               _this.searchList.searchEndPro = _this.searchEndPro;
+              _this.searchList.searchEndCity = _this.searchEndCity;
             }
           },
           getPageScroll:function() {
@@ -671,12 +681,21 @@
           hotAddressListChoose:function (item,type) {
             var _this = this;
             if(_this.addtype == 0){
-              _this.searchList.startAdd = item.region;
+              if(type == 0 || type == 1){
+                _this.searchList.startAdd = item.region;
+              }else if(type == 2){
+                _this.searchList.startAdd = item;
+              }
+
               if(type == 0){
                 _this.searchList.searchStartPro = "";
               }
             }else if(_this.addtype == 1){
-              _this.searchList.endAdd = item.region;
+              if(type == 0 || type == 1){
+                _this.searchList.endAdd = item.region;
+              }else if(type == 2){
+                _this.searchList.endAdd = item;
+              }
               if(type == 0){
                 _this.searchList.searchEndPro = "";
               }
@@ -703,7 +722,9 @@
             for(var i =0 ; i < _this.normalAreaList.length;i++){
               _this.normalAreaList[i].checked = false;
             }
-            item.checked = true;
+            if(type == 0 || type == 1){
+              item.checked = true;
+            }
             _this.screenAddressTrue = false;
             if(_this.tabShow == 0){
               localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList));
