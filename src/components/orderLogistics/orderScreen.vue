@@ -151,8 +151,8 @@
         data:JSON.stringify({
           page:pageNum,
           size:pageSize,
-          type:"13",
-          state:"",
+          type:"",
+          state:"13",
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
           keyword:thisthatsecond.address == "" ? "HDSDDD" : androidIos.checkText(thisthatsecond.address),

@@ -297,6 +297,12 @@
         methods:{
           caozuoZ:function () {
             var _this = this;
+            var messageList =  sessionStorage.getItem("ownerMessage");
+            if(JSON.parse(messageList).status == "2"){
+
+            }else{
+              androidIos.second("请审核通过后再试！");
+            }
           },
           scrollAddress:function (index) {
             var _this = this;
@@ -470,55 +476,61 @@
           },
           caozuo:function (type,message) {
             var _this = this;
-            if(type == 1){
-               if(message == "" || message == null){
-                   androidIos.second("暂无司机位置信息");
-               }else{
+            var messageList =  sessionStorage.getItem("ownerMessage");
+            if(JSON.parse(messageList).status == "2"){
+              if(type == 1){
+                if(message == "" || message == null){
+                  androidIos.second("暂无司机位置信息");
+                }else{
                   androidIos.addPageList();
                   _this.$router.push({path:"/driverMap",query:{location:message}})
-               }
-            }else if(type == 2){
-              androidIos.telCall(message);
-            }else if(type == 3){
-              androidIos.shortMessageCall(message);
-            }else if(type == 4){
-              androidIos.first("确认添加为熟车吗?");
-              $(".tanBox-yes").unbind('click').click(function(){
-                $(".tanBox-bigBox").remove();
-                $.ajax({
-                  type: "POST",
-                  url: androidIos.ajaxHttp() + "/driver/collectCarAndDriver",
-                  data:JSON.stringify({
-                    pk:message,
-                    userCode:sessionStorage.getItem("token"),
-                    source:sessionStorage.getItem("source"),
-                  }),
-                  contentType: "application/json;charset=utf-8",
-                  dataType: "json",
-                  timeout: 30000,
-                  success: function (collectCarAndDriver) {
-                    if (collectCarAndDriver.success == "1") {
-                      _this.$cjj("添加成功");
-                      if(_this.mescrollArrList[1-_this.tabShow] != null){
-                        _this.mescrollArrList[1-_this.tabShow] = null;
-                        _this.tab[1-_this.tabShow].prolist = [] ;
-                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
-                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
+                }
+              }else if(type == 2){
+                androidIos.telCall(message);
+              }else if(type == 3){
+                androidIos.shortMessageCall(message);
+              }else if(type == 4){
+                androidIos.first("确认添加为熟车吗?");
+                $(".tanBox-yes").unbind('click').click(function(){
+                  $(".tanBox-bigBox").remove();
+                  $.ajax({
+                    type: "POST",
+                    url: androidIos.ajaxHttp() + "/driver/collectCarAndDriver",
+                    data:JSON.stringify({
+                      pk:message,
+                      userCode:sessionStorage.getItem("token"),
+                      source:sessionStorage.getItem("source"),
+                    }),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    timeout: 30000,
+                    success: function (collectCarAndDriver) {
+                      if (collectCarAndDriver.success == "1") {
+                        _this.$cjj("添加成功");
+                        if(_this.mescrollArrList[1-_this.tabShow] != null){
+                          _this.mescrollArrList[1-_this.tabShow] = null;
+                          _this.tab[1-_this.tabShow].prolist = [] ;
+                          $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
+                          $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
+                        }
+                      }else{
+                        androidIos.second(collectCarAndDriver.message);
                       }
-                    }else{
-                      androidIos.second(collectCarAndDriver.message);
+                    },
+                    complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                      if (status == 'timeout') { //超时,status还有success,error等值的情况
+                        androidIos.second("当前状况下网络状态差，请检查网络！");
+                      } else if (status == "error") {
+                        androidIos.errorwife();
+                      }
                     }
-                  },
-                  complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-                    if (status == 'timeout') { //超时,status还有success,error等值的情况
-                      androidIos.second("当前状况下网络状态差，请检查网络！");
-                    } else if (status == "error") {
-                      androidIos.errorwife();
-                    }
-                  }
+                  });
                 });
-              });
+              }
+            }else{
+               androidIos.second("请审核通过后再试！");
             }
+
           },
           compare : function(name){
             return function(a,b){
