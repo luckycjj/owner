@@ -121,7 +121,7 @@
           androidIos.judgeIphoneX("xinYaIndexBox",1);
           androidIos.judgeIphoneX("date",2);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
-          _this.serchorderType = sessionStorage.getItem("searchDate");
+          _this.serchorderType = sessionStorage.getItem("searchDate") == undefined ? 0 : sessionStorage.getItem("searchDate");
           _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
           if(sessionStorage.getItem("indexCorner") != undefined){
             _this.iconList = JSON.parse(sessionStorage.getItem("indexCorner"));
