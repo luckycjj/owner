@@ -45,6 +45,7 @@ import  orderLogisticsF from '@/components/orderLogistics/orderLogisticsMore'
 import  orderLogisticsS from '@/components/orderLogistics/map'
 import  orderScreen from '@/components/orderLogistics/orderScreen'
 import uploadDataF from '@/components/uploadData/pdf'
+import driverMap from '@/components/carBox/map'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -181,6 +182,11 @@ Vue.filter('timeCheck',function (timeCheck) {
 })
 export default new Router({
   routes: [
+    {
+      path:'/driverMap',
+      name:'driverMap',
+      component:driverMap,
+    },
     {
       path:'/newProlist',
       name:'newProlist',

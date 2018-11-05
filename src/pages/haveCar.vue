@@ -15,12 +15,12 @@
         <div class="screenCarLength">
           <div class="distanceLine"></div>
           <div class="dist">
-            <p v-html="searchList.carLength == '' ? '不限' :searchList.carLength "  @click="checkdistance(1)"></p>
+            <p v-html="searchList.carLength == '' ? '车长' :searchList.carLength  + '米'"  @click="checkdistance(1)"></p>
           </div>
         </div>
         <div class="screenDistance">
           <div class="dist">
-            <p v-html="searchList.distance == '' ? '选择车型' : searchList.distanceName " @click="checkdistance(2)"></p>
+            <p v-html="searchList.distance == '' ? '选择车型' : searchList.distanceName" @click="checkdistance(2)"></p>
           </div>
         </div>
         <div class="screenGo">
@@ -238,7 +238,13 @@
            androidIos.judgeIphoneX("screen",0);
           androidIos.judgeIphoneX("mescroll",2);
           androidIos.judgeIphoneX("mescroll",1);
-          var SCREENROBBING = localStorage.getItem("SCREENROBBING");
+          _this.tabShow =  sessionStorage.getItem("haveCarTap") == null ? 0 : sessionStorage.getItem("haveCarTap");
+          var SCREENROBBING;
+          if(_this.tabShow == 0 ){
+            SCREENROBBING = localStorage.getItem("SCREENROBBING");
+          }else{
+            SCREENROBBING = localStorage.getItem("SCREENROBBING2");
+          }
           if(SCREENROBBING != null){
             _this.searchList = JSON.parse(SCREENROBBING);
           }
@@ -253,17 +259,10 @@
         methods:{
           caozuoZ:function () {
             var _this = this;
-            _this.mescrollArrList[_this.tabShow].resetUpScroll();
-            if(_this.mescrollArrList[1-_this.tabShow] != null){
-              _this.mescrollArrList[1-_this.tabShow] = null;
-              _this.tab[1-_this.tabShow].prolist = [] ;
-              $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
-              $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
-            }
           },
           go:function () {
             var _this = this;
-            $('.wrapper').navbarscroll({defaultSelect:0});
+            $('.wrapper').navbarscroll({defaultSelect:_this.tabShow});
             var curNavIndex = _this.tabShow;//首页0; 奶粉1; 面膜2; 图书3;
             var mescrollArr=new Array(_this.tab.length);//4个菜单所对应的4个mescroll对象
             //初始化首页
@@ -273,7 +272,28 @@
             $("#trackTab li").click(function(){
               var i=Number($(this).attr("i"));
               _this.tabShow = i;
-              sessionStorage.setItem("trackTap",i);
+              sessionStorage.setItem("haveCarTap",i);
+              _this.searchList = {
+                  startAdd:"",
+                  endAdd:"",
+                  distance:"",
+                  distanceName:"",
+                  searchStartPro:"",
+                  carLength:"",
+                  carLengthName:"",
+                  searchEndPro:"",
+              };
+              if(_this.tabShow == 0){
+                var SCREENROBBING = localStorage.getItem("SCREENROBBING");
+                if(SCREENROBBING != null){
+                  _this.searchList = JSON.parse(SCREENROBBING);
+                }
+              }else if(_this.tabShow == 1){
+                var SCREENROBBING = localStorage.getItem("SCREENROBBING2");
+                if(SCREENROBBING != null){
+                  _this.searchList = JSON.parse(SCREENROBBING);
+                }
+              }
               if(curNavIndex!=i) {
                 //更改列表条件
                 //隐藏当前列表和回到顶部按钮
@@ -349,6 +369,7 @@
               //延时一秒,模拟联网
               setTimeout(function () {
                 var http = curNavIndex == 0 ? "/driver/findCarSourceCollect" : "/driver/findCarAndDriver";
+              /*  _this.geolocation();*/
                   $.ajax({
                     type: "POST",
                     url: androidIos.ajaxHttp() + http,
@@ -392,8 +413,11 @@
           caozuo:function (type,message) {
             var _this = this;
             if(type == 1){
-               if(message == "" && message == null){
+               if(message == "" || message == null){
                    androidIos.second("暂无司机位置信息");
+               }else{
+                  androidIos.addPageList();
+                  _this.$router.push({path:"/driverMap",query:{location:message}})
                }
             }else if(type == 2){
               androidIos.telCall(message);
@@ -607,7 +631,12 @@
             }
             item.checked = true;
             _this.screenAddressTrue = false;
-            localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList))
+            if(_this.tabShow == 0){
+              localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList));
+            }else if(_this.tabShow == 1){
+              localStorage.setItem("SCREENROBBING2",JSON.stringify(_this.searchList));
+            }
+            _this.mescrollArrList[_this.tabShow].resetUpScroll();
           },
           checkdistance:function (type) {
             var _this = this;
@@ -627,7 +656,7 @@
                 async:false,
                 success: function (getCarType) {
                   var list = [{
-                    value:0,
+                    value:"",
                     name:"不限",
                     checked:false,
                   }];
@@ -663,7 +692,7 @@
                 async:false,
                 success: function (getCarType) {
                   var list = [{
-                    value:0,
+                    value:"",
                     name:"不限",
                     checked:false,
                   }];
@@ -699,6 +728,25 @@
                 }
               }
             }
+          },
+          geolocation:function () {
+            AMap.plugin('AMap.Geolocation', function() {
+              var geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                timeout: 10000,          //超过10秒后停止定位，默认：5s
+                buttonPosition:'RB',    //定位按钮的停靠位置
+                buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+
+              });
+              geolocation.getCurrentPosition(function(status,result){
+                if(status=='complete'){
+                  console.log(result)
+                }else{
+                   androidIos.second("定位失败");
+                }
+              });
+            });
           },
           distanceListChecked:function (number) {
             var _this = this;
@@ -742,7 +790,12 @@
               if(type){
                 _this.searchList.distance = list.join(",");
                 _this.searchList.distanceName = listName.join(",");
-                localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList))
+                if(_this.tabShow == 0){
+                  localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList));
+                }else if(_this.tabShow == 1){
+                  localStorage.setItem("SCREENROBBING2",JSON.stringify(_this.searchList));
+                }
+                _this.mescrollArrList[_this.tabShow].resetUpScroll();
               }
             }else if(_this.cartype == 1){
               for(var i = 0;i < _this.carLengthList.length ; i++){
@@ -755,7 +808,12 @@
               if(type){
                 _this.searchList.carLength = list.join(",");
                 _this.searchList.carLengthName = listName.join(",");
-                localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList))
+                if(_this.tabShow == 0){
+                  localStorage.setItem("SCREENROBBING",JSON.stringify(_this.searchList));
+                }else if(_this.tabShow == 1){
+                  localStorage.setItem("SCREENROBBING2",JSON.stringify(_this.searchList));
+                }
+                _this.mescrollArrList[_this.tabShow].resetUpScroll();
               }
             }
 

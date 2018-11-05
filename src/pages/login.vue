@@ -34,6 +34,7 @@
           sessionStorage.removeItem("token");
           androidIos.delCookie("MESSAGEDRIVER");
           androidIos.delCookie("BAIDUTOKEN");
+          sessionStorage.removeItem("haveCarTap");
           sessionStorage.removeItem("ownerMessage");
           sessionStorage.removeItem("trackTap");
           sessionStorage.removeItem("settlementTap");
