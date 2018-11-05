@@ -137,6 +137,11 @@
                 <div class="clearBoth"></div>
               </ul>
             </div>
+            <div class="scrollAZ" v-if="normalCityList.length  ==  0 && normalAreaList.length == 0">
+                <ul>
+                  <li @click="scrollAddress(index)" v-for="(item,index) in PinyinFirstList"> {{item.PinyinFirst}}</li>
+                </ul>
+            </div>
           </div>
         </div>
       </transition>
@@ -246,6 +251,7 @@
             }],
             errorlogo: 'this.src="' + require('../images/userImg.png') + '"',
             mescrollArrList:null,
+            PinyinFirstList:[]
           }
         },
         mounted:function () {
@@ -263,17 +269,54 @@
           if(SCREENROBBING != null){
             _this.searchList = JSON.parse(SCREENROBBING);
           }
+
           _this.normalAddressList = provinceCityArea;
+          var list = [];
           for(var i = 0 ; i < _this.normalAddressList.length ;i++){
             _this.normalAddressList[i].PinyinFirst = ConvertPinyin(_this.normalAddressList[i].region).substring(0,1).toUpperCase();
+            list.push({
+              PinyinFirst:ConvertPinyin(_this.normalAddressList[i].region).substring(0,1).toUpperCase(),
+              scroll:0,
+            });
           }
           _this.normalAddressList.sort(_this.compare("PinyinFirst"));
           _this.unique1(_this.normalAddressList);
+          list.sort(_this.compare("PinyinFirst"));
+          for(var i = 0 ; i < list.length ;i++){
+            list[i].scroll = _this.countId(list);
+          }
+          var res = [list[0]];
+          for(var i = 1; i < list.length; i++){
+            if(list[i].PinyinFirst !== res[res.length - 1].PinyinFirst){
+              res.push(list[i]);
+            }
+          }
+          _this.PinyinFirstList = res;
           androidIos.bridge(_this);
         },
         methods:{
           caozuoZ:function () {
             var _this = this;
+          },
+          scrollAddress:function (index) {
+            var _this = this;
+            var scroll = 0;
+            for(var i = 0 ; i <index;i++){
+              scroll =  scroll + _this.PinyinFirstList[i].scroll[_this.PinyinFirstList[i].PinyinFirst];
+            }
+            var html = document.getElementsByTagName("html")[0].style.fontSize.replace("px","");
+            $(".selectAddress ul").animate({scrollTop: scroll*1.2*html}, 100);
+          },
+          countId:function(data){
+            var count={};
+            for(var i=0;i<data.length;i++){
+              if(count[data[i].PinyinFirst]){
+                count[data[i].PinyinFirst]++;;
+                continue;
+              }
+              count[data[i].PinyinFirst]=1;
+            }
+            return count;
           },
           go:function () {
             var _this = this;
@@ -1311,6 +1354,15 @@
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
+}
+.scrollAZ{
+  position: absolute;
+  right:0.52rem;
+  bottom:0.6rem;
+}
+.scrollAZ li{
+   color:#999;
+  font-size: 0.3125rem;
 }
 .slide-fade-enter-active {
   transition: all .3s ease;
