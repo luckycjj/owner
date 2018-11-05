@@ -227,7 +227,7 @@
     margin:0;
   }
   html,body{
-    background-color: white;
+    background-color: white!important;
     touch-action: none;
   }
   body ::-webkit-scrollbar{

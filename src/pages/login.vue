@@ -46,6 +46,12 @@
           localStorage.removeItem("noviceguidance1");
           localStorage.removeItem("noviceguidance2");
           localStorage.removeItem("noviceguidance3");
+          localStorage.removeItem("getPageScroll0");
+          localStorage.removeItem("getPageScroll1");
+          localStorage.removeItem("getPageScroll2");
+          localStorage.removeItem("getPageScroll3");
+          localStorage.removeItem("SCREENROBBING");
+          localStorage.removeItem("SCREENROBBING2");
           sessionStorage.removeItem("searchDate");
           androidIos.bridge(_this);
       },

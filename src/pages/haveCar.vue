@@ -102,6 +102,7 @@
               <h1>已选择</h1>
               <ul>
                 <li v-html="addtype == 0 ? searchList.searchStartPro : searchList.searchEndPro"></li>
+                <li v-html="addtype == 0 ? searchList.searchStartCity : searchList.searchEndCity"></li>
                 <li><span style="color: #2c9cff;border-bottom: 1px solid #2c9cff;font-size:0.35rem;">请选择</span></li>
                 <div class="clearBoth"></div>
               </ul>
@@ -120,10 +121,17 @@
                 <div class="clearBoth"></div>
               </ul>
             </div>
-            <div class="selectcity" v-if="normalCityList.length > 0">
+            <div class="selectcity" v-if="normalCityList.length > 0 && normalAreaList.length == 0">
               <h1>选择城市</h1>
               <ul id="selectcityUl">
-                <li v-for="(item ,index) in normalCityList" :class="item.checked ? 'addCheckTrue' : ''" @click="hotAddressListChoose(item,1)"><div class="shouzimu">{{item.PinyinFirst}}</div>{{item.region}}</li>
+                <li v-for="(item ,index) in normalCityList" :class="item.checked ? 'addCheckTrue' : ''" @click="chooseCity(item,index)"><div class="shouzimu">{{item.PinyinFirst}}</div>{{item.region}}</li>
+                <div class="clearBoth"></div>
+              </ul>
+            </div>
+            <div class="selectarea" v-if="normalAreaList.length > 0">
+              <h1>选择区/县</h1>
+              <ul id="selectareaUl">
+                <li v-for="(item ,index) in normalAreaList" :class="item.checked ? 'addCheckTrue' : ''" @click="hotAddressListChoose(item,1)"><div class="shouzimu">{{item.PinyinFirst}}</div>{{item.region}}</li>
                 <div class="clearBoth"></div>
               </ul>
             </div>
@@ -155,6 +163,8 @@
               carLength:"",
               carLengthName:"",
               searchEndPro:"",
+              searchStartCity:"",
+              searchEndCity:"",
             },
             screenDistanceTrue:false,
             screenAddressTrue:false,
@@ -215,8 +225,11 @@
             }],
             normalAddressList:[],
             normalCityList:[],
+            normalAreaList:[],
             searchStartPro:"",
             searchEndPro:"",
+            searchStartCity:"",
+            searchEndCity:"",
             addtype:0,
             cartype:1,
             tabShow:0,
@@ -484,6 +497,7 @@
             _this.screenAddressTrue = true;
             _this.addtype = type;
             _this.normalCityList = [];
+            _this.normalAreaList = [];
             for(var i =0 ; i < _this.hotAddressList.length;i++){
               _this.hotAddressList[i].checked = false;
             }
@@ -492,6 +506,7 @@
             }
             if(type == 0){
               _this.searchStartPro =  _this.searchList.searchStartPro;
+              _this.searchStartCity = _this.searchList.searchStartCity;
               if(_this.searchList.startAdd != "" && _this.searchList.searchStartPro == ""){
                 for(var i = 0; i < _this.hotAddressList.length;i++){
                   _this.hotAddressList[i].checked = false;
@@ -503,28 +518,36 @@
                 for(var i = 0 ; i < _this.normalAddressList.length ; i++){
                   if(_this.searchList.searchStartPro == _this.normalAddressList[i].region){
                     _this.normalCityList = _this.normalAddressList[i].child;
-                    for(var i = 0 ; i < _this.normalCityList.length ;i++){
-                      _this.normalCityList[i].PinyinFirst = ConvertPinyin(_this.normalCityList[i].region).substring(0,1).toUpperCase();
+                    for(var x = 0; x < _this.normalCityList.length ; x++){
+                      _this.normalCityList[x].PinyinFirst = ConvertPinyin(_this.normalCityList[x].region).substring(0,1).toUpperCase();
+                      _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                      if(_this.searchList.searchStartCity == _this.normalCityList[x].region){
+                        _this.normalAreaList = _this.normalCityList[x].child;
+                        for(var z = 0 ; z < _this.normalAreaList.length ;z++){
+                          _this.normalAreaList[z].PinyinFirst = ConvertPinyin(_this.normalAreaList[z].region).substring(0,1).toUpperCase();
+                        }
+                        _this.normalAreaList.sort(_this.compare("PinyinFirst"));
+                        _this.unique1(_this.normalAreaList);
+                        _this.$nextTick(function () {
+                          var scrolltopGo = _this.tabShow == 0 ? localStorage.getItem("getPageScroll0") :  localStorage.getItem("getPageScroll2");
+                          scrolltopGo = scrolltopGo == null ? 0 : scrolltopGo;
+                          $("#selectareaUl").animate({scrollTop: scrolltopGo}, 0);
+                        });
+                        break;
+                      }
                     }
-                    _this.normalCityList.sort(_this.compare("PinyinFirst"));
-                    _this.unique1(_this.normalCityList);
-                    _this.$nextTick(function () {
-                      var scrolltopGo = localStorage.getItem("getPageScroll0");
-                      scrolltopGo = scrolltopGo == null ? 0 : scrolltopGo;
-                      $("#selectcityUl").animate({scrollTop: scrolltopGo}, 0);
-                    });
-                    break;
                   }
                 }
-                for(var i = 0 ; i < _this.normalCityList.length ; i++){
-                  _this.normalCityList[i].checked = false;
-                  if(_this.searchList.startAdd == _this.normalCityList[i].region){
-                    _this.normalCityList[i].checked = true;
+                for(var i = 0 ; i < _this.normalAreaList.length ; i++){
+                  _this.normalAreaList[i].checked = false;
+                  if(_this.searchList.startAdd == _this.normalAreaList[i].region){
+                    _this.normalAreaList[i].checked = true;
                   }
                 }
               }
             }else if(type == 1){
               _this.searchEndPro =  _this.searchList.searchEndPro;
+              _this.searchEndCity = _this.searchList.searchEndCity;
               if(_this.searchList.endAdd != "" && _this.searchList.searchEndPro == ""){
                 for(var i = 0; i < _this.hotAddressList.length;i++){
                   _this.hotAddressList[i].checked = false;
@@ -536,23 +559,29 @@
                 for(var i = 0 ; i < _this.normalAddressList.length ; i++){
                   if(_this.searchList.searchEndPro == _this.normalAddressList[i].region){
                     _this.normalCityList = _this.normalAddressList[i].child;
-                    for(var i = 0 ; i < _this.normalCityList.length ;i++){
-                      _this.normalCityList[i].PinyinFirst = ConvertPinyin(_this.normalCityList[i].region).substring(0,1).toUpperCase();
+                    for(var x = 0; x < _this.normalCityList.length ; x++){
+                      _this.normalCityList[x].PinyinFirst = ConvertPinyin(_this.normalCityList[x].region).substring(0,1).toUpperCase();
+                      _this.normalCityList.sort(_this.compare("PinyinFirst"));
+                      if(_this.searchList.searchEndCity == _this.normalCityList[x].region){
+                         _this.normalAreaList = _this.normalCityList[x].child;
+                        for(var z = 0 ; z< _this.normalAreaList.length ;z++){
+                          _this.normalAreaList[z].PinyinFirst = ConvertPinyin(_this.normalAreaList[z].region).substring(0,1).toUpperCase();
+                        }
+                        _this.normalAreaList.sort(_this.compare("PinyinFirst"));
+                        _this.unique1(_this.normalAreaList);
+                        _this.$nextTick(function () {
+                          var scrolltopGo = _this.tabShow == 0 ? localStorage.getItem("getPageScroll1") :  localStorage.getItem("getPageScroll3");
+                          scrolltopGo = scrolltopGo == null ? 0 : scrolltopGo;
+                          $("#selectareaUl").animate({scrollTop: scrolltopGo}, 0);
+                        });
+                      }
                     }
-                    _this.normalCityList.sort(_this.compare("PinyinFirst"));
-                    _this.unique1(_this.normalCityList);
-                    _this.$nextTick(function () {
-                      var scrolltopGo = localStorage.getItem("getPageScroll1");
-                      scrolltopGo = scrolltopGo == null ? 0 : scrolltopGo;
-                      $("#selectcityUl").animate({scrollTop: scrolltopGo}, 0);
-                    });
-                    break;
                   }
                 }
-                for(var i = 0 ; i < _this.normalCityList.length ; i++){
-                  _this.normalCityList[i].checked = false;
-                  if(_this.searchList.endAdd == _this.normalCityList[i].region){
-                    _this.normalCityList[i].checked = true;
+                for(var i = 0 ; i < _this.normalAreaList.length ; i++){
+                  _this.normalAreaList[i].checked = false;
+                  if(_this.searchList.endAdd == _this.normalAreaList[i].region){
+                    _this.normalAreaList[i].checked = true;
                   }
                 }
               }
@@ -569,7 +598,7 @@
           },
           getPageScroll:function() {
             var  yScroll;
-            yScroll = document.getElementById("selectcityUl").scrollTop;
+            yScroll = document.getElementById("selectareaUl").scrollTop;
             return yScroll;
           },
           chooseProvince:function (item,index) {
@@ -593,17 +622,51 @@
               _this.searchList.searchEndPro = item.region;
             }
           },
+          chooseCity:function (item,index) {
+            var _this = this;
+            for(var i = 0; i < _this.normalCityList.length; i++){
+              _this.normalCityList[i].checked = false;
+            }
+            _this.normalCityList[index].checked = true;
+            _this.normalAreaList = item.child;
+            for(var i = 0 ; i < _this.normalAreaList.length ;i++){
+              _this.normalAreaList[i].PinyinFirst = ConvertPinyin(_this.normalAreaList[i].region).substring(0,1).toUpperCase();
+            }
+            _this.normalAreaList.sort(_this.compare("PinyinFirst"));
+            _this.unique1(_this.normalAreaList);
+            for(var i =0 ; i < _this.normalAreaList.length;i++){
+              _this.normalAreaList[i].checked = false;
+            }
+            if(_this.addtype == 0){
+              _this.searchList.searchStartCity = item.region;
+            }else if(_this.addtype == 1){
+              _this.searchList.searchEndCity = item.region;
+            }
+          },
           normalCityGoback:function () {
             var _this = this;
-            for(var i = 0; i < _this.normalAddressList.length; i++){
-              _this.normalAddressList[i].checked = false;
+            if(_this.normalAreaList.length > 0){
+              for(var i = 0; i < _this.normalCityList.length; i++){
+                _this.normalCityList[i].checked = false;
+              }
+              _this.normalAreaList = [];
+              if(_this.addtype == 0){
+                _this.searchList.searchStartCity = "";
+              }else if(_this.addtype == 1){
+                _this.searchList.searchEndCity = "";
+              }
+            }else if(_this.normalAreaList.length == 0){
+              for(var i = 0; i < _this.normalAddressList.length; i++){
+                _this.normalAddressList[i].checked = false;
+              }
+              _this.normalCityList = [];
+              if(_this.addtype == 0){
+                _this.searchList.searchStartPro = "";
+              }else if(_this.addtype == 1){
+                _this.searchList.searchEndPro = "";
+              }
             }
-            _this.normalCityList = [];
-            if(_this.addtype == 0){
-              _this.searchList.searchStartPro = "";
-            }else if(_this.addtype == 1){
-              _this.searchList.searchEndPro = "";
-            }
+
           },
           hotAddressListChoose:function (item,type) {
             var _this = this;
@@ -618,16 +681,27 @@
                 _this.searchList.searchEndPro = "";
               }
             }
-            if(_this.addtype == 0 && type == 1 ){
-              localStorage.setItem("getPageScroll0",_this.getPageScroll());
-            }else if(_this.addtype == 1 && type == 1){
-              localStorage.setItem("getPageScroll1",_this.getPageScroll());
+            if(_this.tabShow == 0){
+              if(_this.addtype == 0 && type == 1 ){
+                localStorage.setItem("getPageScroll0",_this.getPageScroll());
+              }else if(_this.addtype == 1 && type == 1){
+                localStorage.setItem("getPageScroll1",_this.getPageScroll());
+              }
+            }else if(_this.tabShow == 1){
+              if(_this.addtype == 0 && type == 1 ){
+                localStorage.setItem("getPageScroll2",_this.getPageScroll());
+              }else if(_this.addtype == 1 && type == 1){
+                localStorage.setItem("getPageScroll3",_this.getPageScroll());
+              }
             }
             for(var i =0 ; i < _this.hotAddressList.length;i++){
               _this.hotAddressList[i].checked = false;
             }
             for(var i =0 ; i < _this.normalCityList.length;i++){
               _this.normalCityList[i].checked = false;
+            }
+            for(var i =0 ; i < _this.normalAreaList.length;i++){
+              _this.normalAreaList[i].checked = false;
             }
             item.checked = true;
             _this.screenAddressTrue = false;
@@ -1153,11 +1227,11 @@
   background-position: 50% 50%;
   background-color: #2c9cff;
 }
-.hotAddress,.checkedAddress,.selectAddress,.selectcity{
+.hotAddress,.checkedAddress,.selectAddress,.selectcity,.selectarea{
   width:9rem;
   margin: 0.3rem  auto 0.3334rem auto;
 }
-.hotAddress h1,.checkedAddress h1,.selectAddress h1,.selectcity h1{
+.hotAddress h1,.checkedAddress h1,.selectAddress h1,.selectcity h1,.selectarea h1{
   font-size: 0.3125rem;
   color:#999;
   margin-bottom: 0.15rem;
@@ -1167,7 +1241,7 @@
   max-height: 7.5rem;
   overflow: scroll;
 }
-.selectAddress ul,.selectcity ul{
+.selectAddress ul,.selectcity ul,.selectarea ul{
   width:100%;
   max-height: 7.5rem;
   overflow: scroll;
@@ -1182,9 +1256,9 @@
   min-width:20%;
   margin-left:2.5%;
   float: left;
-  text-align: left;
   font-size: 0.35rem;
   line-height: 1.2rem;
+  text-align: center;
 }
 .hotAddress li{
   float: left;
@@ -1207,7 +1281,7 @@
   min-width: 0.375rem;
   height:1.2rem;
 }
-.selectAddress li,.selectcity li{
+.selectAddress li,.selectcity li,.selectarea li{
   width:100%;
   margin: 0 auto;
   text-align: left;
