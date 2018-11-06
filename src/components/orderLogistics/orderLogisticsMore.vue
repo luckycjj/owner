@@ -243,7 +243,7 @@
               var tracking=[];
               for(var i =0 ;i<invoiceDetail.tracking.length;i++){
                 var trackingJson = {
-                  type:invoiceDetail.tracking[i].tackingStatus == invoiceDetail.tracking[i].tackingMemo ? invoiceDetail.tracking[i].tackingStatus : invoiceDetail.tracking[i].tackingStatus + ":" +invoiceDetail.tracking[i].tackingMemo,
+                  type:invoiceDetail.tracking[i].tackingStatus == invoiceDetail.tracking[i].tackingMemo ? invoiceDetail.tracking[i].tackingStatus : invoiceDetail.tracking[i].tackingStatus + " " +invoiceDetail.tracking[i].tackingMemo,
                   time:invoiceDetail.tracking[i].tackingTime,
                 }
                 tracking.push(trackingJson);
