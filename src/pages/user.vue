@@ -9,7 +9,7 @@
         </div>
         <div style="float: left;width:50%;">
           <p>{{message.name}}</p>
-          <h1 v-html="message.status == '0' ? '未认证' :message.status == '1' ? '待审核' : message.status == '2' ? '已审核' : message.status == '3' ? '已驳回' : message.status == '4' ? '已禁用' : ''"></h1>
+          <h1 v-html="message.status == '0' ? '未认证' :message.status == '1' ? '待审核' : message.status == '2' ? '已认证' : message.status == '3' ? '已驳回' : message.status == '4' ? '已禁用' : ''"></h1>
         </div>
         <div class="lookMore"  @click="renzhen()"><span v-if="message.status == 0">去认证</span></div>
         <div class="clearBoth"></div>
