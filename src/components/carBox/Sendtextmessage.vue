@@ -140,7 +140,7 @@
           androidIos.loading("正在发送");
           $.ajax({
             type: "POST",
-            url: androidIos.ajaxHttp() + "driver/sendMess",
+            url: androidIos.ajaxHttp() + "/driver/sendMess",
             data:JSON.stringify(json),
             contentType: "application/json;charset=utf-8",
             dataType: "json",
@@ -153,6 +153,7 @@
               }
             },
             complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              $("#common-blackBox").remove();
               if (status == 'timeout') { //超时,status还有success,error等值的情况
                 androidIos.second("当前状况下网络状态差，请检查网络！");
               } else if (status == "error") {
