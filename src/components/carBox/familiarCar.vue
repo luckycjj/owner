@@ -1,6 +1,6 @@
 <template>
      <div id="familiarCar" style="top:1.3rem;">
-       <div id="title" v-title data-title="车源"></div>
+       <div id="title" v-title data-title="熟车"></div>
        <div  style="top:0rem;" v-for="(item,index) in tab" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
          <ul :id="'dataList' + index" class="data-list">
            <li v-for="(items,indexs) in item.prolist">
@@ -59,6 +59,8 @@
       mounted:function () {
         var _this = this;
         androidIos.judgeIphoneX("familiarCar",2);
+        androidIos.judgeIphoneX("mescroll",1);
+        androidIos.judgeIphoneX("messageSureListBox",1);
         var sendtextmessage = sessionStorage.getItem("sendtextmessage");
         if(sendtextmessage != undefined){
            _this.sureList = JSON.parse(sendtextmessage);
