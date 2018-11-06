@@ -286,11 +286,11 @@
     margin:0 0.1rem;
   }
   .wrapper .scroller li a span{
-    color:#2c9cff;
+    color:#1D68A8;
     font-size: 0.3125rem;
   }
   .wrapper .scroller li.cur a{
-    color:#2c9cff;
+    color:#1D68A8;
   }
   .wrapper .scroller li .imglistBox{
     width:0.53rem;
