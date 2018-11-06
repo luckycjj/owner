@@ -15,10 +15,10 @@
         <p>编<br>辑<br>短<br>信</p>
       </div>
       <div class="message">
-        <textarea placeholder="请输入短信内容"></textarea>
+        <textarea @input="inputText()" placeholder="请输入短信内容" maxlength="50" v-model="messageBody"></textarea>
         <div class="messageoperation">
-          <span>常用短语</span>
-          <span>清空</span>
+          <span @click="shortMessageTrueYes()">常用短语</span>
+          <span @click="shortMessageClear()">清空</span>
           <div class="clearBoth"></div>
         </div>
         <div class="messageLook">
@@ -29,6 +29,18 @@
         </div>
       </div>
     </div>
+    <button id="fasong" @click="fasong()">发送</button>
+    <transition name="slide-fade">
+      <div id="shortMessageBox" v-if="shortMessageTrue" @click="bodyquxiao($event)">
+        <div id="shortMessage">
+            <ul>
+              <li>常用短语</li>
+              <li @click="shortMessagego(index)" v-for="(item,index) in shortMessageList">{{item.displayName}}</li>
+              <li @click="quxiaoshortmessage()">取消</li>
+            </ul>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -39,13 +51,116 @@
         name: "sendtextmessage",
       data(){
           return{
-             peopleList:[]
+             peopleList:[],
+            shortMessageList:[],
+            shortMessageTrue:false,
+            messageBody:"",
           }
       },
       mounted:function () {
         var _this = this;
         _this.peopleList = _this.$route.query.driver != undefined ?  JSON.parse(_this.$route.query.driver) : [];
         androidIos.judgeIphoneX("sendtextmessage",2);
+      },
+      methods:{
+        shortMessageClear:function () {
+          var _this = this;
+          _this.messageBody = "";
+        },
+        inputText:function () {
+          var _this = this;
+          _this.messageBody = _this.messageBody.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\(\)\-]/g,'');
+        },
+        shortMessageTrueYes:function () {
+          var _this = this;
+          _this.shortMessageTrue = true;
+          if(_this.shortMessageList.length == 0){
+            $.ajax({
+              type: "GET",
+              url: androidIos.ajaxHttp() + "/settings/getSysConfigList",
+              data: {
+                str: "shortmessage",
+                userCode: sessionStorage.getItem("token"),
+                source: sessionStorage.getItem("source")
+              },
+              dataType: "json",
+              timeout: 30000,
+              success: function (getCarType) {
+                _this.shortMessageList = getCarType;
+              },
+              complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                if (status == 'timeout') {//超时,status还有success,error等值的情况
+                  androidIos.second("网络请求超时");
+                } else if (status == 'error') {
+                  androidIos.errorwife();
+                }
+              }
+            });
+          }
+        },
+        quxiaoshortmessage:function () {
+          var _this = this;
+          _this.shortMessageTrue = false;
+        },
+        bodyquxiao:function (e) {
+          var _this = this;
+          if(e.target.id == "shortMessageBox"){
+            _this.shortMessageTrue = false;
+          }
+        },
+        shortMessagego:function (index) {
+          var _this = this;
+          if(_this.messageBody.length > 0){
+              if(_this.messageBody[_this.messageBody.length - 1] == "," || _this.messageBody[_this.messageBody.length - 1] == "，" ){
+                _this.messageBody = _this.messageBody + _this.shortMessageList[index].displayName;
+              }else{
+                _this.messageBody = _this.messageBody + ","+_this.shortMessageList[index].displayName;
+              }
+          }else{
+            _this.messageBody = _this.messageBody + _this.shortMessageList[index].displayName;
+          }
+          _this.shortMessageTrue = false;
+        },
+        fasong:function () {
+          var _this = this;
+          if(_this.messageBody == ""){
+            bomb.first("请填写短信内容");
+            return false;
+          }
+          var list = [];
+          for(var i = 0 ;i < _this.peopleList.length;i++){
+            list.push(_this.peopleList[i].carno);
+          }
+          var json = {
+            carno:list.join(","),
+            content : _this.messageBody,
+            userCode: sessionStorage.getItem("token"),
+            source: sessionStorage.getItem("source")
+          }
+          androidIos.loading("正在发送");
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "driver/sendMess",
+            data:JSON.stringify(json),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (sendMess) {
+              if (sendMess.success == "1") {
+               _this.$cjj("发送成功");
+              }else{
+                androidIos.second(sendMess.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                 androidIos.errorwife();
+              }
+            }
+          });
+        }
       }
     }
 </script>
@@ -135,5 +250,49 @@
     font-size: 0.35rem;
     color:#999;
     margin-bottom: 0.2rem;
+  }
+  /* 可以设置不同的进入和离开动画 */
+  /* 设置持续时间和动画函数 */
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(0.13rem);
+    opacity: 0;
+  }
+  #shortMessageBox{
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    height: auto;
+    top:0;
+    background: rgba(0,0,0,0.3);
+  }
+  #shortMessage{
+    position: absolute;
+    background: white;
+    width:100%;
+    bottom: 0;
+  }
+  #shortMessage li{
+    color:#373737;
+    text-align: center;
+    line-height: 1.3rem;
+    font-size: 0.4rem;
+    border-bottom: 1px solid #D8D8D8;
+  }
+  #fasong{
+    width:9rem;
+    margin:1.13rem auto 0 auto;
+    display: block;
+    background:#1D68A8 ;
+    color:white;
+    font-size: 0.4rem;
+    line-height:1.067rem ;
+    border-radius: 0.1rem;
   }
 </style>
