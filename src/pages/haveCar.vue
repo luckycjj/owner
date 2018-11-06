@@ -152,6 +152,7 @@
           </div>
         </div>
       </transition>
+      <div id="container" style="display: none;"></div>
     </div>
 </template>
 
@@ -164,6 +165,7 @@
   import "../js/navbarscroll";
   import MeScroll from '../js/mescroll'
   import {iscroll} from '../js/iscroll'
+  import AMap from 'AMap'
     export default {
         name: "have-car",
         data(){
@@ -268,7 +270,8 @@
               name:"短信记录",
               icon:require("../images/xinxijilu.png"),
               url:"/sendtextmessage"
-            }]
+            }],
+            map:null
           }
         },
         mounted:function () {
@@ -276,6 +279,9 @@
            androidIos.judgeIphoneX("screen",0);
           androidIos.judgeIphoneX("mescroll",2);
           androidIos.judgeIphoneX("mescroll",1);
+          _this.map = new AMap.Map('container', {
+            resizeEnable: true
+          });
           _this.tabShow =  sessionStorage.getItem("haveCarTap") == null ? 0 : sessionStorage.getItem("haveCarTap");
           var SCREENROBBING;
           if(_this.tabShow == 0 ){
@@ -477,7 +483,7 @@
                       endCity:_this.searchList.endAdd,
                       phone:"",
                       carno:"",
-                      location:"121.47,31.23",
+                      location:_this.map.getCenter().lng + "," + _this.map.getCenter().lat,
                       userCode:sessionStorage.getItem("token"),
                       source:sessionStorage.getItem("source"),
                     }),

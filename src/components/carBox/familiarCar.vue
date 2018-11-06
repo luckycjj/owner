@@ -28,6 +28,7 @@
          <button @click="messageGo()">发送短信</button>
          <div class="clearBoth"></div>
        </div>
+       <div id="container" style="display: none;"></div>
      </div>
 </template>
 
@@ -40,6 +41,7 @@
   import "../../js/navbarscroll";
   import MeScroll from '../../js/mescroll'
   import {iscroll} from '../../js/iscroll'
+  import AMap from 'AMap'
     export default {
         name: "familiar-car",
       data(){
@@ -54,6 +56,7 @@
             tabShow:0,
             quanxuanList:false,
             errorlogo: 'this.src="' + require('../../images/userImg.png') + '"',
+            map:null,
           }
       },
       mounted:function () {
@@ -61,6 +64,9 @@
         androidIos.judgeIphoneX("familiarCar",2);
         androidIos.judgeIphoneX("mescroll",1);
         androidIos.judgeIphoneX("messageSureListBox",1);
+        _this.map = new AMap.Map('container', {
+          resizeEnable: true
+        });
         var sendtextmessage = sessionStorage.getItem("sendtextmessage");
         if(sendtextmessage != undefined){
            _this.sureList = JSON.parse(sendtextmessage);
@@ -188,7 +194,7 @@
                     endCity:"",
                     phone:"",
                     carno:"",
-                    location:"121.47,31.23",
+                    location:_this.map.getCenter().lng + "," + _this.map.getCenter().lat,
                     userCode:sessionStorage.getItem("token"),
                     source:sessionStorage.getItem("source"),
                   }),
@@ -334,12 +340,14 @@
   .second h2{
     font-size:0.3125rem ;
     color:#999;
-    line-height:0.7rem ;
+    line-height: 0.4rem;
+    margin-top: 0.1rem;
     background-image: url("../../images/haveCarDingweixiao.png");
-    background-position: 0 50%;
+    background-position: 0 0.07rem;
     background-repeat: no-repeat;
     background-size: 0.25rem;
     padding-left: 0.4rem;
+    max-width: 7rem;
   }
   .second h3{
     font-size:0.3125rem ;
