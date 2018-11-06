@@ -811,6 +811,16 @@
             for(var i =0 ; i < _this.normalAreaList.length;i++){
               _this.normalAreaList[i].checked = false;
             }
+            _this.normalAreaList = [];
+            _this.normalCityList = [];
+            _this.searchStartPro = "";
+            _this.searchEndCity = "";
+            _this.searchStartCity = "";
+            _this.searchEndCity = "";
+            _this.searchList.searchStartPro = "";
+            _this.searchList.searchEndPro = "";
+            _this.searchList.searchStartCity = "";
+            _this.searchList.searchEndCity = "";
             if(type == 0 || type == 1){
               item.checked = true;
             }
@@ -1392,8 +1402,8 @@
   height:1.2rem;
 }
 .selectAddress li,.selectcity li,.selectarea li{
-  width:100%;
-  margin: 0 auto;
+  width:80%;
+  /*margin: 0 auto;*/
   text-align: left;
   font-size: 0.375rem;
   line-height: 1.2rem;
@@ -1409,6 +1419,8 @@
 .scrollAZ li{
    color:#999;
   font-size: 0.3125rem;
+  width: 1rem;
+  text-align: right;
 }
 .slide-fade-enter-active {
   transition: all .2s ease;

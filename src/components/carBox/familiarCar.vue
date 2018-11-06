@@ -234,6 +234,7 @@
           var _this = this;
           _this.quanxuanList = !_this.quanxuanList;
           if(_this.quanxuanList){
+            _this.sureList = [];
              for(var i = 0 ; i <_this.tab[0].prolist.length;i++){
                _this.tab[0].prolist[i].choose = true;
                _this.sureList.push(_this.tab[0].prolist[i]);

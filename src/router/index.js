@@ -11,8 +11,6 @@ import statusNow from '@/components/myBox/statusNow'
 import bestDriverList from '@/components/xinyaBox/bestDriverList'
 import bestDriverMore from '@/components/xinyaBox/bestDriverMore'
 import bestCarrierMore from '@/components/xinyaBox/bestCarrierMore'
-import logicsOrder from '@/components/xinyaBox/logicsOrder'
-import messageList from '@/components/xinyaBox/messageList'
 import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
 import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
@@ -218,16 +216,6 @@ export default new Router({
       path:'/authentication',
       name:'authentication',
       component:authentication,
-    },
-  {
-    path:'/logicsOrder',
-    name:'logicsOrder',
-    component:logicsOrder,
-  },
-    {
-      path:'/messageList',
-      name:'messageList',
-      component:messageList,
     },
     {
       path:'/bestCarrierMore',
