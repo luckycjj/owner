@@ -50,7 +50,7 @@
               <p>{{items.driverName}}</p>
               <h1>{{items.carno}}<span style="margin-left: 0.187rem"><span v-if="items.carLength != null && items.carLength != ''">{{items.carLength}}米</span><span v-if="items.carLength != null && items.carLength != '' && items.carModel != null && items.carModel != ''">/</span><span v-if="items.carModel != null && items.carModel != ''">{{items.carModel}}</span></span></h1>
               <h2 v-if="items.location != null && items.location != ''">{{items.heartbeatTime | timeCheck}}&nbsp;&nbsp;定位：{{items.heartbeatAddr}}&nbsp;&nbsp;离我&nbsp;&nbsp;{{items.distance*1 | distanceWidth}}</h2>
-              <h2 v-else>暂无位置信息</h2>
+              <h3 v-else>暂无位置信息</h3>
             </div>
             <div class="third">
                <div class="imgcaozuo" @click="caozuo(1,items.location)">
@@ -61,7 +61,7 @@
                 <img src="../images/haveCarTel.png">
                 <p>电话</p>
               </div>
-              <div v-if="tabShow == 0" class="imgcaozuo" @click="caozuo(3,items.driverCode)">
+              <div v-if="tabShow == 0" class="imgcaozuo" @click="caozuo(3,items)">
                 <img src="../images/haveCarMessage.png">
                 <p>短信</p>
               </div>
@@ -144,6 +144,13 @@
             </div>
           </div>
         </div>
+        <div id="operationBox" v-if="operationBoxTrue" @click="operationBoxFalse($event)">
+          <div id="operation" style="top:1.35rem;">
+            <ul>
+              <li @click="operationListUrl(item.url)" v-if="(tabShow == 1 && index == 1)  || tabShow == 0" v-for="(item,index) in operationList" :style="{backgroundImage:'url('+item.icon+')',borderBottom:index != operationList.length - 1 ? '1px solid #F5F5F5' : ''}">{{item.name}}</li>
+            </ul>
+          </div>
+        </div>
       </transition>
     </div>
 </template>
@@ -175,6 +182,7 @@
             },
             screenDistanceTrue:false,
             screenAddressTrue:false,
+            operationBoxTrue:false,
             distanceList:[],
             carLengthList:[],
             hotAddressList:[{
@@ -251,7 +259,16 @@
             }],
             errorlogo: 'this.src="' + require('../images/userImg.png') + '"',
             mescrollArrList:null,
-            PinyinFirstList:[]
+            PinyinFirstList:[],
+            operationList:[{
+               name:"群发短信",
+               icon:require("../images/xinxi.png"),
+               url:"/familiarCar"
+            },{
+              name:"短信记录",
+              icon:require("../images/xinxijilu.png"),
+              url:"/sendtextmessage"
+            }]
           }
         },
         mounted:function () {
@@ -295,13 +312,27 @@
           androidIos.bridge(_this);
         },
         methods:{
+          operationListUrl:function (url) {
+            var _this = this;
+            androidIos.addPageList();
+            _this.$router.push({path:url});
+          },
           caozuoZ:function () {
             var _this = this;
             var messageList =  sessionStorage.getItem("ownerMessage");
             if(JSON.parse(messageList).status == "2"){
-
+              _this.operationBoxTrue = true;
+              _this.$nextTick(function () {
+                androidIos.judgeIphoneX("operation",2);
+              })
             }else{
               androidIos.second("请审核通过后再试！");
+            }
+          },
+          operationBoxFalse:function (e) {
+            var _this = this;
+            if(e.target.id == "operationBox"){
+              _this.operationBoxTrue = false;
             }
           },
           scrollAddress:function (index) {
@@ -397,7 +428,7 @@
                   noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
                   empty: {
                     icon: require("../images/nojilu.png"),
-                    tip: "暂无订单", //提示
+                    tip: "暂无车源", //提示
                   },
                   clearEmptyId: clearEmptyId, //相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项
                   toTop:{ //配置回到顶部按钮
@@ -488,7 +519,10 @@
               }else if(type == 2){
                 androidIos.telCall(message);
               }else if(type == 3){
-                androidIos.shortMessageCall(message);
+                androidIos.addPageList();
+                var list = [];
+                list.push(message);
+                _this.$router.push({path:"/sendtextmessage",query:{driver:JSON.stringify(list)}});
               }else if(type == 4){
                 androidIos.first("确认添加为熟车吗?");
                 $(".tanBox-yes").unbind('click').click(function(){
@@ -1377,10 +1411,10 @@
   font-size: 0.3125rem;
 }
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all .2s ease;
 }
 .slide-fade-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active for below version 2.1.8 */ {
@@ -1427,6 +1461,16 @@
     font-size:0.3125rem ;
     color:#999;
     line-height:0.7rem ;
+    background-image: url("../images/haveCarDingweixiao.png");
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    background-size: 0.25rem;
+    padding-left: 0.4rem;
+  }
+  .second h3{
+    font-size:0.3125rem ;
+    color:#999;
+    line-height:0.7rem ;
   }
   .second h1 span{
     font-size:0.347rem ;
@@ -1451,5 +1495,38 @@
     text-align: center;
     color:#1D68A8;
     margin-top:0.06rem ;
+  }
+  #operationBox{
+    position: fixed;
+    top:0;
+    bottom: 1.3rem;
+    width:100%;
+    background: rgba(255,255,255,0);
+  }
+  #operation{
+    width:4.44rem;
+  /*  background-color: white;*/
+    position: absolute;
+    top:1.3rem;
+    right:0.3rem;
+    /*border-radius: 0.2rem;*/
+  /*  box-shadow:0px 0px 4px 0px rgba(0,0,0,0.12);*/
+    background-image: url("../images/sanjiaoxing.png");
+    background-repeat: no-repeat;
+    background-size: 4.44rem;
+    background-position: 0% 0%;
+  }
+  #operation ul {
+    padding-top: 0.14rem;
+  }
+  #operation li{
+     width:3rem;
+    padding-left: 1.44rem;
+    background-position:0.57rem 50% ;
+    background-repeat: no-repeat;
+    background-size:0.427rem ;
+    line-height: 0.96rem;
+    font-size: 0.32rem;
+    color:#373737;
   }
 </style>

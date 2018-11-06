@@ -46,6 +46,8 @@ import  orderLogisticsS from '@/components/orderLogistics/map'
 import  orderScreen from '@/components/orderLogistics/orderScreen'
 import uploadDataF from '@/components/uploadData/pdf'
 import driverMap from '@/components/carBox/map'
+import familiarCar from '@/components/carBox/familiarCar'
+import sendtextmessage from '@/components/carBox/sendtextmessage'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -186,6 +188,16 @@ export default new Router({
       path:'/driverMap',
       name:'driverMap',
       component:driverMap,
+    },
+    {
+      path:'/familiarCar',
+      name:'familiarCar',
+      component:familiarCar,
+    },
+    {
+      path:'/sendtextmessage',
+      name:'sendtextmessage',
+      component:sendtextmessage,
     },
     {
       path:'/newProlist',
