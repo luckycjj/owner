@@ -272,6 +272,10 @@
         },
         messageGo:function () {
           var _this = this;
+          if(_this.sureList.length == 0){
+             bomb.first("请选择车辆司机");
+             return false;
+          }
           androidIos.addPageList();
           sessionStorage.setItem("sendtextmessage",JSON.stringify(_this.sureList));
           _this.$router.push({path:"/sendtextmessage",query:{driver:JSON.stringify(_this.sureList)}});
