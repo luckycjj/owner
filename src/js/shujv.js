@@ -33,7 +33,7 @@ var shujvyuan = {
           "region":"黑",
           "add":"黑龙江"
         },{
-          "code":"1",
+          "code":"2",
           "region":"沪",
           "add":"上海"
         },{

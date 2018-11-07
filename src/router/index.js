@@ -46,6 +46,7 @@ import uploadDataF from '@/components/uploadData/pdf'
 import driverMap from '@/components/carBox/map'
 import familiarCar from '@/components/carBox/familiarCar'
 import sendtextmessage from '@/components/carBox/sendtextmessage'
+import searchDriver from '@/components/carBox/searchDriver'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -211,6 +212,11 @@ export default new Router({
       path:'/haveCar',
       name:'haveCar',
       component:haveCar,
+    },
+    {
+      path:'/searchDriver',
+      name:'searchDriver',
+      component:searchDriver,
     },
     {
       path:'/authentication',

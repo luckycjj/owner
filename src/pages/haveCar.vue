@@ -38,7 +38,7 @@
         </div>
       </div>
       <div id="searchInput">
-         <input type="text" placeholder="通过车牌号、手机号搜索司机"/>
+         <input type="text" placeholder="通过车牌号、手机号搜索司机" @click="searchDriver()"/>
       </div>
       <div  style="top:3.73rem;" v-for="(item,index) in tab" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
@@ -271,7 +271,8 @@
               icon:require("../images/xinxijilu.png"),
               url:"/sendtextmessage"
             }],
-            map:null
+            map:"",
+
           }
         },
         mounted:function () {
@@ -279,9 +280,6 @@
            androidIos.judgeIphoneX("screen",0);
           androidIos.judgeIphoneX("mescroll",2);
           androidIos.judgeIphoneX("mescroll",1);
-          _this.map = new AMap.Map('container', {
-            resizeEnable: true
-          });
           _this.tabShow =  sessionStorage.getItem("haveCarTap") == null ? 0 : sessionStorage.getItem("haveCarTap");
           var SCREENROBBING;
           if(_this.tabShow == 0 ){
@@ -315,7 +313,63 @@
             }
           }
           _this.PinyinFirstList = res;
-          androidIos.bridge(_this);
+          var locationAMap = androidIos.getcookie("locationAMap");
+          if(locationAMap == ""){
+            androidIos.loading("获取位置");
+            new AMap.Map('container', {
+              resizeEnable: true
+            });
+            AMap.plugin('AMap.Geolocation', function() {
+              var geolocation = new AMap.Geolocation({
+                zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
+              });
+              geolocation.getCurrentPosition(function(status,result){
+                if(status=='complete'){
+                  onComplete(result)
+                }else{
+                  onError(result)
+                }
+              });
+            });
+            function onComplete(data) {
+              _this.map = data.position;
+              androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
+              $("#common-blackBox").remove();
+              androidIos.bridge(_this);
+            }
+            //解析定位错误信息
+            function onError(data) {
+              androidIos.second("定位失败");
+            }
+          }else{
+            _this.map = JSON.parse(locationAMap);
+            new AMap.Map('container', {
+              resizeEnable: true
+            });
+            AMap.plugin('AMap.Geolocation', function() {
+              var geolocation = new AMap.Geolocation({
+                zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
+              });
+              geolocation.getCurrentPosition(function(status,result){
+                if(status=='complete'){
+                  onComplete(result)
+                }else{
+                  onError(result)
+                }
+              });
+            });
+            function onComplete(data) {
+              _this.map = data.position;
+              androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
+            }
+            //解析定位错误信息
+            function onError(data) {
+              androidIos.second("定位失败");
+            }
+            androidIos.bridge(_this);
+          }
+
+
         },
         methods:{
           operationListUrl:function (url) {
@@ -483,7 +537,7 @@
                       endCity:_this.searchList.endAdd,
                       phone:"",
                       carno:"",
-                      location:_this.map.getCenter().lng + "," + _this.map.getCenter().lat,
+                      location:_this.map.lng + "," + _this.map.lat,
                       userCode:sessionStorage.getItem("token"),
                       source:sessionStorage.getItem("source"),
                     }),
@@ -1018,6 +1072,11 @@
             }
 
           },
+          searchDriver:function () {
+             var _this = this;
+             androidIos.addPageList();
+            _this.$router.push({path:"/searchDriver"});
+          }
         }
     }
 </script>

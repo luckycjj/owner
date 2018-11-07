@@ -566,8 +566,8 @@ var androidIos = {
   },
   setcookie:function (c_name,value,time) {
     var exdate=new Date();
-    exdate.setDate(exdate.getDate() + time);
-    document.cookie =  c_name + "="  + escape(value)+ ( (time == null) ?  ""  : ";expires="+exdate.toGMTString());
+    exdate = new Date(exdate.getTime() + time*24*60*60*1000);
+    document.cookie =  c_name + "="  + escape(value)+ ( (time == null) ?  ""  : ";expires=" + exdate.toGMTString());
   },
   getcookie:function (c_name) {
     if (document.cookie.length>0){
@@ -730,7 +730,7 @@ var androidIos = {
     }
     catch (e){
       paddingBottom = 0 + "px";
-      paddingTop =10 + "px";
+      paddingTop =30 + "px";
     }
     var docuId = document.getElementById(id);
     if(docuId == null){
