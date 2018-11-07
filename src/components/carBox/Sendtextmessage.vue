@@ -51,7 +51,9 @@
         name: "sendtextmessage",
       data(){
           return{
-             peopleList:[],
+             peopleList:[{
+               carno:"111"
+             }],
             shortMessageList:[],
             shortMessageTrue:false,
             messageBody:"",

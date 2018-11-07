@@ -269,7 +269,7 @@
             },{
               name:"短信记录",
               icon:require("../images/xinxijilu.png"),
-              url:"/sendtextmessage"
+              url:"/messageRecord"
             }],
             map:"",
 
@@ -985,25 +985,6 @@
                 }
               }
             }
-          },
-          geolocation:function () {
-            AMap.plugin('AMap.Geolocation', function() {
-              var geolocation = new AMap.Geolocation({
-                enableHighAccuracy: true,//是否使用高精度定位，默认:true
-                timeout: 10000,          //超过10秒后停止定位，默认：5s
-                buttonPosition:'RB',    //定位按钮的停靠位置
-                buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-                zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
-
-              });
-              geolocation.getCurrentPosition(function(status,result){
-                if(status=='complete'){
-                  console.log(result)
-                }else{
-                   androidIos.second("定位失败");
-                }
-              });
-            });
           },
           distanceListChecked:function (number) {
             var _this = this;

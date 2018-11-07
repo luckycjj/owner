@@ -47,6 +47,7 @@ import driverMap from '@/components/carBox/map'
 import familiarCar from '@/components/carBox/familiarCar'
 import sendtextmessage from '@/components/carBox/sendtextmessage'
 import searchDriver from '@/components/carBox/searchDriver'
+import messageRecord from '@/components/carBox/messageRecord'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -181,12 +182,76 @@ Vue.filter('timeCheck',function (timeCheck) {
   }
   return timeCheck
 })
+
+Vue.filter('selectTime',function (time) {
+    function ten(val) {
+       return val - 10 < 0 ? "0" + val : val
+    }
+    function day(val) {
+      switch(val)
+      {
+        case 0:
+          return "日"
+          break;
+        case 1:
+          return "一"
+          break;
+        case 2:
+          return "二"
+          break;
+        case 3:
+          return "三"
+          break;
+        case 4:
+          return "四"
+          break;
+        case 5:
+          return "五"
+          break;
+        case 6:
+          return "六"
+          break;
+        default:
+          return ""
+        break
+      }
+    }
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = ten(today.getMonth() + 1);
+    var todayDate = ten(today.getDate());
+    var todayXingqi = today.getDay();
+    var todayZu = todayYear + "-" + todayMonth + "-" + todayDate;
+    var timeList1 = time.split(" ");
+    var numberCha = ((new Date(todayZu.replace(/-/g,'/'))).getTime() - (new Date(timeList1[0].replace(/-/g,'/'))).getTime())/(24*60*60*1000);
+    if(numberCha == 0 ){
+      if(timeList1[1].split(":")[0] - 12 > 0){
+         return "下午" +  (timeList1[1].split(":")[0] - 12) + ":" +  timeList1[1].split(":")[1]
+      }else{
+        return "上午" +  (timeList1[1].split(":")[0]) + ":" +  timeList1[1].split(":")[1]
+      }
+    }else if(numberCha > 0  && numberCha < (todayXingqi*1 + 1)){
+      if(numberCha == 1){
+        return "昨天"
+      }else{
+        return  "星期" + day((new Date(timeList1[0].replace(/-/g,'/'))).getDay())
+      }
+    }else{
+      return time
+    }
+
+})
 export default new Router({
   routes: [
     {
       path:'/driverMap',
       name:'driverMap',
       component:driverMap,
+    },
+    {
+      path:'/messageRecord',
+      name:'messageRecord',
+      component:messageRecord,
     },
     {
       path:'/familiarCar',
