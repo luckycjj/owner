@@ -24,7 +24,7 @@
         <div class="messageLook">
           <p>短信预览</p>
           <h6>
-            【欣阳物流】沪DR5659的朋友, 上海欣雅供应链管理有限公司, 联系人：李婷 13526736803,回复TD退订
+            【欣阳物流】{{peopleList[0].carno}}的朋友, {{corpName}}, 联系人：{{name}} {{tel}},回复TD退订
           </h6>
         </div>
       </div>
@@ -55,11 +55,17 @@
             shortMessageList:[],
             shortMessageTrue:false,
             messageBody:"",
+            corpName:"",
+            name:"",
+            tel:""
           }
       },
       mounted:function () {
         var _this = this;
         _this.peopleList = _this.$route.query.driver != undefined ?  JSON.parse(_this.$route.query.driver) : [];
+        _this.corpName = JSON.parse(sessionStorage.getItem("ownerMessage")).corpName;
+        _this.name = JSON.parse(sessionStorage.getItem("ownerMessage")).name;
+        _this.tel = sessionStorage.getItem("token");
         androidIos.judgeIphoneX("sendtextmessage",2);
       },
       methods:{

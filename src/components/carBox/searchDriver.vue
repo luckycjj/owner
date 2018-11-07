@@ -148,7 +148,7 @@
           var _this = this;
           if(type == 1){
             var reg = /^1([3|5|8][0-9]|4[5|7|9]|66|7[0|1|3|5|6|7|8]|9[8|9])[0-9]{8}$/;
-            if(!reg.test(tel)){
+            if(!reg.test(_this.tel)){
               bomb.first("手机号码格式不对");
               return false;
             }
@@ -270,6 +270,11 @@
     color:#46B2E7;
     font-size: 0.4rem;
     line-height: 1.31rem;
+    width:3.7rem;
+    background-image: url("../../images/tongxunlu-3.png");
+    background-position: 100% 50%;
+    background-size: 0.375rem;
+    background-repeat: no-repeat;
   }
   .telBoxBottom h1{
     padding:0.2rem 0.26rem 0.427rem 0.26rem;

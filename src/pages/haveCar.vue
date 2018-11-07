@@ -313,62 +313,7 @@
             }
           }
           _this.PinyinFirstList = res;
-          var locationAMap = androidIos.getcookie("locationAMap");
-          if(locationAMap == ""){
-            androidIos.loading("获取位置");
-            new AMap.Map('container', {
-              resizeEnable: true
-            });
-            AMap.plugin('AMap.Geolocation', function() {
-              var geolocation = new AMap.Geolocation({
-                zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
-              });
-              geolocation.getCurrentPosition(function(status,result){
-                if(status=='complete'){
-                  onComplete(result)
-                }else{
-                  onError(result)
-                }
-              });
-            });
-            function onComplete(data) {
-              _this.map = data.position;
-              androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
-              $("#common-blackBox").remove();
-              androidIos.bridge(_this);
-            }
-            //解析定位错误信息
-            function onError(data) {
-              androidIos.second("定位失败");
-            }
-          }else{
-            _this.map = JSON.parse(locationAMap);
-            new AMap.Map('container', {
-              resizeEnable: true
-            });
-            AMap.plugin('AMap.Geolocation', function() {
-              var geolocation = new AMap.Geolocation({
-                zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
-              });
-              geolocation.getCurrentPosition(function(status,result){
-                if(status=='complete'){
-                  onComplete(result)
-                }else{
-                  onError(result)
-                }
-              });
-            });
-            function onComplete(data) {
-              _this.map = data.position;
-              androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
-            }
-            //解析定位错误信息
-            function onError(data) {
-              androidIos.second("定位失败");
-            }
-            androidIos.bridge(_this);
-          }
-
+          androidIos.bridge(_this);
 
         },
         methods:{
@@ -523,47 +468,105 @@
             function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
               //延时一秒,模拟联网
               setTimeout(function () {
-                var http = curNavIndex == 0 ? "/driver/findCarSourceCollect" : "/driver/findCarAndDriver";
-              /*  _this.geolocation();*/
-                  $.ajax({
-                    type: "POST",
-                    url: androidIos.ajaxHttp() + http,
-                    data:JSON.stringify({
-                      page:pageNum,
-                      size:pageSize,
-                      carLength:_this.searchList.carLength,
-                      carModel:_this.searchList.distance == 0 ? "" : _this.searchList.distance,
-                      startCity:_this.searchList.startAdd,
-                      endCity:_this.searchList.endAdd,
-                      phone:"",
-                      carno:"",
-                      location:_this.map.lng + "," + _this.map.lat,
-                      userCode:sessionStorage.getItem("token"),
-                      source:sessionStorage.getItem("source"),
-                    }),
-                    contentType: "application/json;charset=utf-8",
-                    dataType: "json",
-                    timeout: 30000,
-                    success: function (loadInvoice) {
-                      if (loadInvoice.success == "1") {
-                        successCallback(loadInvoice.list);
-                      }else{
-                        androidIos.second(loadInvoice.message);
-                        successCallback([]);
-                      }
-                    },
-                    complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-                      if (status == 'timeout') { //超时,status还有success,error等值的情况
-                        androidIos.second("当前状况下网络状态差，请检查网络！");
-                        successCallback([]);
-                      } else if (status == "error") {
-                       /* androidIos.errorwife();*/
-                        successCallback([]);
-                      }
-                    }
+                var locationAMap = androidIos.getcookie("locationAMap");
+                if(locationAMap == ""){
+                  androidIos.loading("获取位置");
+                  new AMap.Map('container', {
+                    resizeEnable: true
                   });
+                  AMap.plugin('AMap.Geolocation', function() {
+                    var geolocation = new AMap.Geolocation({
+                      zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
+                    });
+                    geolocation.getCurrentPosition(function(status,result){
+                      if(status=='complete'){
+                        onComplete(result)
+                      }else{
+                        onError(result)
+                      }
+                    });
+                  });
+                  function onComplete(data) {
+                    _this.map = data.position;
+                    androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.001);
+                    $("#common-blackBox").remove();
+                    _this.ajax(curNavIndex,pageNum,pageSize,successCallback,errorCallback);
+                  }
+                  //解析定位错误信息
+                  function onError(data) {
+                    androidIos.second("定位失败");
+                  }
+                }else{
+                  _this.map = JSON.parse(locationAMap);
+                  new AMap.Map('container', {
+                    resizeEnable: true
+                  });
+                  AMap.plugin('AMap.Geolocation', function() {
+                    var geolocation = new AMap.Geolocation({
+                      zoomToAccuracy: false,   //定位成功后是否自动调整地图视野到定位点
+                    });
+                    geolocation.getCurrentPosition(function(status,result){
+                      if(status=='complete'){
+                        onComplete(result)
+                      }else{
+                        onError(result)
+                      }
+                    });
+                  });
+                  function onComplete(data) {
+                    _this.map = data.position;
+                    androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
+                  }
+                  //解析定位错误信息
+                  function onError(data) {
+                    androidIos.second("定位失败");
+                  }
+                  _this.ajax(curNavIndex,pageNum,pageSize,successCallback,errorCallback);
+                }
+
               },100)
             }
+          },
+          ajax:function (curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
+            var _this = this;
+            var http = curNavIndex == 0 ? "/driver/findCarSourceCollect" : "/driver/findCarAndDriver";
+            $.ajax({
+              type: "POST",
+              url: androidIos.ajaxHttp() + http,
+              data:JSON.stringify({
+                page:pageNum,
+                size:pageSize,
+                carLength:_this.searchList.carLength,
+                carModel:_this.searchList.distance == 0 ? "" : _this.searchList.distance,
+                startCity:_this.searchList.startAdd,
+                endCity:_this.searchList.endAdd,
+                phone:"",
+                carno:"",
+                location:_this.map.lng + "," + _this.map.lat,
+                userCode:sessionStorage.getItem("token"),
+                source:sessionStorage.getItem("source"),
+              }),
+              contentType: "application/json;charset=utf-8",
+              dataType: "json",
+              timeout: 30000,
+              success: function (loadInvoice) {
+                if (loadInvoice.success == "1") {
+                  successCallback(loadInvoice.list);
+                }else{
+                  androidIos.second(loadInvoice.message);
+                  successCallback([]);
+                }
+              },
+              complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                if (status == 'timeout') { //超时,status还有success,error等值的情况
+                  androidIos.second("当前状况下网络状态差，请检查网络！");
+                  successCallback([]);
+                } else if (status == "error") {
+                  /* androidIos.errorwife();*/
+                  successCallback([]);
+                }
+              }
+            });
           },
           caozuo:function (type,message) {
             var _this = this;
