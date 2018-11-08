@@ -15,6 +15,7 @@
           <h3  id="authenticationTab" style="display: none;" class="asd"  v-if="doNow==8"><span>上一步</span></h3>
           <h3  id="xunjia" class="asd" @click="inquiry()"  v-if="doNow==9"><span>询价</span></h3>
           <h3  id="cleanMessageAll" class="asd"   v-if="doNow==10"><span style="color:#999;">清空</span></h3>
+          <h3  id="addshucheYes" class="asd"   v-if="doNow==11"><span></span></h3>
         </div>
         <div id="table"></div>
       </div>
@@ -119,6 +120,8 @@
         _this.doNow = 9;
       }else if( _this.html.indexOf("/messageRecord") != -1){
         _this.doNow = 10;
+      }else if( _this.html.indexOf("/carMessageMore") != -1){
+        _this.doNow = 11;
       }else{
         _this.doNow = "";
       }
@@ -156,6 +159,8 @@
           _this.doNow = 9;
         }else if( _this.html.indexOf("/messageRecord") != -1){
           _this.doNow = 10;
+        }else if( _this.html.indexOf("/carMessageMore") != -1){
+          _this.doNow = 11;
         }else{
           _this.doNow = "";
         }

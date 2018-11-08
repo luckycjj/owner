@@ -93,6 +93,44 @@
       methods:{
          go:function () {
            var _this = this;
+           var message = _this.driverMessage.usedCar == 1 ? "取消熟车" : "加为熟车";
+           $("#addshucheYes span").text(message);
+           $("#addshucheYes span").unbind("click").click(function () {
+               var messageGo = $(this).text();
+                androidIos.first("确定" + messageGo + "吗？");
+             $(".tanBox-yes").unbind('click').click(function(){
+               $(".tanBox-bigBox").remove();
+               var http = messageGo == "取消熟车" ? "/driver/cancelCollect" : "/driver/collectCarAndDriver";
+               var pk = messageGo == "取消熟车" ? _this.driverMessage.carno : _this.driverMessage.pkCar;
+               $.ajax({
+                 type: "POST",
+                 url: androidIos.ajaxHttp() + http,
+                 data:JSON.stringify({
+                   pk : pk,
+                   userCode:sessionStorage.getItem("token"),
+                   source:sessionStorage.getItem("source"),
+                 }),
+                 contentType: "application/json;charset=utf-8",
+                 dataType: "json",
+                 timeout: 30000,
+                 success: function (collectCarAndDriver) {
+                   if (collectCarAndDriver.success == "1") {
+                     _this.$cjj( messageGo == "取消熟车" ? "取消成功" : "添加成功");
+                     $("#addshucheYes span").text( messageGo == "取消熟车" ? "加为熟车" : "取消熟车");
+                   }else{
+                     androidIos.second(collectCarAndDriver.message);
+                   }
+                 },
+                 complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                   if (status == 'timeout') { //超时,status还有success,error等值的情况
+                     androidIos.second("当前状况下网络状态差，请检查网络！");
+                   } else if (status == "error") {
+                     androidIos.errorwife();
+                   }
+                 }
+               });
+             });
+           });
            var location =  _this.driverMessage.location.indexOf(null) != -1 ? "121.4,31.2" : _this.driverMessage.location;
            var map = new AMap.Map("container", {
              resizeEnable: true,
