@@ -220,8 +220,12 @@
       },
       gonewOrder:function () {
         var _this = this;
-        androidIos.addPageList();
-        _this.$router.push({path:"/newOrder",query:{newordertrantype:0}});
+        if(JSON.parse(sessionStorage.getItem("ownerMessage")).status == 2){
+          androidIos.addPageList();
+          _this.$router.push({path:"/newOrder",query:{newordertrantype:0}});
+        }else{
+          androidIos.second("请认证通过后再试");
+        }
       },
       lookTrackMore:function (pk,index) {
         var _this = this;

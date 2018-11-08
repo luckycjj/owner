@@ -48,6 +48,7 @@ import familiarCar from '@/components/carBox/familiarCar'
 import sendtextmessage from '@/components/carBox/sendtextmessage'
 import searchDriver from '@/components/carBox/searchDriver'
 import messageRecord from '@/components/carBox/messageRecord'
+import carMessageMore from '@/components/carBox/carMessageMore'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -243,6 +244,11 @@ Vue.filter('selectTime',function (time) {
 })
 export default new Router({
   routes: [
+    {
+      path:'/carMessageMore',
+      name:'carMessageMore',
+      component:carMessageMore,
+    },
     {
       path:'/driverMap',
       name:'driverMap',

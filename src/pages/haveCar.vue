@@ -42,7 +42,7 @@
       </div>
       <div  style="top:3.73rem;" v-for="(item,index) in tab" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist">
+          <li v-for="(items,indexs) in item.prolist" @click="lookCarmessage(items.carno)">
             <div class="first">
               <img :src="items.driverPicture == null ? '' : items.driverPicture" :onerror="errorlogo">
             </div>
@@ -317,6 +317,15 @@
 
         },
         methods:{
+          lookCarmessage:function (carno) {
+            var _this = this;
+            if(JSON.parse(sessionStorage.getItem("ownerMessage")).status == 2){
+              androidIos.addPageList();
+              _this.$router.push({path:"/carMessageMore",query:{carno:carno}});
+            }else{
+              androidIos.second("请认证通过后再试");
+            }
+          },
           operationListUrl:function (url) {
             var _this = this;
             androidIos.addPageList();
@@ -331,7 +340,7 @@
                 androidIos.judgeIphoneX("operation",2);
               })
             }else{
-              androidIos.second("请审核通过后再试！");
+              androidIos.second("请认证通过后再试！");
             }
           },
           operationBoxFalse:function (e) {
@@ -625,7 +634,7 @@
                 });
               }
             }else{
-               androidIos.second("请审核通过后再试！");
+               androidIos.second("请认证通过后再试！");
             }
 
           },
@@ -1058,8 +1067,12 @@
           },
           searchDriver:function () {
              var _this = this;
-             androidIos.addPageList();
-            _this.$router.push({path:"/searchDriver"});
+            if(JSON.parse(sessionStorage.getItem("ownerMessage")).status == 2){
+               androidIos.addPageList();
+              _this.$router.push({path:"/searchDriver"});
+            }else{
+               androidIos.second("请认证通过后再试");
+            }
           }
         }
     }
