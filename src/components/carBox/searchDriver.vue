@@ -22,7 +22,7 @@
         </div>
         <div class="telBox">
           <div class="telBoxTop">
-            <h6 @click="carList=true" >{{plateName}}</h6>
+            <h6 @click="plateametrue()" >{{plateName}}</h6>
             <div id="carNumberBox" @click="keyboardshow()" :class="carNo.length == 7 ? 'carGreen' : carNo.length == 6 ?'carBrown' : ''" :style="{color:carNo == '' ? '#BCBCBC' : '#373737'}" v-html="carNo == '' ? '请输入司机车牌号' : carNo"></div>
             <button @click="searchDriverList(2)">搜索</button>
             <div class="clearBoth"></div>
@@ -32,6 +32,30 @@
           </div>
         </div>
       </div>
+      <ul class="data-list">
+        <li v-for="(items,indexs) in prolist" @click="lookCarmessage(items.carno)">
+          <div class="first">
+            <img :src="items.driverPicture == null ? '' : items.driverPicture" :onerror="errorlogo">
+          </div>
+          <div class="second">
+            <p>{{items.driverName}}</p>
+            <h1>{{items.carno}}<span style="margin-left: 0.187rem"><span v-if="items.carLength != null && items.carLength != ''">{{items.carLength}}米</span><span v-if="items.carLength != null && items.carLength != '' && items.carModel != null && items.carModel != ''">/</span><span v-if="items.carModel != null && items.carModel != ''">{{items.carModel}}</span></span></h1>
+            <h2 v-if="items.location != null && items.location != ''">{{items.heartbeatTime | timeCheck}}&nbsp;&nbsp;定位：{{items.heartbeatAddr}}&nbsp;&nbsp;离我&nbsp;&nbsp;{{items.distance*1 | distanceWidth}}</h2>
+            <h3 v-else>暂无位置信息</h3>
+          </div>
+          <div class="third">
+            <div class="imgcaozuo" @click.stop="caozuo(1,items.location)">
+              <img src="../../images/haveCarDingwei.png">
+              <p>定位</p>
+            </div>
+            <div class="imgcaozuo" @click.stop="caozuo(2,items.driverCode)">
+              <img src="../../images/haveCarTel.png">
+              <p>电话</p>
+            </div>
+          </div>
+          <div class="clearBoth"></div>
+        </li>
+      </ul>
       <transition name="slide-fade">
         <div v-if="carList" id="carListBox" @click="carListHideAgain($event)">
           <div id="carList">
@@ -95,9 +119,11 @@
               second:[],
               third:[]
             },
+            prolist:[],
             keyboard:false,
             carList:false,
             InvitationDriver:false,
+            errorlogo: 'this.src="' + require('../../images/userImg.png') + '"',
           }
       },
       mounted:function () {
@@ -108,9 +134,30 @@
         _this.keyboardLetter.first = shujvyuan.fifth().first;
         _this.keyboardLetter.second = shujvyuan.fifth().second;
         _this.keyboardLetter.third = shujvyuan.fifth().third;
+        var carSearchList = sessionStorage.getItem("carSearchList");
+        if(carSearchList != undefined){
+          carSearchList = JSON.parse(carSearchList);
+             _this.tel = carSearchList.tel;
+            _this.drivertel = carSearchList.drivertel;
+            _this.carNo = carSearchList.carNo;
+            _this.plateName =carSearchList.plateName;
+            _this.prolist = carSearchList.prolist;
+          sessionStorage.removeItem("carSearchList");
+        }
         androidIos.bridge(_this);
       },
       methods:{
+        plateametrue:function () {
+          var _this = this;
+          _this.carList = true;
+          for(var i=0;i<_this.carTypeList.length;i++){
+            if( _this.plateName ==  _this.carTypeList[i].region){
+              _this.carTypeList[i].code=2;
+            }else{
+              _this.carTypeList[i].code=1;
+            }
+          }
+        },
         go:function () {
           $(document).unbind("touchstart").on("touchstart","#keyboardBox p",function () {
             $(this).css("background","#abb4bd");
@@ -128,6 +175,84 @@
             _this.carTypeList[i].code=1;
           }
           _this.carTypeList[number].code=2;
+        },
+        lookCarmessage:function (carno) {
+          var _this = this;
+          if(JSON.parse(sessionStorage.getItem("ownerMessage")).status == 2){
+            var json = {
+              tel:_this.tel,
+              drivertel:_this.drivertel,
+              carNo:_this.carNo,
+              plateName:_this.plateName,
+              prolist:_this.prolist,
+            }
+            sessionStorage.setItem("carSearchList",JSON.stringify(json));
+            androidIos.addPageList();
+            _this.$router.push({path:"/carMessageMore",query:{carno:carno}});
+          }else{
+            androidIos.second("请认证通过后再试");
+          }
+        },
+        caozuo:function (type,message) {
+          var _this = this;
+          var messageList =  sessionStorage.getItem("ownerMessage");
+          if(JSON.parse(messageList).status == "2"){
+            if(type == 1){
+              if(message == "" || message == null){
+                androidIos.second("暂无司机位置信息");
+              }else{
+                androidIos.addPageList();
+                _this.$router.push({path:"/driverMap",query:{location:message}})
+              }
+            }else if(type == 2){
+              androidIos.telCall(message);
+            }else if(type == 3){
+              androidIos.addPageList();
+              var list = [];
+              list.push(message);
+              _this.$router.push({path:"/sendtextmessage",query:{driver:JSON.stringify(list)}});
+            }else if(type == 4){
+              androidIos.first("确认添加为熟车吗?");
+              $(".tanBox-yes").unbind('click').click(function(){
+                $(".tanBox-bigBox").remove();
+                $.ajax({
+                  type: "POST",
+                  url: androidIos.ajaxHttp() + "/driver/collectCarAndDriver",
+                  data:JSON.stringify({
+                    pk:message,
+                    userCode:sessionStorage.getItem("token"),
+                    source:sessionStorage.getItem("source"),
+                  }),
+                  contentType: "application/json;charset=utf-8",
+                  dataType: "json",
+                  timeout: 30000,
+                  success: function (collectCarAndDriver) {
+                    if (collectCarAndDriver.success == "1") {
+                      _this.$cjj("添加成功");
+                      if(_this.mescrollArrList[1-_this.tabShow] != null){
+                        _this.mescrollArrList[1-_this.tabShow] = null;
+                        _this.tab[1-_this.tabShow].prolist = [] ;
+                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-downwarp").remove();
+                        $("#mescroll" + (1-_this.tabShow)).find(".mescroll-upwarp").remove();
+                      }
+                    }else{
+                      androidIos.second(collectCarAndDriver.message);
+                    }
+                  },
+                  complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                    if (status == 'timeout') { //超时,status还有success,error等值的情况
+                      androidIos.second("当前状况下网络状态差，请检查网络！");
+                    } else if (status == "error") {
+                      androidIos.errorwife();
+                    }
+                  }
+                });
+              });
+            }
+          }else{
+            androidIos.second("请认证通过后再试！");
+          }
+
         },
         carListHideAgain:function (even) {
           var el = even.target.id;
@@ -196,7 +321,7 @@
                    androidIos.second("暂无车辆");
                  /*   _this.drivertel = type == 1 ? _this.tel : "";*/
                 }else{
-                   androidIos.second(accurateFindCarnoAndPhone.list[0].driverName);
+                   _this.prolist = accurateFindCarnoAndPhone.list;
                 }
               }else{
                 androidIos.second(accurateFindCarnoAndPhone.message);
@@ -524,4 +649,87 @@
     border-bottom: 1px solid #dbdbdb;
     padding-bottom: 0.2rem;
   }
+   .data-list{
+     position: absolute;
+     bottom: 0;
+     top:7rem;
+     height: auto;
+     overflow: scroll;
+     width:100%;
+   }
+   .data-list li {
+     background: white;
+     border-top: 1px solid white;
+     border-bottom: 1px solid #ececec;
+     margin-top: 2px;
+     position: relative;
+   }
+   .first{
+     width:1rem;
+     height: 1rem;
+     overflow: hidden;
+     border-radius: 50%;
+     margin:0.45rem 0 0 0.347rem ;
+     border-top: 1px solid white;
+     float: left;
+   }
+   .first img{
+     width:1rem;
+     height:1rem;
+   }
+   .second{
+     float: left;
+     margin-left: 0.213rem;
+     margin-top: 0.2rem;
+   }
+   .second p{
+     font-size:0.4rem ;
+     color:#373737;
+     line-height:0.4rem ;
+   }
+   .second h1{
+     font-size:0.347rem ;
+     color:#373737;
+     line-height:0.347rem ;
+     margin-top: 0.15rem;
+   }
+   .second h2{
+     font-size:0.3125rem ;
+     color:#999;
+     line-height:0.7rem ;
+     background-image: url("../../images/haveCarDingweixiao.png");
+     background-position: 0 50%;
+     background-repeat: no-repeat;
+     background-size: 0.25rem;
+     padding-left: 0.4rem;
+   }
+   .second h3{
+     font-size:0.3125rem ;
+     color:#999;
+     line-height:0.7rem ;
+   }
+   .second h1 span{
+     font-size:0.347rem ;
+     color:#1D68A8;
+     line-height:0.347rem ;
+   }
+   .third{
+     right:0;
+     top:0.15rem;
+     position: absolute;
+   }
+   .third .imgcaozuo{
+     width:0.67rem;
+     float: left;
+     margin-right: 0.33rem;
+   }
+   .third img{
+     width:0.67rem;
+   }
+   .third p{
+     font-size: 0.3125rem;
+     text-align: center;
+     color:#1D68A8;
+     margin-top:0.06rem ;
+   }
 </style>

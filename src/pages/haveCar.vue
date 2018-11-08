@@ -53,19 +53,19 @@
               <h3 v-else>暂无位置信息</h3>
             </div>
             <div class="third">
-               <div class="imgcaozuo" @click="caozuo(1,items.location)">
+               <div class="imgcaozuo" @click.stop="caozuo(1,items.location)">
                  <img src="../images/haveCarDingwei.png">
                  <p>定位</p>
                </div>
-              <div class="imgcaozuo" @click="caozuo(2,items.driverCode)">
+              <div class="imgcaozuo" @click.stop="caozuo(2,items.driverCode)">
                 <img src="../images/haveCarTel.png">
                 <p>电话</p>
               </div>
-              <div v-if="tabShow == 0" class="imgcaozuo" @click="caozuo(3,items)">
+              <div v-if="tabShow == 0" class="imgcaozuo" @click.stop="caozuo(3,items)">
                 <img src="../images/haveCarMessage.png">
                 <p>短信</p>
               </div>
-              <div v-if="tabShow == 1" class="imgcaozuo" @click="caozuo(4,items.pkCar)">
+              <div v-if="tabShow == 1" class="imgcaozuo" @click.stop="caozuo(4,items.pkCar)">
                 <img src="../images/haveCarYesCar.png">
                 <p>熟车</p>
               </div>

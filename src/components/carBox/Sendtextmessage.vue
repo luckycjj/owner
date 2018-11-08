@@ -15,7 +15,7 @@
         <p>编<br>辑<br>短<br>信</p>
       </div>
       <div class="message">
-        <textarea @keyup="inputText()" placeholder="请输入短信内容（最多10字）" maxlength="10" v-model="messageBody"></textarea>
+        <textarea @keyup="inputText()" placeholder="请输入短信内容（最多18字）" maxlength="18" v-model="messageBody"></textarea>
         <div class="messageoperation">
           <span @click="shortMessageTrueYes()">常用短语</span>
           <span @click="shortMessageClear()">清空</span>
@@ -24,7 +24,7 @@
         <div class="messageLook">
           <p>短信预览</p>
           <h6>
-            【欣阳物流】{{peopleList[0].carno}}的朋友, {{corpName}}, 联系人：{{name}} {{tel}},回复TD退订
+            【欣阳物流】尊敬的{{peopleList[0].carno}}车主, {{messageBody}},如有兴趣可电话联系:{{name}} {{tel}},回复TD退订
           </h6>
         </div>
       </div>
@@ -77,7 +77,7 @@
         },
         inputText:function () {
           var _this = this;
-          _this.messageBody = _this.messageBody.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\(\)\-]/g,'');
+          _this.messageBody = _this.messageBody.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\(\)\-\?\？]/g,'');
         },
         shortMessageTrueYes:function () {
           var _this = this;
