@@ -127,6 +127,9 @@
           }else{
             _this.messageBody = _this.messageBody + _this.shortMessageList[index].displayName;
           }
+          if( _this.messageBody.length > 18){
+            _this.messageBody =  _this.messageBody.substring(0,18);
+          }
           _this.shortMessageTrue = false;
         },
         fasong:function () {
