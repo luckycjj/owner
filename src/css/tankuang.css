@@ -6,7 +6,7 @@
     top: 0;
     bottom:0;
     height: auto;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.3);
 }
 .tanBox-box,.tanBox-boxS{
     width:7.1875rem;
@@ -50,7 +50,7 @@
     float: left;
 }
 .tanBox-yes,.tanBox-yesS{
-    color:#308dfa;
+    color:#1D68A8;
     float: right;
 }
 .tanBox-class,.tanBox-classS{

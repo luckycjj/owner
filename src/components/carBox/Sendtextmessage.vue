@@ -15,7 +15,7 @@
         <p>编<br>辑<br>短<br>信</p>
       </div>
       <div class="message">
-        <textarea @input="inputText()" placeholder="请输入短信内容" maxlength="50" v-model="messageBody"></textarea>
+        <textarea @keyup="inputText()" placeholder="请输入短信内容（最多10字）" maxlength="10" v-model="messageBody"></textarea>
         <div class="messageoperation">
           <span @click="shortMessageTrueYes()">常用短语</span>
           <span @click="shortMessageClear()">清空</span>

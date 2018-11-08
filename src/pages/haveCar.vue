@@ -488,7 +488,7 @@
                   });
                   function onComplete(data) {
                     _this.map = data.position;
-                    androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.001);
+                    androidIos.setcookie("locationAMap",JSON.stringify(data.position),0.01);
                     $("#common-blackBox").remove();
                     _this.ajax(curNavIndex,pageNum,pageSize,successCallback,errorCallback);
                   }

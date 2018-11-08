@@ -32,29 +32,46 @@
           </div>
         </div>
       </div>
-      <div v-if="carList" id="carListBox" @click="carListHideAgain($event)">
-        <div id="carList">
-          <p v-for="(item,index) in carTypeList" @click="carClick(index,item.region)" :class="item.code==2?'carCode':''">{{item.region}}</p>
-          <button @click="carList=false"> 完成</button>
+      <transition name="slide-fade">
+        <div v-if="carList" id="carListBox" @click="carListHideAgain($event)">
+          <div id="carList">
+            <p v-for="(item,index) in carTypeList" @click="carClick(index,item.region)" :class="item.code==2?'carCode':''">{{item.region}}</p>
+            <button @click="carList=false"> 完成</button>
+          </div>
         </div>
-      </div>
-      <div v-if="keyboard" id="keyboardBox" @click="keyboardHideAgain($event)">
-        <div id="keyboard">
-          <p v-for="item in keyboardNumber" @click="carkeyboard(item.name)">{{item.name}}</p>
-          <div class="clearBoth"></div>
-          <p v-for="item in keyboardLetter.first" @click="carkeyboard(item.name)">{{item.name}}</p>
-          <div class="clearBoth"></div>
-          <div style="margin-left:0.500115rem" ><p v-for="item in keyboardLetter.second"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
-          <div class="clearBoth"></div>
-          <div style="margin-left:1.500345rem" ><p v-for="item in keyboardLetter.third"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
-          <p class="keyRemove" @click="keyremove()"></p>
-          <div class="clearBoth"></div>
-          <p class="keyBlack"></p>
-          <p class="keyBlack"></p>
-          <p class="keySpace">space</p>
-          <p class="keyOk" @click="keyboard=false">down</p>
+        <div v-if="keyboard" id="keyboardBox" @click="keyboardHideAgain($event)">
+          <div id="keyboard">
+            <p v-for="item in keyboardNumber" @click="carkeyboard(item.name)">{{item.name}}</p>
+            <div class="clearBoth"></div>
+            <p v-for="item in keyboardLetter.first" @click="carkeyboard(item.name)">{{item.name}}</p>
+            <div class="clearBoth"></div>
+            <div style="margin-left:0.500115rem" ><p v-for="item in keyboardLetter.second"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
+            <div class="clearBoth"></div>
+            <div style="margin-left:1.500345rem" ><p v-for="item in keyboardLetter.third"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
+            <p class="keyRemove" @click="keyremove()"></p>
+            <div class="clearBoth"></div>
+            <p class="keyBlack"></p>
+            <p class="keyBlack"></p>
+            <p class="keySpace">space</p>
+            <p class="keyOk" @click="keyboard=false">down</p>
+          </div>
         </div>
-      </div>
+        <div v-if="InvitationDriver" id="InvitationDriverBox">
+             <div id="InvitationDriver">
+               <p>温馨提示</p>
+               <div class='InvitationDriver-class'>
+                 <h3>暂无车辆司机</h3>
+                 <!--<input type="tel" placeholder="司机联系方式" maxlength="11" v-model="drivertel"/>-->
+                 <div class='clearBoth'></div>
+               </div>
+               <div class='InvitationDriver-button'>
+                 <button class='InvitationDriver-close' @click="InvitationDriver = false;">取消</button>
+                 <div class='InvitationDriver-shuxian'></div>
+                 <button id='InvitationDriver-yes' class='InvitationDriver-yes InvitationDriver-yesGo' @click="InvitationDriverTrue()">确定</button>
+               </div>
+             </div>
+        </div>
+      </transition>
     </div>
 </template>
 
@@ -68,6 +85,7 @@
       data(){
           return{
             tel:"",
+            drivertel:"",
             carNo:"",
             plateName:"沪",
             carTypeList:[],
@@ -79,6 +97,7 @@
             },
             keyboard:false,
             carList:false,
+            InvitationDriver:false,
           }
       },
       mounted:function () {
@@ -173,7 +192,12 @@
             timeout: 30000,
             success: function (accurateFindCarnoAndPhone) {
               if (accurateFindCarnoAndPhone.success == "1") {
-                console.log(accurateFindCarnoAndPhone)
+                if(accurateFindCarnoAndPhone.list.length == 0){
+                   androidIos.second("暂无车辆");
+                 /*   _this.drivertel = type == 1 ? _this.tel : "";*/
+                }else{
+                   androidIos.second(accurateFindCarnoAndPhone.list[0].driverName);
+                }
               }else{
                 androidIos.second(accurateFindCarnoAndPhone.message);
               }
@@ -183,6 +207,45 @@
                 androidIos.second("当前状况下网络状态差，请检查网络！");
               } else if (status == "error") {
                  androidIos.errorwife();
+              }
+            }
+          });
+        },
+        InvitationDriverTrue:function () {
+          var _this = this;
+          var reg = /^1([3|5|8][0-9]|4[5|7|9]|66|7[0|1|3|5|6|7|8]|9[8|9])[0-9]{8}$/;
+          if(_this.drivertel == ""){
+            bomb.first("请输入手机号码");
+            return false;
+          }
+          if(!reg.test(_this.drivertel)){
+            bomb.first("手机号码格式不对");
+            return false;
+          }
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp() + "/driver/inviteJoin",
+            data:JSON.stringify({
+              phone:_this.drivertel,
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source"),
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 30000,
+            success: function (inviteJoin) {
+              if (inviteJoin.success == "1") {
+                _this.InvitationDriver = false;
+                _this.$cjj("邀请成功");
+              }else{
+                androidIos.second(inviteJoin.message);
+              }
+            },
+            complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+              if (status == 'timeout') { //超时,status还有success,error等值的情况
+                androidIos.second("当前状况下网络状态差，请检查网络！");
+              } else if (status == "error") {
+                androidIos.errorwife();
               }
             }
           });
@@ -282,7 +345,7 @@
     font-size: 0.4rem;
     line-height: 0.5rem;
   }
-   #carListBox,#keyboardBox{
+   #carListBox,#keyboardBox,#InvitationDriverBox{
      position: fixed;
      bottom:0;
      width:100%;
@@ -290,6 +353,9 @@
      height:auto;
      background: rgba(0,0,0,0);
      z-index: 10;
+   }
+   #InvitationDriverBox{
+     background: rgba(0,0,0,0.3);
    }
    #carList,#keyboard{
      position: fixed;
@@ -381,4 +447,81 @@
      line-height: 0.68rem;
      margin-left: 0.26rem;
    }
+   .slide-fade-enter-active {
+     transition: all .2s ease;
+   }
+   .slide-fade-leave-active {
+     transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+   }
+   .slide-fade-enter, .slide-fade-leave-to
+     /* .slide-fade-leave-active for below version 2.1.8 */ {
+     transform: translateY(0.13rem);
+     opacity: 0;
+   }
+  #InvitationDriver{
+    width:7.1875rem;
+    position: absolute;
+    left:50%;
+    margin-left: -3.59375rem;
+    background: white;
+    border: 0.03125rem solid #b1b1b1;
+    border-radius: 0.25rem;
+    top:30%;
+    overflow: hidden;
+  }
+   #InvitationDriver p{
+     width: 100%;
+     line-height: 1rem;
+     border-bottom: 0.03125rem solid #e0e0e0;
+     font-size: 0.451rem;
+     color:#333;
+     text-align: center;
+     letter-spacing: 0.03125rem;
+   }
+   .InvitationDriver-button{
+     width:100%;
+     height: 1.0625rem;
+     border-top: 0.03125rem solid #e0e0e0;
+   }
+   .InvitationDriver-shuxian{
+     width: 0.03125rem;
+     height: 1.0625rem;
+     float: left;
+     background: #e0e0e0;
+   }
+   .InvitationDriver-button button,.InvitationDriver-buttonS button{
+     height: 1.0625rem;
+     width:3.578125rem;
+     background: white;
+     font-size: 0.44rem;
+   }
+   .InvitationDriver-close{
+     color:#999999;
+     float: left;
+   }
+   .InvitationDriver-yes{
+     color:#1D68A8;
+     float: right;
+   }
+   .InvitationDriver-class h3{
+     text-align: center;
+     font-size: 0.4rem;
+     color:#666;
+     width: 80%;
+     margin-left: 10%;
+     line-height: 0.6rem;
+     padding: 0.3rem 0 0.5rem 0;
+   }
+  .InvitationDriver-class input{
+     width:60%;
+    display: block;
+    margin: 0 auto;
+    font-size: 0.4rem;
+    color:#373737;
+    text-align: center;
+    line-height: 0.45rem;
+    margin-bottom: 0.3rem;
+    border-bottom: 1px solid #dbdbdb;
+    padding-bottom: 0.2rem;
+  }
 </style>
