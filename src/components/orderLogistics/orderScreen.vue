@@ -65,6 +65,7 @@
         var ORDERSCREEN = sessionStorage.getItem("ORDERSCREEN");
         if( ORDERSCREEN != null){
           self.address = ORDERSCREEN;
+          sessionStorage.removeItem("ORDERSCREEN");
         }
         self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
           up: {
@@ -152,10 +153,11 @@
           page:pageNum,
           size:pageSize,
           type:"",
-          state:"13",
+          state: thisthatsecond.$route.query.type == 1 ? 7 : thisthatsecond.$route.query.type == 2 ? 8 : thisthatsecond.$route.query.type == 3 ?  14 : 13,
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
           keyword:thisthatsecond.address == "" ? "HDSDDD" : androidIos.checkText(thisthatsecond.address),
+          today: thisthatsecond.$route.query.type == 1 ||  thisthatsecond.$route.query.type == 2? 1 :"",
         }),
         contentType: "application/json;charset=utf-8",
         dataType: "json",

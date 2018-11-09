@@ -46,6 +46,16 @@
       mounted:function () {
         var _this = this;
         androidIos.judgeIphoneX("searchTodayOrder",2);
+        sessionStorage.removeItem("weh");
+        sessionStorage.removeItem("nowOrderCartype");
+        sessionStorage.removeItem("dataStart");
+        sessionStorage.removeItem("dataEnd");
+        sessionStorage.removeItem("orderPk");
+        sessionStorage.removeItem("dispatchPK");
+        sessionStorage.removeItem("carPKlistGo");
+        sessionStorage.removeItem("driverPk");
+        sessionStorage.removeItem("ORDERSCREEN");
+        sessionStorage.removeItem("orderType");
         androidIos.bridge(_this);
       },
       methods:{
@@ -103,9 +113,10 @@
           page:pageNum,
           size:pageSize,
           type:2,
-          state:14,
+          state:thisthatsecond.type == 1 ? 7 : thisthatsecond.type == 2 ? 8 : thisthatsecond.type == 3 ?  14 : 12,
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
+          today:thisthatsecond.type == 1 || thisthatsecond.type == 2? 1 :"",
         }),
         contentType: "application/json;charset=utf-8",
         dataType: "json",

@@ -181,8 +181,13 @@
       },
       orderScreen:function () {
         var _this = this;
+        var http = location.href;
+        var type = "";
+        if(http.indexOf("searchTodayOrder") != -1){
+           type = androidIos.GetQueryString("type");
+        }
         androidIos.addPageList();
-        _this.$router.push({ path: "/orderScreen"});
+        _this.$router.push({ path: "/orderScreen",query:{type:type == '' ? undefined : type}});
       },
       inquiry:function () {
         var _this = this;
