@@ -40,6 +40,7 @@
           sessionStorage.removeItem("trackTap");
           sessionStorage.removeItem("settlementTap");
           sessionStorage.removeItem("newProTap");
+          sessionStorage.removeItem("userTabList");
           sessionStorage.removeItem("INDEXSCROLLTOP");
           sessionStorage.removeItem("driverBottomIcon");
           sessionStorage.removeItem("messageCount");
@@ -54,6 +55,7 @@
           localStorage.removeItem("SCREENROBBING");
           localStorage.removeItem("SCREENROBBING2");
           sessionStorage.removeItem("searchDate");
+          sessionStorage.removeItem("xinYaIndex");
           androidIos.bridge(_this);
       },
       methods:{

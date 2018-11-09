@@ -113,7 +113,7 @@
           page:pageNum,
           size:pageSize,
           type:2,
-          state:thisthatsecond.type == 1 ? 7 : thisthatsecond.type == 2 ? 8 : thisthatsecond.type == 3 ?  14 : 12,
+          state:thisthatsecond.type == 1 ? 7 : thisthatsecond.type == 2 ? 8 : thisthatsecond.type == 3 ?  14 : 15,
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
           today:thisthatsecond.type == 1 || thisthatsecond.type == 2? 1 :"",

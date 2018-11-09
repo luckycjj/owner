@@ -121,8 +121,11 @@
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.serchorderType = sessionStorage.getItem("searchDate") == undefined ? 0 : sessionStorage.getItem("searchDate");
           _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
-          if(sessionStorage.getItem("indexCorner") != undefined){
-            _this.iconList = JSON.parse(sessionStorage.getItem("indexCorner"));
+          if(sessionStorage.getItem("xinYaIndex") != undefined){
+            _this.iconList = JSON.parse(sessionStorage.getItem("xinYaIndex")).iconList;
+            _this.todayPrice = JSON.parse(sessionStorage.getItem("xinYaIndex")).todayPrice;
+            _this.todayOrder = JSON.parse(sessionStorage.getItem("xinYaIndex")).todayOrder;
+            sessionStorage.removeItem("xinYaIndex");
           }
           sessionStorage.removeItem("indexKeyword");
           sessionStorage.removeItem("trackTap");
@@ -195,6 +198,11 @@
               if (homeStatistics.success == "1") {
                  _this.todayOrder = homeStatistics.orderTotal * 1;
                  _this.todayPrice = homeStatistics.todayFee*1;
+                 sessionStorage.setItem("xinYaIndex",JSON.stringify({
+                   todayOrder:_this.todayOrder,
+                   todayPrice: _this.todayPrice,
+                   iconList:_this.iconList,
+                 }))
               }else{
                 androidIos.second(homeStatistics.message);
               }
@@ -223,7 +231,11 @@
                 _this.iconList[1].number = carrOrderListHeaderIcon.todayCompletedCount*1;
                 _this.iconList[2].number = carrOrderListHeaderIcon.pendingAllocation*1;
                 _this.iconList[3].number = carrOrderListHeaderIcon.abnormalCount*1;
-                sessionStorage.setItem("indexCorner",JSON.stringify(_this.iconList));
+                sessionStorage.setItem("xinYaIndex",JSON.stringify({
+                  todayOrder:_this.todayOrder,
+                  todayPrice: _this.todayPrice,
+                  iconList:_this.iconList,
+                }))
               }else{
                 androidIos.second(carrOrderListHeaderIcon.message);
               }

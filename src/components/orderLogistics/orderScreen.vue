@@ -153,7 +153,7 @@
           page:pageNum,
           size:pageSize,
           type:"",
-          state: thisthatsecond.$route.query.type == 1 ? 7 : thisthatsecond.$route.query.type == 2 ? 8 : thisthatsecond.$route.query.type == 3 ?  14 : 13,
+          state: thisthatsecond.$route.query.type == 1 ? 7 : thisthatsecond.$route.query.type == 2 ? 8 : thisthatsecond.$route.query.type == 3 ?  14:thisthatsecond.$route.query.type == 4 ?  15 : 13,
           userCode:sessionStorage.getItem("token"),
           source:sessionStorage.getItem("source"),
           keyword:thisthatsecond.address == "" ? "HDSDDD" : androidIos.checkText(thisthatsecond.address),

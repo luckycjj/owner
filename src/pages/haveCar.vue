@@ -503,6 +503,7 @@
                   }
                   //解析定位错误信息
                   function onError(data) {
+                    $("#common-blackBox").remove();
                     androidIos.second("定位失败");
                   }
                 }else{

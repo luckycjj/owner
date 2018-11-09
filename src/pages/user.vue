@@ -115,6 +115,10 @@
     },
     mounted:function () {
       var _this = this;
+      var  userTabList = sessionStorage.getItem("userTabList");
+      if(userTabList != undefined){
+        _this.tabList = JSON.parse(userTabList);
+      }
       androidIos.judgeIphoneX("userBox",1);
       androidIos.judgeIphoneX("user",2);
       sessionStorage.removeItem("settlementTap");
@@ -175,6 +179,7 @@
         success: function (getPayCount) {
           if (getPayCount.success == "1") {
             _this.tabList[0].number = getPayCount.paied*1 + getPayCount.unPaied*1;
+            sessionStorage.setItem("userTabList",JSON.stringify(_this.tabList));
           }else{
             androidIos.second(getPayCount.message);
           }
@@ -215,6 +220,7 @@
       });
       Promise.all([ajax1]).then(function(values) {
           _this.tabList[1].number = list0;
+          sessionStorage.setItem("userTabList",JSON.stringify(_this.tabList));
       })
       Promise.all([ajax]).then(function(values) {
         $.ajax({
@@ -236,6 +242,7 @@
                   _this.tabList[3].number = driverBottomIcon.count * 1;
                 }else{*/
                   _this.tabList[2].number = driverBottomIcon.count * 1;
+                sessionStorage.setItem("userTabList",JSON.stringify(_this.tabList));
                 /*}*/
               }
             } else {
