@@ -112,7 +112,7 @@
         _this.doNow = 4;
       }else if( _this.html.indexOf("/user") != -1){
         _this.doNow = 5;
-      }else if( _this.html.indexOf("/trackList") != -1){
+      }else if( _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/searchTodayOrder") != -1){
         _this.doNow = 6;
       }else if( _this.html.indexOf("/authentication") != -1){
         _this.doNow = 8;
@@ -151,7 +151,7 @@
           _this.doNow = 4;
         }else if( _this.html.indexOf("/user") != -1){
           _this.doNow = 5;
-        }else if( _this.html.indexOf("/trackList") != -1){
+        }else if( _this.html.indexOf("/trackList") != -1 || _this.html.indexOf("/searchTodayOrder") != -1){
           _this.doNow = 6;
         }else if( _this.html.indexOf("/authentication") != -1){
           _this.doNow = 8;

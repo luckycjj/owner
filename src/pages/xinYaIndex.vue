@@ -23,9 +23,7 @@
          <div class="center">
            <ul>
              <li v-for="(item,index) in iconList" @click="lookTrackList(index)">
-                 <!--<div class="iconListImg" :style="{backgroundImage :'url(' + item.icon +')'}">
-                   <div class="Indexcorner" v-if="item.number > 0"  :style="{marginRight:item.marginRight}">{{item.number}}</div>
-                 </div>-->
+
                <p :style="{ color : index== 3 ? '#FF4500' : '#404060'}">{{item.number | toThousands}}</p>
                  {{item.name}}
              </li>
@@ -129,7 +127,6 @@
           sessionStorage.removeItem("indexKeyword");
           sessionStorage.removeItem("trackTap");
           sessionStorage.removeItem("settlementTap");
-          androidIos.noviceguidance(1);
           androidIos.bridge(_this);
       },
       methods:{
@@ -242,15 +239,8 @@
         },
         lookTrackList:function (type) {
           var _this = this;
-          if(type ==0 || type == 1){
-            androidIos.addPageList();
-            sessionStorage.setItem("trackTap",type + 2);
-            _this.$router.push({path:"/trackList",query:{type:1,today:1}});
-          }else if(type == 2){
-            androidIos.addPageList();
-            sessionStorage.setItem("trackTap",0);
-            _this.$router.push({path:"/trackList",query:{type:1,today:1}});
-          }
+          androidIos.addPageList();
+          _this.$router.push({path:"/searchTodayOrder",query:{type:type+1}});
         },
         getPageScroll:function() {
           var  yScroll;

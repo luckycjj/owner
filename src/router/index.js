@@ -8,10 +8,6 @@ import suggestion from '@/components/myBox/suggestion'
 import settlement from '@/components/myBox/settlement'
 import changePassword from '@/components/myBox/changePassword'
 import statusNow from '@/components/myBox/statusNow'
-import bestDriverList from '@/components/xinyaBox/bestDriverList'
-import bestDriverMore from '@/components/xinyaBox/bestDriverMore'
-import bestCarrierMore from '@/components/xinyaBox/bestCarrierMore'
-import bestCarrierList from '@/components/xinyaBox/bestCarrierList'
 import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
@@ -49,6 +45,7 @@ import sendtextmessage from '@/components/carBox/sendtextmessage'
 import searchDriver from '@/components/carBox/searchDriver'
 import messageRecord from '@/components/carBox/messageRecord'
 import carMessageMore from '@/components/carBox/carMessageMore'
+import searchTodayOrder from '@/components/xinyaBox/searchTodayOrder'
 Vue.use(Router);
 
 Vue.directive('title', {
@@ -295,24 +292,9 @@ export default new Router({
       component:authentication,
     },
     {
-      path:'/bestCarrierMore',
-      name:'bestCarrierMore',
-      component:bestCarrierMore,
-    },
-    {
-      path:'/bestCarrierList',
-      name:'bestCarrierList',
-      component:bestCarrierList,
-    },
-    {
-      path:'/bestDriverMore',
-      name:'bestDriverMore',
-      component:bestDriverMore,
-    },
-    {
-      path:'/bestDriverList',
-      name:'bestDriverList',
-      component:bestDriverList,
+      path:'/searchTodayOrder',
+      name:'searchTodayOrder',
+      component:searchTodayOrder,
     },
     {
       path:'/xinYaIndex',
