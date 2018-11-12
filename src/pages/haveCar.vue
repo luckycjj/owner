@@ -505,6 +505,7 @@
                   function onError(data) {
                     $("#common-blackBox").remove();
                     androidIos.second("定位失败");
+                    successCallback([]);
                   }
                 }else{
                   _this.map = JSON.parse(locationAMap);
@@ -530,6 +531,7 @@
                   //解析定位错误信息
                   function onError(data) {
                     androidIos.second("定位失败");
+                    successCallback([]);
                   }
                   _this.ajax(curNavIndex,pageNum,pageSize,successCallback,errorCallback);
                 }
