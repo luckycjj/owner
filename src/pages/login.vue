@@ -4,11 +4,11 @@
     <img src="../images/logo.png" id="logo">
     <div class="modelView">
       <span class="w3">手机号</span>
-      <input  @keyup="filterInput()" type="tel" v-model="mobile" placeholder="请输入手机号" maxlength="11"/>
+      <input autocomplete="off"  @keyup="filterInput()" type="tel" v-model="mobile" placeholder="请输入手机号" maxlength="11"/>
     </div>
     <div class="modelView">
       <span class="w2">密码</span>
-      <input  @input="filterInput()" :type="lookPassWord ? 'text' : 'password' "  v-model="password" placeholder="请输入密码"/>
+      <input autocomplete="off"  @input="filterInput()" :type="lookPassWord ? 'text' : 'password' "  v-model="password" placeholder="请输入密码"/>
       <div id="lookPassWord" :class="lookPassWord ? 'lookPassWord' : '' " @click="lookpass()"></div>
     </div>
     <button @click="loginOn()">登录</button>
