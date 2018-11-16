@@ -3,12 +3,18 @@
       <div id="title" v-title data-title="首页"></div>
       <div id="xinYaIndexBox" style="top:0rem;">
          <div class="top">
-            <img src="../images/date.png" id="date" style="top:0.375rem;" @click="searchDateBoxTrue()">
+            <div id="imgBoxTab" style="top:0.375rem;">
+              <img src="../images/date.png" id="date" @click="searchDateBoxTrue()">
+              <img src="../images/saoyisao-2.png" id="saoyisao">
+              <p @click="xunjia()">询价</p>
+              <div class="clearBoth"></div>
+            </div>
+
             <div class="topLeft">
               <div class="topleftInputBox">
                 <input type="text" @click="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
+                <img src="../images/huatong-2.png">
               </div>
-
             </div>
             <div class="topRight">
               <div class="topRightF">
@@ -78,15 +84,15 @@
                value:3,
                check:false,
              },{
-               name:"最近7天",
+               name:"最近一周",
                value:7,
                check:false,
              },{
-               name:"最近30天",
+               name:"最近一个月",
                value:30,
                check:false,
              },{
-               name:"最近60天",
+               name:"最近两个月",
                value:60,
                check:false,
              }],
@@ -117,7 +123,7 @@
           var _this = this;
           androidIos.judgeIphoneX("top",0);
           androidIos.judgeIphoneX("xinYaIndexBox",1);
-          androidIos.judgeIphoneX("date",2);
+          androidIos.judgeIphoneX("imgBoxTab",2);
           sessionStorage.removeItem("NEWORDERTRANTYPE");
           _this.serchorderType = sessionStorage.getItem("searchDate") == undefined ? 0 : sessionStorage.getItem("searchDate");
           _this.keyWord = sessionStorage.getItem("indexKeyword") == undefined ? "" : sessionStorage.getItem("indexKeyword");
@@ -139,6 +145,11 @@
              _this.searchList[i].check = false;
           }
           _this.searchList[index].check = true;
+        },
+        xunjia:function () {
+          var _this = this;
+          androidIos.addPageList();
+          _this.$router.push({ path: "/newOrder/inquiry"});
         },
         searchDateBoxTrue:function () {
           var _this = this;
@@ -295,11 +306,32 @@
     background: -moz-linear-gradient(#47b2e8, #1a6bac); /* Firefox 3.6 - 15 */
     background: linear-gradient(#47b2e8 , #1a6bac); /* 标准的语法 */
   }
-  #date{
+  #imgBoxTab{
     position: absolute;
-    width:0.48rem;
-    left:0.54rem;
+    right:0.4rem;
     top:0.375rem;
+  }
+  #imgBoxTab p{
+    color:white;
+    font-size: 0.347rem;
+    float:left;
+  }
+  .topleftInputBox img{
+       position: absolute;
+      width:0.3rem;
+    right:0.3rem;
+    top:50%;
+    margin-top: -0.218181818rem;
+  }
+  #date{
+    width:0.53rem;
+    margin-right: 0.38rem;
+    float:left;
+  }
+  #saoyisao{
+    width:0.48rem;
+    margin-right: 0.38rem;
+    float:left;
   }
   .topLeft{
     width:100%;
@@ -309,21 +341,35 @@
     width:4.77rem;
     height:0.8rem;
     padding: 0rem 0.8rem;
-    background-color:white ;
-    background-image: url("../images/sousuo2.png");
+    background-color:#2E8CC7 ;
+    background-image: url("../images/icon-fadajing.png");
     background-position: 0.2rem 50%;
     background-repeat: no-repeat;
     background-size: 0.375rem;
     border-radius: 0.4rem;
-    margin: 0.15rem auto 0.7rem auto;
-    border:1px solid white;
+    margin: 0.15rem 0 0.7rem 0.32rem;
+    border:1px solid #2E8CC7;
+    position: relative;
+  }
+  input::-webkit-input-placeholder{
+    color: #fff;
+  }
+  input:-moz-placeholder {  /* Mozilla Firefox 4 to 18*/
+    color:#fff;
+  }
+  input::-moz-placeholder {  /* Mozilla Firefox 19+*/
+    　　color:#fff;
+  }
+  input:-ms-input-placeholder { /* Internet Explorer 10+*/
+    　　color:#fff;
   }
   .topLeft input{
     font-size: 0.375rem;
-    color:#373737;
+    color:#fff;
     line-height: 0.375rem;
     text-align: left;
     width:100%;
+    background: transparent;
     height: 0.4rem;
     margin-top: 0.2rem;
     display: block;
