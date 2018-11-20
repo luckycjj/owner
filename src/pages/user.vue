@@ -20,7 +20,7 @@
           <p>{{item.name}}<span v-if="item.number > 0">{{item.number}}</span></p>
           <div class="lookMore"></div>
           <div class="clearBoth"></div>
-          <input type="file" class="saoyisao"  @change="jiexi($event)" v-if="(item.name).indexOf('扫') != -1">
+          <input type="file" class="saoyisao" accept="image/*"  @change="jiexi($event)" v-if="(item.name).indexOf('扫') != -1">
         </li>
       </ul>
     </div>

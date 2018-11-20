@@ -5,7 +5,9 @@
          <div class="top">
             <div id="imgBoxTab" style="top:0.375rem;">
               <img src="../images/date.png" id="date" @click="searchDateBoxTrue()">
-              <img src="../images/saoyisao-2.png" id="saoyisao">
+              <div  id="saoyisao">
+                <input type="file"  accept="image/*"  @change="jiexi($event)">
+              </div>
               <p @click="xunjia()">询价</p>
               <div class="clearBoth"></div>
             </div>
@@ -61,6 +63,7 @@
   import {bomb} from "../js/zujian";
   import bridge from '../js/bridge';
   import "../js/swipeslider";
+  import reqrcode from  '../js/reqrcode';
     export default {
         name: "xin-ya-index",
         data(){
@@ -139,6 +142,46 @@
           androidIos.bridge(_this);
       },
       methods:{
+        jiexi:function (enevt) {
+          var _this = this;
+          androidIos.loading("正在扫描");
+          var getObjectURL = function (file) {
+            var url = null;
+            if (window.createObjectURL != undefined) { // basic
+              url = window.createObjectURL(file);
+            } else if (window.URL != undefined) { // mozilla(firefox)
+              url = window.URL.createObjectURL(file);
+            } else if (window.webkitURL != undefined) { // webkit or chrome
+              url = window.webkitURL.createObjectURL(file);
+            }
+            return url;
+          }
+          reqrcode.decode(getObjectURL(enevt.target.files[0]));
+          reqrcode.callback = function (imgMsg) {
+            enevt.target.value = "";
+            var img;
+            try {
+              img = JSON.parse(imgMsg);
+            } catch (e) {
+              img = "";
+            }
+            $("#common-blackBox").remove();
+            if(img == ""){
+              androidIos.second("扫描二维码失败,请重试!");
+            }else{
+              if(img.type != 1){
+                androidIos.second("请扫描签收二维码!");
+              }else{
+                androidIos.first("确定签收吗？");
+                $(".tanBox-yes").unbind('click').click(function(){
+                  $(".tanBox-bigBox").remove();
+                  androidIos.addPageList();
+                  _this.$router.push({path:'/signIn',query:{pk:img.pk,}});
+                });
+              }
+            }
+          }
+        },
         circleChooese:function (index) {
           var _this = this;
           for(var i = 0 ; i < _this.searchList.length ; i++){
@@ -330,8 +373,23 @@
   }
   #saoyisao{
     width:0.48rem;
+    height: 0.48rem;
+    background-image: url("../images/saoyisao-2.png");
+    background-size: 0.48rem;
+    background-repeat: no-repeat;
+    background-position: 0 0;
     margin-right: 0.38rem;
+    position: relative;
     float:left;
+  }
+  #saoyisao input{
+    position: absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    height:auto;
+    width:100%;
+    opacity: 0;
   }
   .topLeft{
     width:100%;
