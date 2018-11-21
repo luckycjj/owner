@@ -51,8 +51,7 @@
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type == '10' && orderSource == 1">
-              <button  class="zhifu"   @click="closedOrder(1)">取消订单</button>
-              <button @click="shengcheng()">生成委托</button>
+              <button    @click="closedOrder(1)">取消订单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if=" type == '0' && orderSource == 1">
