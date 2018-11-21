@@ -27,7 +27,7 @@
     </div>
     <div class="checkBox">
       <div class="checked" @click="checked = !checked" :class="checked ? 'checkedTrue' : '' "></div>
-      <span>我同意用户协议及声明</span>
+      <span @click="lookneedKnow()">我同意用户协议及声明</span>
       <div class="clearBoth"></div>
     </div>
     <button @click="registerOn()">注册</button>
@@ -47,7 +47,7 @@
             passwordSure:"",
              invitation :"",
              verification:"",
-             checked:true,
+             checked:false,
              lookPassWord:false,
             lookPassWord1:false,
              name:"获取验证码",
@@ -65,6 +65,11 @@
           go:function () {
 
           },
+        lookneedKnow:function () {
+          var _this = this;
+          androidIos.addPageList();
+          _this.$router.push({path:"/newOrder/needKnow"});
+        },
         goback:function () {
           var _this = this;
           androidIos.gobackFrom(_this);
