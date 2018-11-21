@@ -1,25 +1,27 @@
 <template>
   <div id="register">
     <div id="title" v-title data-title="注册"></div>
+    <div id="top">
+      <img id="topImg" src="../../images/register-top.png" style="height:3.78rem;">
+      <img id="gobackImg" src="../../images/register-goback.png" style="top:0.9rem" @click="goback()">
+    </div>
     <div id="registerBody">
-      <div class="modelView">
-        <span class="w3">手机号</span>
+      <div class="modelView img1">
         <input @keyup="filterInput()" type="tel" v-model="mobile" placeholder="请输入手机号" maxlength="11"/>
       </div>
-      <div class="modelView">
-        <span class="w2">密码</span>
+      <div class="modelView img5">
+        <input @keyup="filterInput()" type="tel" v-model="verification" placeholder="请输入验证码" maxlength="6"/>
+        <span class="verificationCome" @click="verificationCome()">{{name}}</span>
+        <div class="clearBoth"></div>
+      </div>
+      <div class="modelView img2">
         <input @input="filterInput()" :type="lookPassWord ? 'text' : 'password' " maxlength="25"  v-model="password" placeholder="请输入密码"/>
         <div id="lookPassWord" :class="lookPassWord ? 'lookPassWord' : '' " @click="lookpass()"></div>
         <div class="clearBoth"></div>
       </div>
-      <!--<div class="modelView">
-        <span class="w3">邀请码</span>
-        <input type="text" v-model="invitation" placeholder="请输入邀请码" maxlength="6"/>
-      </div>-->
-      <div class="modelView" style="border:none">
-        <span class="w3">验证码</span>
-        <input @keyup="filterInput()" type="tel" v-model="verification" placeholder="请输入验证码" maxlength="6"/>
-        <span class="verificationCome" @click="verificationCome()">{{name}}</span>
+      <div class="modelView img3">
+        <input @input="filterInput()"  :type="lookPassWord1 ? 'text' : 'password' "  maxlength="25"  v-model="passwordSure" placeholder="请确认密码"/>
+        <div id="lookPassWord1" :class="lookPassWord1 ? 'lookPassWord' : '' " @click="lookpass(2)"></div>
         <div class="clearBoth"></div>
       </div>
     </div>
@@ -42,33 +44,48 @@
           return{
              mobile:"",
              password:"",
+            passwordSure:"",
              invitation :"",
              verification:"",
-             checked:false,
+             checked:true,
              lookPassWord:false,
+            lookPassWord1:false,
              name:"获取验证码",
              nameSet:null,
           }
       },
       mounted:function () {
         var _this = this;
+        androidIos.judgeIphoneX("topImg",5);
+        androidIos.judgeIphoneX("gobackImg",2);
+        androidIos.judgeIphoneX("checkBox",1);
         androidIos.bridge(_this);
       },
       methods:{
           go:function () {
 
           },
+        goback:function () {
+          var _this = this;
+          androidIos.gobackFrom(_this);
+        },
         filterInput:function () {
           var _this = this;
           _this.mobile =  _this.mobile.replace(/[^\0-9]/g,'');
           _this.verification =  _this.verification.replace(/[^\0-9]/g,'');
           _this.password =  _this.password.replace(/[\u4E00-\u9FA5]/g,'');
           _this.password =  _this.password.replace(/<script>/g,'');
+          _this.passwordSure =  _this.passwordSure.replace(/[\u4E00-\u9FA5]/g,'');
+          _this.passwordSure =  _this.passwordSure.replace(/<script>/g,'');
         },
-          lookpass:function () {
-            var _this = this;
+        lookpass:function (type) {
+          var _this = this;
+          if(type == 1){
             _this.lookPassWord = !_this.lookPassWord;
-          },
+          }else{
+            _this.lookPassWord1 = !_this.lookPassWord1;
+          }
+        },
           verificationCome:function () {
             var _this = this;
             if(_this.name.indexOf("获取") != -1){
@@ -123,10 +140,10 @@
             bomb.first("密码不得小于6位");
             return false;
           }
-         /* if(_this.invitation.length <4){
-            bomb.first("请输入正确的邀请码");
+          if(_this.password != _this.passwordSure){
+            bomb.first("两次密码输入不相同");
             return false;
-          }*/
+          }
           if(_this.verification.length < 4){
             bomb.first("请输入正确的验证码");
             return false;
@@ -143,6 +160,7 @@
               userPhone : _this.mobile,
               password : _this.password,
               checkCode : _this.verification,
+              repassword:_this.passwordSure,
               inviteCode : "",
               source:sessionStorage.getItem("source")
             }),
@@ -175,96 +193,128 @@
 </script>
 
 <style scoped>
- #registerBody{
-   width:100%;
-   background: white;
-   margin: 0.27rem auto;
- }
- .modelView{
-   width:9.6rem;
-   border-bottom: 1px solid #E5E5E5;
-   margin-left:0.4rem;
-   height:1.2rem;
-   position: relative;
- }
- .modelView span{
-   line-height: 1.2rem;
-   color:#333;
-   font-size:0.375rem ;
- }
- .modelView input{
-   width:5rem;
-   height: 0.5rem;
-   margin-top: 0.35rem;
-   font-size: 0.375rem;
-   margin-left: 0.65rem;
- }
- .w2{
-   letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
-   margin-right:-2em;
- }
- .w3{
-   letter-spacing:0.5em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-3）/(3-1)=2em */
-   margin-right:-0.5em;
- }
- #lookPassWord{
-   width: 10%;
-   position: absolute;
-   right: 0.4rem;
-   top:0;
-   height: 100%;
-   background-image: url("../../images/passwordNolock.png");
-   background-repeat: no-repeat;
-   background-size: 0.6rem;
-   background-position: 50% 50%;
- }
- .lookPassWord{
-   background-image: url("../../images/passwordLock.png")!important;
- }
- button{
-   width:9.2rem;
-   margin:0.74rem auto 0 auto ;
-   display: block;
-   background: -webkit-linear-gradient(left, #00C4FF , #0074FF); /* Safari 5.1 - 6.0 */
-   background: -o-linear-gradient(right, #00C4FF, #0074FF); /* Opera 11.1 - 12.0 */
-   background: -moz-linear-gradient(right, #00C4FF, #0074FF); /* Firefox 3.6 - 15 */
-   background: linear-gradient(to right, #00C4FF , #0074FF); /* 标准的语法 */
-   color:white;
-   font-size: 0.42rem;
-   letter-spacing: 2px;
-   height: 1.08rem;
-   box-shadow: 0 0 10px #80d6ff;
-   border-radius: 0.1rem;
- }
+  #register{
+    position: absolute;
+    top:0rem;
+    bottom:0;
+    background: white;
+    height: auto;
+    width:100%;
+  }
+  #top{
+    width:100%;
+    position: relative;
+  }
+  #top  #gobackImg{
+    position: absolute;
+    width:0.253rem;
+    left:0.4rem;
+    top:0.9rem;
+  }
+  #top #topImg{
+    width:100%;
+    height: 3.78rem;
+  }
+  #registerBody{
+    width:100%;
+    background: white;
+    margin: 0.27rem auto;
+  }
+  .modelView{
+    width:7.6rem;
+    border-bottom: 1px solid #E5E5E5;
+    margin-left:auto;
+    margin-right: auto;
+    height:1.2rem;
+    position: relative;
+    background-size:0.53rem ;
+    background-repeat: no-repeat;
+    background-position: 0.13rem 50%;
+  }
+  .modelView span{
+    line-height: 1.2rem;
+    color:#333;
+    font-size:0.375rem ;
+  }
+  .modelView input{
+    width:4.2rem;
+    height: 0.5rem;
+    margin-top: 0.35rem;
+    font-size: 0.375rem;
+    margin-left: 1.06rem;
+  }
+  .img1{
+    background-image: url("../../images/register-user.png");
+  }
+  .img2{
+    background-image: url("../../images/register-mima.png");
+  }
+  .img3{
+    background-image: url("../../images/register-queren.png");
+  }
+  .img4{
+    background-image: url("../../images/register-yaoqingma.png");
+  }
+  .img5{
+    background-image: url("../../images/register-yanzhengma.png");
+  }
+  #lookPassWord,#lookPassWord1{
+    width: 10%;
+    position: absolute;
+    right: 0.4rem;
+    top:0;
+    height: 100%;
+    background-image: url("../../images/passwordNolock.png");
+    background-repeat: no-repeat;
+    background-size: 0.6rem;
+    background-position: 50% 50%;
+  }
+  .lookPassWord{
+    background-image: url("../../images/passwordLock.png")!important;
+  }
+  button{
+    width:7.8rem;
+    margin:0.74rem auto 0 auto ;
+    display: block;
+    background:#1D69A8;
+    color:white;
+    font-size: 0.42rem;
+    letter-spacing: 2px;
+    height: 1.37rem;
+    border-radius: 0.1rem;
+  }
   .verificationCome{
     float: right;
-    color:#0091FF!important;
+    color:#1869A9!important;
     font-size: 0.32rem!important;
     margin-right: 0.42rem;
   }
   .checkBox{
-    width:9.2rem;
-    margin:0.37rem auto 0 auto ;
+    width:4.7rem;
+    position: absolute;
+    bottom:0.58rem;
+    left:50%;
+    margin-left: -2.2rem;
   }
   .checked{
-    width:0.53rem;
-    height: 0.53rem;
-    border: 1px solid #333;
+    width:0.34rem;
+    height: 0.34rem;
+    border: 1px solid #999999;
     border-radius: 0.0625rem;
+    margin-top: 0.08rem;
     float: left;
   }
   .checkedTrue{
     background-image: url("../../images/checkTrue.png");
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-size:0.38rem ;
+    background-size:0.3rem ;
   }
- .checkBox span{
-   line-height: 0.53rem;
-   margin-left:0.32rem ;
-   color:#999;
-   font-size:0.375rem ;
-   letter-spacing: 1px;
-   float: left;
- }
+  .checkBox span{
+    line-height: 0.53rem;
+    margin-left:0.16rem ;
+    color:#999;
+    font-size:0.375rem ;
+    float: left;
+  }
 </style>
