@@ -34,22 +34,22 @@
                 number:0,
                 marginRight:0,
                 cls: "track",
-                name: "车源",
-                push: "/haveCar"
+                name: "订单",
+                push: "/trackList?type=1"
               },
               {
                 number:0,
                 marginRight:0,
                 cls: "newOrder",
                 name: "发货",
-                push: "/newProlist"
+                push: "/newOrder?newordertrantype=0"
               },
               {
                 number:0,
                 marginRight:0,
                 cls: "insurance",
-                name: "保险",
-                push: "/insuranceList"
+                name: "消息",
+                push: "/message"
               },
               {
                 number:0,
@@ -144,6 +144,64 @@
                   }
                 }
               });
+              $.ajax({
+                type: "POST",
+                url: androidIos.ajaxHttp() + "/order/getOrderCount",
+                data:JSON.stringify({
+                  userCode:sessionStorage.getItem("token"),
+                  source:sessionStorage.getItem("source"),
+                }),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                timeout: 30000,
+                success: function (carrOrderListHeaderIcon) {
+                  if (carrOrderListHeaderIcon.success == "1") {
+                    _this.items[1].number = carrOrderListHeaderIcon.myTotalCount*1;
+                    _this.$nextTick(function () {
+                      _this.marginWidth();
+                      sessionStorage.setItem("driverBottomIcon", JSON.stringify(_this.items));
+                    })
+                  }else{
+                    androidIos.second(carrOrderListHeaderIcon.message);
+                  }
+                },
+                complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                  if (status == 'timeout') { //超时,status还有success,error等值的情况
+                    androidIos.second("当前状况下网络状态差，请检查网络！");
+                  } else if (status == "error") {
+                    androidIos.errorwife();
+                  }
+                }
+              });
+              $.ajax({
+                  type: "POST",
+                  url: androidIos.ajaxHttp() + "/order/messageCount",
+                  data: JSON.stringify({
+                    userCode: sessionStorage.getItem("token"),
+                    source: sessionStorage.getItem("source")
+                  }),
+                  contentType: "application/json;charset=utf-8",
+                  dataType: "json",
+                  timeout: 30000,
+                  success: function (driverBottomIcon) {
+                    if (driverBottomIcon.success == "1") {
+                        _this.items[3].number = driverBottomIcon.count * 1;
+                        _this.$nextTick(function () {
+                          _this.marginWidth();
+                          sessionStorage.setItem("driverBottomIcon", JSON.stringify(_this.items));
+                        })
+                    } else {
+                      androidIos.second(driverBottomIcon.message);
+                    }
+                  },
+                  complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+                    if (status == 'timeout') { //超时,status还有success,error等值的情况
+                      androidIos.second("当前状况下网络状态差，请检查网络！");
+                    } else if (status == "error") {
+                      androidIos.errorwife();
+                    }
+                  }
+                });
             }
           },
         urlGoshow:function (url) {

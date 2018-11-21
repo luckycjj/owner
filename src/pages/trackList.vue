@@ -14,7 +14,7 @@
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice,index)">
             <h1>订单编号：{{items.vbillno}}</h1>
-            <h3 :class="'trackList'+ items.status" v-html="type != null && index == 1 ? '待支付' :(items.status == -1 ? '已驳回' :items.status == 0 ? '新建': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '已到货': items.status == 5 ? '已签收': items.status == 6 ? '已失效' : '')"></h3>
+            <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '新建': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '已到货': items.status == 5 ? '已签收': items.status == 6 ? '已失效' : ''"></h3>
             <div class="proBox">
               <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
               <img v-if="items.expFlag == 'Y'" class="yichangOrder" src="../images/yichang.png">
@@ -27,6 +27,7 @@
         </ul>
       </div>
     </div>
+    <footComponent v-if="type == 1"  ref="footcomponent" :idx='1'></footComponent>
   </div>
 </template>
 
@@ -82,11 +83,12 @@
          sessionStorage.removeItem("ORDERSCREEN");
          sessionStorage.removeItem("orderType");
          androidIos.judgeIphoneX("trackList",2);
+         androidIos.judgeIphoneX("mescroll",1);
          var type = _this.$route.query.type;
          if(type != undefined){
            _this.type = type;
            var json = {
-               name:"待付款",
+               name:"待分配",
                number:0,
                prolist:[]
              }
@@ -196,7 +198,7 @@
                      page:pageNum,
                      size:pageSize,
                      type:2,
-                     state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 5 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
+                     state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 14 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
                      userCode:sessionStorage.getItem("token"),
                      source:sessionStorage.getItem("source"),
                      today:_this.$route.query.today != undefined ? 1 : 0,
@@ -255,7 +257,7 @@
                    list2 = carrOrderListHeaderIcon.completedCount*1;
                  }else{
                    list0 = carrOrderListHeaderIcon.myTotalCount*1;
-                   list1 =  carrOrderListHeaderIcon.unPaied*1;
+                   list1 =  carrOrderListHeaderIcon.pendingAllocation*1;
                    list2 = carrOrderListHeaderIcon.onTheWayCount*1;
                    list3 = carrOrderListHeaderIcon.completedCount*1;
                  }
@@ -322,7 +324,7 @@
   .mescroll{
     position: absolute;
     top:1.2rem;
-    bottom:0rem;
+    bottom:1.3rem;
     height: auto!important;
   }
   #showBox{

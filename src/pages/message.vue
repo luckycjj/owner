@@ -40,6 +40,7 @@
         </li>
       </ul>
     </div>
+    <footComponent  ref="footcomponent" :idx='3'></footComponent>
   </div>
 </template>
 
@@ -73,6 +74,7 @@
       mounted:function () {
         var _this = this;
         androidIos.judgeIphoneX("message",2);
+        androidIos.judgeIphoneX("mescroll",1);
         androidIos.bridge(_this);
       },
       methods:{
@@ -306,7 +308,7 @@
   .mescroll{
     position: absolute;
     top:1.78rem;
-    bottom:0rem;
+    bottom:1.3rem;
     height: auto!important;
   }
   .data-list{

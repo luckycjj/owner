@@ -73,16 +73,6 @@
           url:"/settlement",
           number:0,
         },{
-          name:"我的订单",
-          icon:require("../images/userorderList.png"),
-          url:"/trackList?type=1",
-          number:0,
-        },{
-          name:"我的消息",
-          icon:require("../images/messageList.png"),
-          url:"/message",
-          number:0,
-        },{
           name:"扫码签收",
           icon:require("../images/saoyisao.png"),
           url:"",
@@ -192,72 +182,6 @@
           }
         }
       });
-      var list0 = 0 ,list1 = 0 ;
-      var ajax1 = $.ajax({
-        type: "POST",
-        url: androidIos.ajaxHttp() + "/order/getOrderCount",
-        data:JSON.stringify({
-          userCode:sessionStorage.getItem("token"),
-          source:sessionStorage.getItem("source"),
-        }),
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        timeout: 30000,
-        success: function (carrOrderListHeaderIcon) {
-          if (carrOrderListHeaderIcon.success == "1") {
-              list0 = carrOrderListHeaderIcon.myTotalCount*1;
-          }else{
-            androidIos.second(carrOrderListHeaderIcon.message);
-          }
-        },
-        complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-          if (status == 'timeout') { //超时,status还有success,error等值的情况
-            androidIos.second("当前状况下网络状态差，请检查网络！");
-          } else if (status == "error") {
-            androidIos.errorwife();
-          }
-        }
-      });
-      Promise.all([ajax1]).then(function(values) {
-          _this.tabList[1].number = list0;
-          sessionStorage.setItem("userTabList",JSON.stringify(_this.tabList));
-      })
-      Promise.all([ajax]).then(function(values) {
-        $.ajax({
-          type: "POST",
-          url: androidIos.ajaxHttp() + "/order/messageCount",
-          data: JSON.stringify({
-            userCode: sessionStorage.getItem("token"),
-            source: sessionStorage.getItem("source")
-          }),
-          contentType: "application/json;charset=utf-8",
-          dataType: "json",
-          timeout: 30000,
-          success: function (driverBottomIcon) {
-            if (driverBottomIcon.success == "1") {
-              var ownerMessage =  sessionStorage.getItem("ownerMessage");
-              if(ownerMessage != null) {
-                // 1业务员 2审核员 3管理员
-                /*if (JSON.parse(ownerMessage).role.indexOf(3) != -1) {
-                  _this.tabList[3].number = driverBottomIcon.count * 1;
-                }else{*/
-                  _this.tabList[2].number = driverBottomIcon.count * 1;
-                sessionStorage.setItem("userTabList",JSON.stringify(_this.tabList));
-                /*}*/
-              }
-            } else {
-              androidIos.second(driverBottomIcon.message);
-            }
-          },
-          complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
-            if (status == 'timeout') { //超时,status还有success,error等值的情况
-              androidIos.second("当前状况下网络状态差，请检查网络！");
-            } else if (status == "error") {
-              androidIos.errorwife();
-            }
-          }
-        });
-      })
       androidIos.bridge(_this);
     },
     methods:{
@@ -298,21 +222,6 @@
       jrisdiction:function () {
         var _this = this;
         var ownerMessage =  sessionStorage.getItem("ownerMessage");
-        /*if(ownerMessage != null){
-          // 1业务员 2审核员 3管理员
-           if(JSON.parse(ownerMessage).role.indexOf(3) != -1){
-             var json = {
-               name:"添加账号",
-               icon:require("../images/associated.png"),
-               url:"/addUser",
-               number:0,
-             }
-             _this.tabList.splice(2,1);
-             _this.tabList.splice(2,0,json);
-           }else{
-              _this.tabList.splice(2,1);
-           }
-        }*/
       },
       jiexi:function (enevt) {
         var _this = this;

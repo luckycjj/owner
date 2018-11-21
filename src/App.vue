@@ -13,7 +13,6 @@
           <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
           <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
           <h3  id="authenticationTab" style="display: none;" class="asd"  v-if="doNow==8"><span>上一步</span></h3>
-          <h3  id="xunjia" class="asd" @click="inquiry()"  v-if="doNow==9"><span>询价</span></h3>
           <h3  id="cleanMessageAll" class="asd"   v-if="doNow==10"><span style="color:#999;">清空</span></h3>
           <h3  id="addshucheYes" class="asd"   v-if="doNow==11"><span></span></h3>
         </div>
@@ -97,7 +96,7 @@
       }else{
         $("#appBox").show();
       }
-      if(_this.html.indexOf("/xinYaIndex") != -1  || _this.html.indexOf("/haveCar") != -1|| _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1  || _this.html.indexOf("/login") != -1){
+      if(_this.html.indexOf("/xinYaIndex") != -1  || _this.html.indexOf("/message") != -1 || _this.html.indexOf("/trackList") != -1  || _this.html.indexOf("/haveCar") != -1|| _this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1  || _this.html.indexOf("/login") != -1){
         $(".carTitleback").hide();
       }else{
         $(".carTitleback").show();
@@ -116,8 +115,6 @@
         _this.doNow = 6;
       }else if( _this.html.indexOf("/authentication") != -1){
         _this.doNow = 8;
-      }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
-        _this.doNow = 9;
       }else if( _this.html.indexOf("/messageRecord") != -1){
         _this.doNow = 10;
       }else if( _this.html.indexOf("/carMessageMore") != -1){
@@ -136,7 +133,7 @@
         }else{
           $("#appBox").show();
         }
-        if(_this.html.indexOf("/xinYaIndex") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/haveCar") != -1  || _this.html.indexOf("/login") != -1){
+        if(_this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/message") != -1 || _this.html.indexOf("/trackList") != -1 ||_this.html.indexOf("/insuranceList") != -1 || _this.html.indexOf("/user") != -1 || _this.html.indexOf("/haveCar") != -1  || _this.html.indexOf("/login") != -1){
           $(".carTitleback").hide();
         }else{
           $(".carTitleback").show();
@@ -155,8 +152,6 @@
           _this.doNow = 6;
         }else if( _this.html.indexOf("/authentication") != -1){
           _this.doNow = 8;
-        }else if( _this.html.indexOf("/newOrder?newordertrantype") != -1){
-          _this.doNow = 9;
         }else if( _this.html.indexOf("/messageRecord") != -1){
           _this.doNow = 10;
         }else if( _this.html.indexOf("/carMessageMore") != -1){
