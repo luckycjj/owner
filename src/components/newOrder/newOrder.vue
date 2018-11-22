@@ -73,14 +73,14 @@
           <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @touchend="tranType()"></p>
           <div class="clearBoth"></div>
         </div>
-        <div class="lablebox">
+       <!-- <div class="lablebox">
           <span>几装几卸</span>
           <div id="jizhuangjixie">
             <div class="unit" id="Z08"  v-html="both.jizhuangjixie==''?'选择装卸方式':both.jizhuangjixie" :class="both.jizhuangjixie==''?'':'blackColor'"></div>
             <div class="clearBoth"></div>
           </div>
           <div class="clearBoth"></div>
-        </div>
+        </div>-->
         <div class="lablebox">
           <span>增值服务</span>
           <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @touchend="service()"></p>
@@ -535,6 +535,7 @@
               var appoint = sessionStorage.getItem("appoint");
               var insurance =   sessionStorage.getItem("insurance");
               var remark = sessionStorage.getItem("remark");
+              var serviceBox = sessionStorage.getItem("serviceBox");
               var pk = _this.$route.query.pk;
               _this.pk = pk ==undefined || _this.$route.query.type == undefined || _this.$route.query.type == "2" || _this.$route.query.type == "3"?"":pk;
               if(pk != undefined && newOrder == undefined){
@@ -816,6 +817,10 @@
               if(remark!=undefined){
                 _this.both.remark =remark;
                 sessionStorage.removeItem("remark");
+              }
+              if(serviceBox != undefined){
+                 _this.both.service = serviceBox;
+                sessionStorage.removeItem("serviceBox");
               }
               $(document).on('click','.lablebox input',function () {
                 var $Val = $.trim($(this).val())

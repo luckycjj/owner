@@ -5,6 +5,7 @@
       <ul>
          <li v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
            <span>{{item.displayName}}</span>
+           <div class="circleBox" @touchend="readChoose(index)" :class="item.check ? 'circletrue' : ''"></div>
            <div class="clearBoth"></div>
          </li>
       </ul>
@@ -37,7 +38,35 @@
        },
       mounted:function () {
          var _this = this;
+         var newOrder = sessionStorage.getItem("newOrder");
+         if(newOrder != undefined){
+            var list = JSON.parse(newOrder).service.split(",");
+            for(var i = 0 ; i < list.length ; i++){
+               for(var x = 0 ; x < _this.serviceList.length;x++){
+                  if(list[i] == _this.serviceList[x].displayName){
+                    _this.serviceList[x].check = true;
+                    break;
+                  }
+               }
+            }
+         }
+         androidIos.bridge(_this);
+      },
+      methods:{
+          go:function () {
 
+          },
+        readChoose:function (index) {
+          var _this = this;
+          _this.serviceList[index].check =  !_this.serviceList[index].check;
+          var list=[];
+          for(var i = 0 ; i <  _this.serviceList.length;i++){
+            if(_this.serviceList[i].check){
+               list.push(_this.serviceList[i].displayName);
+            }
+          }
+          sessionStorage.setItem("serviceBox",list.join(","));
+        },
       }
     }
 </script>
@@ -77,5 +106,19 @@
   h1{
     font-size: 0.35rem;
     color:#666;
+  }
+ .circleBox{
+    width:0.35rem;
+    height: 0.35rem;
+    border: 1px solid #333;
+    float: right;
+    margin-top: 0.325rem;
+    margin-right: 0.5rem;
+  }
+  .circletrue{
+    background-image: url("../../images/checkTrue.png");
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 0.3rem;
   }
 </style>
