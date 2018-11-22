@@ -1,16 +1,16 @@
 <template>
   <div id="orderScreen" style="top:0rem;">
     <div id="title" v-title data-title="发货地址"></div>
-    <div id="carTitleBox"   @click="event($event)">
+    <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
-        <div class="carTitleback" @click="goback()"></div>
+        <div class="carTitleback" @touchend="goback()"></div>
         <input @keyup="inputKeyup()" type="text" placeholder="请输入订单号、货品名称"  id="carNumber" v-model="address"  @focus="aaa()">
-        <p @click="sousuo()" id="sousuo">搜索</p>
+        <p @touchend="sousuo()" id="sousuo">搜索</p>
       </div>
     </div>
     <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
-        <li v-for="(items,indexs) in pdlist" @click="lookTrackMore(items.pkInvoice,index)">
+        <li v-for="(items,indexs) in pdlist" @touchend="lookTrackMore(items.pkInvoice,index)">
           <h1>订单编号：{{items.vbillno}}</h1>
           <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '新建': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '已到货': items.status == 5 ? '已签收': items.status == 6 ? '已失效' : ''"></h3>
           <div class="proBox">

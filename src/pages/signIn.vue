@@ -17,17 +17,17 @@
           <div class="clearBoth"></div>
         </ul>
         <div class="clearBoth"></div>
-        <p @click="telphone()">有问题请联系客服</p>
+        <p @touchend="telphone()">有问题请联系客服</p>
         <div id="letGo">
-          <button class="error" @click="errorClick()">异常签收</button>
-          <button @click="qianshou()" class="noerror">签收</button>
+          <button class="error" @touchend="errorClick()">异常签收</button>
+          <button @touchend="qianshou()" class="noerror">签收</button>
         </div>
       </div>
       <div id="signYes2" v-if="normalSign">
-        <div class="title"><span @click="goback(1)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @click="signyesYY(1)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
+        <div class="title"><span @touchend="goback(1)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @touchend="signyesYY(1)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
         <div id="star_grade" class="star_grade scorelistscore"></div>
         <ul>
-           <li v-for="(item,index) in normalSignList" @click="normalSignListClick(1,index)" :class="item.choose ? 'chooseTrue' : ''">
+           <li v-for="(item,index) in normalSignList" @touchend="normalSignListClick(1,index)" :class="item.choose ? 'chooseTrue' : ''">
                {{item.displayName}}
            </li>
            <div class="clearBoth"></div>
@@ -36,8 +36,8 @@
         <div class="addImg">
           <h1>货物</h1>
           <div class="imgBox"  v-for="(item,index) in imgList">
-            <img :src="item.file" :onerror="errorlogo"  @click="lookImg($event,item.file)">
-            <div class='closed' @click="removeImg(index)"></div>
+            <img :src="item.file" :onerror="errorlogo"  @touchend="lookImg($event,item.file)">
+            <div class='closed' @touchend="removeImg(index)"></div>
           </div>
           <div class="addImgFirst" v-if="imgList.length < imgListLength">
             <img src="../images/addImgP.png">
@@ -48,9 +48,9 @@
         </div>
       </div>
       <div id="signYes3" v-if="errorSign">
-        <div class="title"><span @click="goback(2)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @click="signyesYY(2)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
+        <div class="title"><span @touchend="goback(2)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @touchend="signyesYY(2)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
         <ul>
-          <li v-for="(item,index) in errorSignList" @click="normalSignListClick(2,index)" :class="item.choose ? 'chooseTrue' : ''">
+          <li v-for="(item,index) in errorSignList" @touchend="normalSignListClick(2,index)" :class="item.choose ? 'chooseTrue' : ''">
             {{item.displayName}}
           </li>
           <div class="clearBoth"></div>
@@ -59,8 +59,8 @@
         <div class="addImg">
            <h1>货物缺损图片</h1>
            <div class="imgBox"  v-for="(item,index) in imgList">
-             <img :src="item.file"  @click="lookImg($event,item.file)"  :onerror="errorlogo" >
-             <div class='closed' @click="removeImg(index)"></div>
+             <img :src="item.file"  @touchend="lookImg($event,item.file)"  :onerror="errorlogo" >
+             <div class='closed' @touchend="removeImg(index)"></div>
            </div>
           <div class="addImgFirst" v-if="imgList.length < imgListLength">
             <img src="../images/addImgP.png">
@@ -71,13 +71,13 @@
         </div>
       </div>
       <div id="signYes4" v-if="errorSignEnd">
-        <div class="title"><span @click="goback(3)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
+        <div class="title"><span @touchend="goback(3)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
         <img src="../images/errorSignEnd.png">
         <p>感谢您的反馈!</p>
         <h1>稍后将会有客服人员联系您核实信息，请保持手机畅通</h1>
       </div>
       <div id="signYes5" v-if="normalSignEnd">
-        <div class="title"><span @click="goback(4)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
+        <div class="title"><span @touchend="goback(4)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
         <img src="../images/okgoyes.png">
         <p v-if="status == 0">感谢您的评价!</p>
         <p v-else>签收成功!</p>

@@ -2,9 +2,9 @@
   <div id="orderLogisticsMore">
     <div id="title" v-title data-title="订单详情"></div>
     <div id="titleText"  style="top:0.72rem">
-      <div id="titleGoback"  @click="goback()" ></div>
+      <div id="titleGoback"  @touchend="goback()" ></div>
       <p v-html="orderSource == 2 ? (type == '10000' ? '待支付' : '已支付') : pdlist[0].orderTypeName"></p>
-      <div class="callUs" @click="telCall('021-50929122')"><div class="callUsLine"></div>物流客服</div>
+      <div class="callUs" @touchend="telCall('021-50929122')"><div class="callUsLine"></div>物流客服</div>
     </div>
     <div id="container"></div>
     <div id="panel"></div>
@@ -42,30 +42,30 @@
           </ul>
           <div id="sure">
             <div class="go" v-if="type=='10000' && orderSource == 2 " >
-              <button  @click="payOrder()" class="zhifu">支付</button>
+              <button  @touchend="payOrder()" class="zhifu">支付</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type*1 < 10 && type*1 > 0  && orderSource == 1">
-              <button @click="closedOrder(1)">关闭订单</button>
-              <button @click="orderAgain(3)" class="zhifu">修改订单</button>
+              <button @touchend="closedOrder(1)">关闭订单</button>
+              <button @touchend="orderAgain(3)" class="zhifu">修改订单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type == '10' && orderSource == 1">
-              <button    @click="closedOrder(1)">取消订单</button>
+              <button    @touchend="closedOrder(1)">取消订单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if=" type == '0' && orderSource == 1">
-              <button class="zhifu" @click="shenhe()">确认</button>
-              <button @click="closedOrder(2)">驳回</button>
+              <button class="zhifu" @touchend="shenhe()">确认</button>
+              <button @touchend="closedOrder(2)">驳回</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
-              <button class="zhifu"  @click="orderAgain(2)">再下一单</button>
-              <button @click="scoreYes(1)">评价</button>
+              <button class="zhifu"  @touchend="orderAgain(2)">再下一单</button>
+              <button @touchend="scoreYes(1)">评价</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="(type=='1001' && orderSource == 1) || (type=='100' && orderSource == 1) || orderSource == 3">
-              <button class="zhifu" @click="orderAgain(2)">再下一单</button>
+              <button class="zhifu" @touchend="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else>
@@ -74,13 +74,13 @@
             </div>
           </div>
         </li>
-    <div id="lookOrderMore" v-if="moveSure"  @click="mapLookS()">
+    <div id="lookOrderMore" v-if="moveSure"  @touchend="mapLookS()">
        查看
     </div>
     <div id="scoreBox"v-show="scoreBox">
       <div id="score">
         <div id="scoreTitle">
-          <img src="../../images/closed.png" @click="scoreClosed()">
+          <img src="../../images/closed.png" @touchend="scoreClosed()">
           <p>评价</p>
         </div>
         <ul>
@@ -91,23 +91,23 @@
           </li>
           <textarea placeholder="详细描述"  @keyup="filterInput()" v-model="scorereason" style="width:95%;height:2rem;border: 1px solid #dcdcdc;margin: 0.1rem auto;padding: 0.1rem 2.5%;font-size: 0.375rem;color:#333;"></textarea>
         </ul>
-        <button @click="scoreChange()" id="gogogo" class="gogogo">提交</button>
+        <button @touchend="scoreChange()" id="gogogo" class="gogogo">提交</button>
       </div>
     </div>
     <div id="cancelReasonBox" v-if="cancelReasonBox">
       <div id="cancelReason">
         <div id="cancelReasonTitle">
-          <img src="../../images/closed.png" @click="cancelReasonClosed()">
+          <img src="../../images/closed.png" @touchend="cancelReasonClosed()">
           <p v-html="closedType ==  1 ? '选择关闭订单的理由': '选择驳回理由'"></p>
         </div>
         <ul class="errorUl">
-          <li v-for="(item,index) in cancelReason" :class="index%2==0?'errorAbnormalLeft':'errorAbnormalRight'" @click="cancelReasonClick($event)">
+          <li v-for="(item,index) in cancelReason" :class="index%2==0?'errorAbnormalLeft':'errorAbnormalRight'" @touchend="cancelReasonClick($event)">
             {{item.displayName}}
           </li>
           <div class="clearBoth"></div>
           <input type="text"  @input="filterInput()" maxlength="30" placeholder="其他原因" v-model="cancelreason">
         </ul>
-        <button @click="cancelReasonChange()" id="gogogo" class="gogogo">提交</button>
+        <button @touchend="cancelReasonChange()" id="gogogo" class="gogogo">提交</button>
       </div>
     </div>
   </div>

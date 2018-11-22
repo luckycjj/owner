@@ -3,7 +3,7 @@
     <div id="title" v-title data-title="保险"></div>
     <div id="mescroll" class="mescroll">
       <ul id="dataList" class="data-list">
-        <li v-for="item in pdlist" @click="chooseLine(item)">
+        <li v-for="item in pdlist" @touchend="chooseLine(item)">
           <span class="name">{{item.name}}</span>
           <span class="price">¥{{item.price}}/次</span>
         </li>

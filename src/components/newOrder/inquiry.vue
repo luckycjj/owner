@@ -22,8 +22,8 @@
             <div class="inputBox">
                <input type="text" maxlength="30" @blur="problur()" @input="prokeyup()" @focus="profocus()" v-model="message.pro" placeholder="请填写货品名称"/>
                <ul v-if="listShow && (message.prolist.length > 0 || message.historylist.length > 0)">
-                 <li v-for="(item,index) in message.historylist" @click="clicklist(item.name,$event)" ><img class="cookieTime" src="../../images/cookieTime.png"><h6>{{item.name}}</h6><div class="clearBoth"></div><div @click="closedHis(index)" class="closed" ></div></li>
-                 <li v-for="(item,index) in message.prolist" @click="clicklist(item.displayName,$event)" >{{item.displayName}}</li>
+                 <li v-for="(item,index) in message.historylist" @touchend="clicklist(item.name,$event)" ><img class="cookieTime" src="../../images/cookieTime.png"><h6>{{item.name}}</h6><div class="clearBoth"></div><div @touchend="closedHis(index)" class="closed" ></div></li>
+                 <li v-for="(item,index) in message.prolist" @touchend="clicklist(item.displayName,$event)" >{{item.displayName}}</li>
                </ul>
             </div>
             <div class="clearBoth"></div>
@@ -31,7 +31,7 @@
           <div class="lablebox imgno">
             <span class="required">运输方式</span>
             <ul class="tranUl">
-              <li :class="item.check ? 'checked' : ''" v-for="(item,index) in message.trantypeList" @click="trantypeList(index)">{{item.name}}</li>
+              <li :class="item.check ? 'checked' : ''" v-for="(item,index) in message.trantypeList" @touchend="trantypeList(index)">{{item.name}}</li>
               <div class="clearBoth"></div>
             </ul>
             <div class="clearBoth"></div>
@@ -52,7 +52,7 @@
       <div class="tab">
         <p>费用 <span v-if="message.price != ''">￥{{message.price}}</span></p>
       </div>
-      <button id="inquiryGet" @click="inquiryGet()">提交</button>
+      <button id="inquiryGet" @touchend="inquiryGet()">提交</button>
     </div>
 </template>
 

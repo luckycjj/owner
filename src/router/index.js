@@ -35,6 +35,7 @@ import  newOrderNi from '@/components/newOrder/insurance'
 import  newOrder11 from '@/components/newOrder/addressMessage'
 import  newOrder12 from '@/components/newOrder/needKnow'
 import  newOrder13 from '@/components/newOrder/inquiry'
+import  newOrder14 from '@/components/newOrder/service'
 import  orderLogisticsF from '@/components/orderLogistics/orderLogisticsMore'
 import  orderLogisticsS from '@/components/orderLogistics/map'
 import  orderScreen from '@/components/orderLogistics/orderScreen'
@@ -406,7 +407,8 @@ export default new Router({
         {path: 'insurance', component: newOrderNi},
         {path:"addressMessage",component:newOrder11},
         {path:"needKnow",component:newOrder12},
-        {path:"inquiry",component:newOrder13}
+        {path:"inquiry",component:newOrder13},
+        {path:"service",component:newOrder14}
       ]
     },
     {

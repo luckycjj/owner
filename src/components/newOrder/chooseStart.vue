@@ -20,12 +20,12 @@
       </div>
       <div class="address inputUp" style=" color:#666;line-height:1rem;font-size: 0.35rem;border: none" v-if="addressType == 1">
         设置默认
-        <div class="morenBox" :class="start.moren == 1 ? 'morenBoxTrue' : ''" @click="morenClick()">
+        <div class="morenBox" :class="start.moren == 1 ? 'morenBoxTrue' : ''" @touchend="morenClick()">
           <div class="moren" :class="start.moren == 1 ? 'morenTrue' : ''"></div>
         </div>
       </div>
     </div>
-    <button :class="start.name!=''&&start.phone!=''&&start.company!=''&&start.address!=''&&start.province!=''?'colorful':''" @click="save()" id="save">保存</button>
+    <button :class="start.name!=''&&start.phone!=''&&start.company!=''&&start.address!=''&&start.province!=''?'colorful':''" @touchend="save()" id="save">保存</button>
   </div>
 </template>
 

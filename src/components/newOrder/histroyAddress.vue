@@ -1,16 +1,16 @@
 <template>
   <div id="histroyAddress">
     <div id="title" v-title data-title="常用路线"></div>
-    <div id="carTitleBox"   @click="event($event)">
+    <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
-        <div class="carTitleback" @click="goback()"></div>
+        <div class="carTitleback" @touchend="goback()"></div>
         <input type="tel" placeholder="请输入手机号码" id="carNumber" v-model="address" maxlength="30" @focus="aaa()">
-        <p @click="sousuo()">搜索</p>
+        <p @touchend="sousuo()">搜索</p>
       </div>
     </div>
     <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
-        <li v-for="item in pdlist" @click="chooseLine(item.pkInvoice)">
+        <li v-for="item in pdlist" @touchend="chooseLine(item.pkInvoice)">
           <div class="firstBox">
             <p>{{item.deliContact}}<span>{{item.deliMobile}}</span></p>
             <h1>{{item.deliAddr}}</h1>
@@ -192,6 +192,7 @@
                 carListMore:newOrder.carListMore,
                 carWidthListMore:newOrder.carWidthListMore,
                 carTypeListMore:newOrder.carTypeListMore,
+                service:""
               }
               sessionStorage.setItem("histroyAddress",JSON.stringify(pdlist));
               androidIos.gobackFrom(_this);

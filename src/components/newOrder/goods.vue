@@ -6,7 +6,7 @@
     <div id="title" v-if="newordertrantype == '3'" v-title data-title="危险品池货物类别"></div>
     <div id="title" v-if="newordertrantype == '4'" v-title data-title="集装箱池货物类别"></div>
     <ul v-if="list.length > 0 && listSure">
-      <li v-for="(item,index) in list" @click="choose(item)">
+      <li v-for="(item,index) in list" @touchend="choose(item)">
         {{item.text}}
       </li>
     </ul>

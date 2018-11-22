@@ -17,8 +17,8 @@
       <div id="container" style="top:4.4rem;bottom: 50px;"></div>
       <div id="panel"></div>
       <div class="caozuoButton" id="caozuoButton">
-        <button @click="telphoneMessageDriver()">发送短信</button>
-        <button @click="telphoneCallDriver(driverMessage.driverCode)">联系司机</button>
+        <button @touchend="telphoneMessageDriver()">发送短信</button>
+        <button @touchend="telphoneCallDriver(driverMessage.driverCode)">联系司机</button>
         <div class="clearBoth"></div>
       </div>
     </div>

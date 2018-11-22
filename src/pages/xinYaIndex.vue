@@ -4,17 +4,17 @@
       <div id="xinYaIndexBox" style="top:0rem;">
          <div class="top">
             <div id="imgBoxTab" style="top:0.375rem;">
-              <img src="../images/date.png" id="date" @click="searchDateBoxTrue()">
+              <img src="../images/date.png" id="date" @touchend="searchDateBoxTrue()">
               <div  id="saoyisao">
                 <input type="file"  accept="image/*"  @change="jiexi($event)">
               </div>
-              <p @click="xunjia()">询价</p>
+              <p @touchend="xunjia()">询价</p>
               <div class="clearBoth"></div>
             </div>
 
             <div class="topLeft">
               <div class="topleftInputBox">
-                <input type="text" @click="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
+                <input type="text" @touchend="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
                 <img src="../images/huatong-2.png">
               </div>
             </div>
@@ -30,7 +30,7 @@
          </div>
          <div class="center">
            <ul>
-             <li v-for="(item,index) in iconList" @click="lookTrackList(index)">
+             <li v-for="(item,index) in iconList" @touchend="lookTrackList(index)">
 
                <p :style="{ color : index== 3 ? '#FF4500' : '#404060'}">{{item.number | toThousands}}</p>
                  {{item.name}}
@@ -43,15 +43,15 @@
         <div id="searchDateBox" v-if="searchDateBox">
           <div id="searchDate">
             <p>选择时间</p>
-            <img src="../images/closed2.png" class="searchClosed"  @click="searchDateBox = false">
+            <img src="../images/closed2.png" class="searchClosed"  @touchend="searchDateBox = false">
             <ul>
               <li v-for="(item,index) in searchList">
                 <h1>{{item.name}}</h1>
-                <div class="circle" @click="circleChooese(index)"><div class="circleTrue" v-if="item.check"></div></div>
+                <div class="circle" @touchend="circleChooese(index)"><div class="circleTrue" v-if="item.check"></div></div>
                 <div class="clearBoth"></div>
               </li>
             </ul>
-            <button @click="searchDateGo()">确定</button>
+            <button @touchend="searchDateGo()">确定</button>
           </div>
         </div>
       </transition>

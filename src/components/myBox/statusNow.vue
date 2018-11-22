@@ -4,7 +4,7 @@
     <div v-if="status == 0" class="statusF">
       <img src="../../images/noStatus.png">
       <p>对不起，您尚未认证，请前去认证</p>
-      <button @click="goStatus(1)">前往认证</button>
+      <button @touchend="goStatus(1)">前往认证</button>
     </div>
     <div class="statusS" v-else>
       <p>认证状态</p>
@@ -24,7 +24,7 @@
           <span class="title">信用代码</span><span class="nei">{{creditCode}}</span>
         </div>
       </div>
-      <button v-if="status != 2 && status != 1" @click="goStatus(2)">重新上传</button>
+      <button v-if="status != 2 && status != 1" @touchend="goStatus(2)">重新上传</button>
     </div>
   </div>
 </template>

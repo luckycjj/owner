@@ -13,13 +13,13 @@
                   <h1>{{item.sendTime | selectTime}}</h1>
                   <div class="clearBoth"></div>
                   <h6  class="messageBodyH6" :class="item.show && !item.look ? 'overflowHidden' : ''">{{item.content}}</h6>
-                  <img src="../../images/lookMore4.png" :class="item.look ? 'xuanzhuan' : ''" @click="lookMoreMessage(index)" v-if="item.show" class="lookMore">
+                  <img src="../../images/lookMore4.png" :class="item.look ? 'xuanzhuan' : ''" @touchend="lookMoreMessage(index)" v-if="item.show" class="lookMore">
                 </div>
                 <div class="clearBoth"></div>
               </div>
               <div class="clearBoth"></div>
             </div>
-            <div class="thirdBox" @click="cleanMessage(index)">
+            <div class="thirdBox" @touchend="cleanMessage(index)">
               <p>删除</p>
             </div>
             <div class="clearBoth"></div>

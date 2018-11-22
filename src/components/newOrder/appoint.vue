@@ -1,11 +1,11 @@
 <template>
   <div id="appoint">
     <div id="title" v-title data-title="选择承运商"></div>
-    <div id="carTitleBox"   @click="event($event)">
+    <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
-        <div class="carTitleback" @click="goback()"></div>
+        <div class="carTitleback" @touchend="goback()"></div>
         <input placeholder="请输入公司名称" type="text" id="carNumber" v-model="message" @focus="aaa()">
-        <p @click="sousuo()">搜索</p>
+        <p @touchend="sousuo()">搜索</p>
       </div>
     </div>
     <!--<div class="nav">

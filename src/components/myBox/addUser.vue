@@ -19,7 +19,7 @@
        <div class="label">
          <span>添加职务</span>
           <ul>
-            <li v-for="(item,index) in jobList" :class="item.check ? 'liCheck' : ''" @click="jobChoose(index)">
+            <li v-for="(item,index) in jobList" :class="item.check ? 'liCheck' : ''" @touchend="jobChoose(index)">
                 {{item.name}}
             </li>
             <div class="clearBoth"></div>
@@ -27,7 +27,7 @@
        </div>
 
      </div>
-     <button @click="letGo()">确定</button>
+     <button @touchend="letGo()">确定</button>
    </div>
 </template>
 

@@ -1,10 +1,10 @@
 <template>
   <div id="footer">
     <ul>
-      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @click="urlGoshow(item.push)">
+      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @touchend="urlGoshow(item.push,index)">
         <div class="imgBox"  :class='[ item.cls , {imgSure:index === idx} ]'><div :style="{marginRight:item.marginRight}" class="corner" v-show=" item.number > 0">{{item.number}}</div></div>
         <div id="footerUserTX" v-if="index == 4" :style="{display: item.show ? 'block' : 'none'}"></div>
-        <div id="newOrderGo" @click="gonewOrder()" v-if="index == 2">
+        <div id="newOrderGo" @touchend="gonewOrder()" v-if="index == 2">
           <div class="shuxian"></div>
           <div class="hengxian"></div>
         </div>
@@ -204,14 +204,24 @@
                 });
             }
           },
-        urlGoshow:function (url) {
+        urlGoshow:function (url,type) {
             var _this = this;
             if(_this.cookie != ""){
               if(_this.idx == 0){
                 var yScroll = document.getElementById("xinYaIndexBox").scrollTop;
                 sessionStorage.setItem("INDEXSCROLLTOP",yScroll);
               }
-              _this.$router.push({path:url});
+              if(type == 2){
+                if( JSON.parse(sessionStorage.getItem("ownerMessage")).status == 2){
+                  androidIos.addPageList();
+                  _this.$router.push({path:url});
+                }else{
+                   androidIos.second("请上传资料后下单");
+                }
+              }else{
+                _this.$router.push({path:url});
+              }
+
             }else if(_this.cookie == ""){
               androidIos.first("尚未登录,请登录！");
               $(".tanBox-yes").unbind('click').click(function(){

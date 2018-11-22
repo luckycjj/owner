@@ -14,7 +14,7 @@
                <h3 v-else>暂无位置信息</h3>
              </div>
              <div class="third">
-               <div class="imgcaozuo" @click="chooseDriver(items)"  :class="items.choose ? 'imgyes' : ''"></div>
+               <div class="imgcaozuo" @touchend="chooseDriver(items)"  :class="items.choose ? 'imgyes' : ''"></div>
                <div class="clearBoth"></div>
              </div>
              <div class="clearBoth"></div>
@@ -22,10 +22,10 @@
          </ul>
        </div>
        <div id="messageSureListBox">
-         <div class="imgcaozuo" :class="quanxuanList ? 'imgyes' : ''" @click="quanxuan()"></div>
+         <div class="imgcaozuo" :class="quanxuanList ? 'imgyes' : ''" @touchend="quanxuan()"></div>
          <p>全选</p>
          <h1>已选：{{sureList.length}}条</h1>
-         <button @click="messageGo()">发送短信</button>
+         <button @touchend="messageGo()">发送短信</button>
          <div class="clearBoth"></div>
        </div>
        <div id="container" style="display: none;"></div>

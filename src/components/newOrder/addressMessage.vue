@@ -2,40 +2,40 @@
   <div id="addressMessage">
     <div id="title" v-title data-title="发货地址" v-if="addressType == 1"></div>
     <div id="title" v-title data-title="收货地址" v-if="addressType == 3"></div>
-    <div id="carTitleBox"   @click="event($event)">
+    <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
-        <div class="carTitleback" @click="goback()"></div>
+        <div class="carTitleback" @touchend="goback()"></div>
         <input type="tel" placeholder="请输入电话号码" maxlength="11" id="carNumber" v-model="address"  @focus="aaa()">
-        <p @click="sousuo()" id="sousuo">管理</p>
+        <p @touchend="sousuo()" id="sousuo">管理</p>
       </div>
     </div>
     <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
         <li v-for="(item,index) in pdlist" style="overflow: hidden">
           <div class="moveDiv" style="position: relative">
-            <div  @click="chooseLine(item)" style="width:10rem;">
+            <div  @touchend="chooseLine(item)" style="width:10rem;">
             <div class="firstBox">
               <p><span style="color:#31b6e7" v-if="item.ifDefault == '1'">[默认]</span>{{item.contact}}<span>{{item.mobile}}</span></p>
               <h1>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
             </div>
               <div class="clearBoth"></div>
             <div class="secondBox">
-              <img src="../../images/edit.png" @click="editLine(item)" v-if="manage">
-              <img src="../../images/clean.png" @click="cleanLine(index)" v-if="(pk != '' && manage && item.checked == '0') || (pk == '' && manage)">
+              <img src="../../images/edit.png" @touchend="editLine(item)" v-if="manage">
+              <img src="../../images/clean.png" @touchend="cleanLine(index)" v-if="(pk != '' && manage && item.checked == '0') || (pk == '' && manage)">
               <img src="../../images/checked.png"  v-if="!manage && item.checked == '1'">
               <div class="clearBoth"></div>
             </div>
             </div>
             <div class="thirdBox" v-if="addressType == 1">
-              <p v-if="item.ifDefault==0" @click="moren(1,index)">设置默认</p>
-              <p v-else-if="item.ifDefault==1" @click="moren(0,index)">取消默认</p>
+              <p v-if="item.ifDefault==0" @touchend="moren(1,index)">设置默认</p>
+              <p v-else-if="item.ifDefault==1" @touchend="moren(0,index)">取消默认</p>
             </div>
             <div class="clearBoth"></div>
           </div>
         </li>
       </ul>
     </div>
-    <button id="addNew" @click="addNew()">新增地址</button>
+    <button id="addNew" @touchend="addNew()">新增地址</button>
   </div>
 </template>
 

@@ -8,7 +8,7 @@
         <div class="telBox">
             <div class="telBoxTop">
               <input type="tel" placeholder="请输入司机手机号" maxlength="11" v-model="tel" />
-              <button @click="searchDriverList(1)">搜索</button>
+              <button @touchend="searchDriverList(1)">搜索</button>
               <div class="clearBoth"></div>
             </div>
           <div class="telBoxBottom">
@@ -22,9 +22,9 @@
         </div>
         <div class="telBox">
           <div class="telBoxTop">
-            <h6 @click="plateametrue()" >{{plateName}}</h6>
-            <div id="carNumberBox" @click="keyboardshow()" :class="carNo.length == 7 ? 'carGreen' : carNo.length == 6 ?'carBrown' : ''" :style="{color:carNo == '' ? '#BCBCBC' : '#373737'}" v-html="carNo == '' ? '请输入司机车牌号' : carNo"></div>
-            <button @click="searchDriverList(2)">搜索</button>
+            <h6 @touchend="plateametrue()" >{{plateName}}</h6>
+            <div id="carNumberBox" @touchend="keyboardshow()" :class="carNo.length == 7 ? 'carGreen' : carNo.length == 6 ?'carBrown' : ''" :style="{color:carNo == '' ? '#BCBCBC' : '#373737'}" v-html="carNo == '' ? '请输入司机车牌号' : carNo"></div>
+            <button @touchend="searchDriverList(2)">搜索</button>
             <div class="clearBoth"></div>
           </div>
           <div class="telBoxBottom">
@@ -57,27 +57,27 @@
         </li>
       </ul>
       <transition name="slide-fade">
-        <div v-if="carList" id="carListBox" @click="carListHideAgain($event)">
+        <div v-if="carList" id="carListBox" @touchend="carListHideAgain($event)">
           <div id="carList">
-            <p v-for="(item,index) in carTypeList" @click="carClick(index,item.region)" :class="item.code==2?'carCode':''">{{item.region}}</p>
-            <button @click="carList=false"> 完成</button>
+            <p v-for="(item,index) in carTypeList" @touchend="carClick(index,item.region)" :class="item.code==2?'carCode':''">{{item.region}}</p>
+            <button @touchend="carList=false"> 完成</button>
           </div>
         </div>
-        <div v-if="keyboard" id="keyboardBox" @click="keyboardHideAgain($event)">
+        <div v-if="keyboard" id="keyboardBox" @touchend="keyboardHideAgain($event)">
           <div id="keyboard">
-            <p v-for="item in keyboardNumber" @click="carkeyboard(item.name)">{{item.name}}</p>
+            <p v-for="item in keyboardNumber" @touchend="carkeyboard(item.name)">{{item.name}}</p>
             <div class="clearBoth"></div>
-            <p v-for="item in keyboardLetter.first" @click="carkeyboard(item.name)">{{item.name}}</p>
+            <p v-for="item in keyboardLetter.first" @touchend="carkeyboard(item.name)">{{item.name}}</p>
             <div class="clearBoth"></div>
-            <div style="margin-left:0.500115rem" ><p v-for="item in keyboardLetter.second"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
+            <div style="margin-left:0.500115rem" ><p v-for="item in keyboardLetter.second"   @touchend="carkeyboard(item.name)">{{item.name}}</p></div>
             <div class="clearBoth"></div>
-            <div style="margin-left:1.500345rem" ><p v-for="item in keyboardLetter.third"   @click="carkeyboard(item.name)">{{item.name}}</p></div>
-            <p class="keyRemove" @click="keyremove()"></p>
+            <div style="margin-left:1.500345rem" ><p v-for="item in keyboardLetter.third"   @touchend="carkeyboard(item.name)">{{item.name}}</p></div>
+            <p class="keyRemove" @touchend="keyremove()"></p>
             <div class="clearBoth"></div>
             <p class="keyBlack"></p>
             <p class="keyBlack"></p>
             <p class="keySpace">space</p>
-            <p class="keyOk" @click="keyboard=false">down</p>
+            <p class="keyOk" @touchend="keyboard=false">down</p>
           </div>
         </div>
         <div v-if="InvitationDriver" id="InvitationDriverBox">
@@ -89,9 +89,9 @@
                  <div class='clearBoth'></div>
                </div>
                <div class='InvitationDriver-button'>
-                 <button class='InvitationDriver-close' @click="InvitationDriver = false;">取消</button>
+                 <button class='InvitationDriver-close' @touchend="InvitationDriver = false;">取消</button>
                  <div class='InvitationDriver-shuxian'></div>
-                 <button id='InvitationDriver-yes' class='InvitationDriver-yes InvitationDriver-yesGo' @click="InvitationDriverTrue()">确定</button>
+                 <button id='InvitationDriver-yes' class='InvitationDriver-yes InvitationDriver-yesGo' @touchend="InvitationDriverTrue()">确定</button>
                </div>
              </div>
         </div>

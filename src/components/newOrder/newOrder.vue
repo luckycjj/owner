@@ -6,18 +6,18 @@
       <div id="title" v-if="newordertrantype == '3'" v-title data-title="发布危险品池货源"></div>
       <div id="title" v-if="newordertrantype == '4'" v-title data-title="发布集装箱池货源"></div>
       <div id="peopleAddress">
-          <div id="histroyAddress" @click="histroyAddress()"  v-if="pk==''&& both.histroyAddressLength">
+          <div id="histroyAddress" @touchend="histroyAddress()"  v-if="pk==''&& both.histroyAddressLength">
             常用路线
           </div>
           <div class="right">
             <div class="message  pickmessage">
               <p>发货方信息</p>
-              <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @click="goStartAddress()"></h1>
+              <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @touchend="goStartAddress()"></h1>
             </div>
             <div class="borderBottom"></div>
             <div class="message arrmessage">
               <p>收货方信息</p>
-              <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @click="goEndAddress()"></h1>
+              <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @touchend="goEndAddress()"></h1>
             </div>
           </div>
         <div class="clearBoth"></div>
@@ -39,13 +39,13 @@
       <div  v-for="(item,index) in both.productList" :id="'goods'+index" class="goodsLabel">
         <div class="labelTitle" v-if="both.productList.length>1">
           <p v-html="item.goodsType==''?'货物：暂无':'货物：'+item.goodsType">货物{{index+1}}</p>
-          <h6 @click="removeList(index)" v-if="pk==''">删除</h6>
+          <h6 @touchend="removeList(index)" v-if="pk==''">删除</h6>
           <div class="clearBoth"></div>
         </div>
         <div class="label" :class="both.productList.length>1?'labelTop':''">
           <div class="lablebox goodsTypeLabel borderno">
             <span class="required">货物类别</span>
-            <p v-html="item.goodsType==''?'请选择货物类型':item.goodsType" :class="item.goodsType==''?'':'blackColor'" @click="goodsType(index)" :datatype="item.goodstypenumber"></p>
+            <p v-html="item.goodsType==''?'请选择货物类型':item.goodsType" :class="item.goodsType==''?'':'blackColor'" @touchend="goodsType(index)" :datatype="item.goodstypenumber"></p>
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
@@ -63,14 +63,14 @@
         </div>
       </div>
       <div id="add"  v-if="pk==''">
-         <p @click="addList()">增加</p>
-         <img src="../../images/add.png" @click="addList()">
+         <p @touchend="addList()">增加</p>
+         <img src="../../images/add.png" @touchend="addList()">
         <div class="clearBoth"></div>
       </div>
       <div  v-if="pk==''" id="insurance" class="label" style="margin-top: 0;">
         <div class="lablebox" v-if="both.carTypeLook">
           <span class="required">车辆车型</span>
-          <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @click="tranType()"></p>
+          <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @touchend="tranType()"></p>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox">
@@ -81,18 +81,23 @@
           </div>
           <div class="clearBoth"></div>
         </div>
-        <div class="lablebox borderno">
-          <span>承运商</span>
-          <p v-html="both.appoint==''?'请选择指定承运商':both.appoint" :class="both.appoint==''?'':'blackColor'" @click="appoint()"></p>
+        <div class="lablebox">
+          <span>增值服务</span>
+          <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @touchend="service()"></p>
           <div class="clearBoth"></div>
         </div>
-        <!--<div class="lablebox borderno">
-          <span>保险</span>
-          <p v-html="both.insurance==''?'请选择保险':both.insurance" :class="both.insurance==''?'':'blackColor'" @click="insurance()"></p>
+        <div class="lablebox">
+          <span>承运商</span>
+          <p v-html="both.appoint==''?'请选择指定承运商':both.appoint" :class="both.appoint==''?'':'blackColor'" @touchend="appoint()"></p>
           <div class="clearBoth"></div>
-        </div>-->
+        </div>
+        <div class="lablebox borderno">
+          <span>备注</span>
+          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
+          <div class="clearBoth"></div>
+        </div>
       </div>
-      <div  v-if="pk==''" id="payment" class="label">
+    <!--  <div  v-if="pk==''" id="payment" class="label">
         <div class="lablebox imgno">
           <span>付款方</span>
           <div id="pay">
@@ -103,10 +108,10 @@
         </div>
         <div class="lablebox borderno">
           <span>备注</span>
-          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @click="remark()"></p>
+          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
           <div class="clearBoth"></div>
         </div>
-      </div>
+      </div>-->
       <div v-if="pk==''" id="price" class="label">
         <div class="lablebox borderno imgno">
           <span class="required">价格</span>
@@ -116,28 +121,28 @@
       </div>
       <div v-if="pk==''" id="read"  style="margin: 0 auto; width: 94%;background: transparent;height: 1.4rem;line-height: 1.4rem;">
         <div class=" borderno">
-          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><div class="clearBoth"></div></label>
+          <label><div class="circleBox" @touchend="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><div class="clearBoth"></div></label>
         </div>
       </div>
-      <button id="submit" class="gogogo" @click="submitGo()">提交</button>
+      <button id="submit" class="gogogo" @touchend="submitGo()">提交</button>
       <div id="vehicleBox" v-if="vehicleBox">
            <div id="vehicle">
-             <img src="../../images/closed.png" @click="vehicleBoxClosed()">
+             <img src="../../images/closed.png" @touchend="vehicleBoxClosed()">
              <p>选择车辆车型</p>
              <div class="vehicleBox">
                <div class="vehicle" v-if="both.carList.length > 0">
                  <h6>用车类型</h6>
                  <ul>
-                   <li v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @click="carListS(index,1)">{{item.displayName}}</li>
-                   <li @click="lookMore(1)" class="cartypelookMore" v-if="both.carListMore">全部</li>
+                   <li v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
+                   <li @touchend="lookMore(1)" class="cartypelookMore" v-if="both.carListMore">全部</li>
                    <div class="clearBoth"></div>
                  </ul>
                </div>
                <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
                  <h6>车长<span>（米，可多选）</span></h6>
                  <ul>
-                   <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @click="carListS(index,2)">{{item.displayName}}</li>
-                   <li @click="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
+                   <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,2)">{{item.displayName}}</li>
+                   <li @touchend="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
                    <div class="clearBoth"></div>
                    <div class="cartypeOther" v-if="!both.carWidthListMore"><span>其它车长：</span><input v-model="both.cartypeOther" placeholder="点击输入"/>米</div>
                  </ul>
@@ -145,13 +150,13 @@
                <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
                  <h6>车型<span>（可多选）</span></h6>
                  <ul>
-                   <li v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @click="carListS(index,3)">{{item.displayName}}</li>
-                   <li @click="lookMore(3)" class="cartypelookMore" v-if="both.carTypeListMore">全部</li>
+                   <li v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
+                   <li @touchend="lookMore(3)" class="cartypelookMore" v-if="both.carTypeListMore">全部</li>
                    <div class="clearBoth"></div>
                  </ul>
                </div>
              </div>
-             <button @click="carListSure()">确定</button>
+             <button @touchend="carListSure()">确定</button>
            </div>
       </div>
       <div id="newOrderMessageBox" v-if="newOrderMessageBox">
@@ -173,9 +178,9 @@
               <div class="clearBoth"></div>
             </div>
             <div class="message_button">
-              <button @click="messageButtonNo()">取消</button>
+              <button @touchend="messageButtonNo()">取消</button>
               <div class='message_shuxian'></div>
-              <button class="message_buttonYes"  @click="messageButtonYes()">确定</button>
+              <button class="message_buttonYes"  @touchend="messageButtonYes()">确定</button>
               <div class="clearBoth"></div>
             </div>
           </div>
@@ -258,6 +263,7 @@
               carWidthListMore:false,
               carTypeListMore:false,
               carTypeLook:true,
+              service:"",
             },
             pk:"",
             price:"",
@@ -646,6 +652,7 @@
                       carWidthListMore:_this.both.carWidthListMore,
                       carTypeListMore:_this.both.carTypeListMore,
                       carTypeLook:true,
+                      service:"",
                     }
                     _this.price = invoiceDetail.price*1;
                     _this.both = pdlist;
@@ -1452,6 +1459,14 @@
           androidIos.addPageList();
           _this.$router.push({ path: '/newOrder/remark'});
         },
+        service:function(){
+          var _this = this;
+          _this.both.price = _this.price;
+          _this.both.scrollTop =  _this.getPageScroll();
+          sessionStorage.setItem("newOrder",JSON.stringify(_this.both));
+          androidIos.addPageList();
+          _this.$router.push({ path: '/newOrder/service'});
+         },
         insurance:function(){
           var _this = this;
           _this.both.price = _this.price;
@@ -1726,6 +1741,7 @@
               if_urgent:self.read ? "Y" : "N",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
+              service:self.service,
             };
             androidIos.loading("正在提交");
             bomb.removeClass("submit","gogogo");
@@ -2026,7 +2042,7 @@
     white-space: nowrap;
     font-size: 0.375rem;
   }
-  #Z02,#pay,#jizhuangjixie{
+  #Z02,#pay,#jizhuangjixie,#service{
     float: right;
     font-size: 0.375rem;
     margin-right: 5%;

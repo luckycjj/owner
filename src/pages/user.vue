@@ -11,11 +11,11 @@
           <p>{{message.name}}</p>
           <h1 v-html="message.status == '0' ? '未认证' :message.status == '1' ? '待审核' : message.status == '2' ? '已认证' : message.status == '3' ? '已驳回' : message.status == '4' ? '已禁用' : ''"></h1>
         </div>
-        <div class="lookMore"  @click="renzhen()"><span v-if="message.status == 0">去认证</span></div>
+        <div class="lookMore"  @touchend="renzhen()"><span v-if="message.status == 0">去认证</span></div>
         <div class="clearBoth"></div>
       </div>
       <ul>
-        <li @click="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
+        <li @touchend="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
           <div class="tableIcon" :style="{backgroundImage:'url(' + item.icon + ')'}"></div>
           <p>{{item.name}}<span v-if="item.number > 0">{{item.number}}</span></p>
           <div class="lookMore"></div>
@@ -31,12 +31,12 @@
           <div id="shareBodyTab">
             <p>分享至...</p>
             <label :style="{width:100 / shareList.length + '%'}" v-for="(item,index) in shareList">
-              <img :src="item.icon" @click="shareType(index)">
+              <img :src="item.icon" @touchend="shareType(index)">
               <h6>{{item.name}}</h6>
             </label>
             <div class="clearBoth"></div>
           </div>
-          <button @click="shareYes(false)">取消</button>
+          <button @touchend="shareYes(false)">取消</button>
         </div>
       </div>
     </transition>
@@ -247,6 +247,7 @@
             img = "";
           }
           $("#common-blackBox").remove();
+          debugger
           if(img == ""){
             androidIos.second("扫描二维码失败,请重试!");
           }else{

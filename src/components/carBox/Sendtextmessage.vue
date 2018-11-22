@@ -17,8 +17,8 @@
       <div class="message">
         <textarea @keyup="inputText()" placeholder="请输入短信内容（最多18字）" maxlength="18" v-model="messageBody"></textarea>
         <div class="messageoperation">
-          <span @click="shortMessageTrueYes()">常用短语</span>
-          <span @click="shortMessageClear()">清空</span>
+          <span @touchend="shortMessageTrueYes()">常用短语</span>
+          <span @touchend="shortMessageClear()">清空</span>
           <div class="clearBoth"></div>
         </div>
         <div class="messageLook">
@@ -29,14 +29,14 @@
         </div>
       </div>
     </div>
-    <button id="fasong" @click="fasong()">发送</button>
+    <button id="fasong" @touchend="fasong()">发送</button>
     <transition name="slide-fade">
-      <div id="shortMessageBox" v-if="shortMessageTrue" @click="bodyquxiao($event)">
+      <div id="shortMessageBox" v-if="shortMessageTrue" @touchend="bodyquxiao($event)">
         <div id="shortMessage">
             <ul>
               <li>常用短语</li>
-              <li @click="shortMessagego(index)" v-for="(item,index) in shortMessageList">{{item.displayName}}</li>
-              <li @click="quxiaoshortmessage()">取消</li>
+              <li @touchend="shortMessagego(index)" v-for="(item,index) in shortMessageList">{{item.displayName}}</li>
+              <li @touchend="quxiaoshortmessage()">取消</li>
             </ul>
         </div>
       </div>

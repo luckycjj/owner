@@ -4,14 +4,14 @@
       <div id="iphoneXX"></div>
       <div id="carTitleBox">
         <div class="carTitleBox">
-          <div class="carTitleback" @click="goback()" ></div>
+          <div class="carTitleback" @touchend="goback()" ></div>
           <p>{{title}}</p>
           <h3  id="manage" class="asd"  v-if="doNow==1"><span>管理</span></h3>
           <h3 id="siteCar"  style="display: none" class="asd"  v-if="doNow==2"></h3>
           <h3  id="search" class="asd"  v-if="doNow==3" ><h5 id="searchSpan"></h5></h3>
           <img id="erweimaLook"  src="./images/erweima.png" v-if="doNow==4" style="display: none">
-          <div id="setUp"  v-if="doNow == 5" @click="setUpgo()"></div>
-          <div id="orderScreenTitle"  v-if="doNow == 6" @click="orderScreen()"></div>
+          <div id="setUp"  v-if="doNow == 5" @touchend="setUpgo()"></div>
+          <div id="orderScreenTitle"  v-if="doNow == 6" @touchend="orderScreen()"></div>
           <h3  id="authenticationTab" style="display: none;" class="asd"  v-if="doNow==8"><span>上一步</span></h3>
           <h3  id="cleanMessageAll" class="asd"   v-if="doNow==10"><span style="color:#999;">清空</span></h3>
           <h3  id="addshucheYes" class="asd"   v-if="doNow==11"><span></span></h3>

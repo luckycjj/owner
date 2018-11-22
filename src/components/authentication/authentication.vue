@@ -23,7 +23,7 @@
             <h6 v-if="message.first.authorization.bendi == ''">点击拍照</h6>
           </div>
           <div class="YYZZLook">
-            <img src="../../images/SQHlook.png"   @click="lookImg($event,require('../../images/SQHlook.png'))">
+            <img src="../../images/SQHlook.png"   @touchend="lookImg($event,require('../../images/SQHlook.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -46,7 +46,7 @@
             <h6 v-if="message.second.businesslicense.bendi == ''">点击拍照</h6>
           </div>
           <div class="YYZZLook">
-            <img src="../../images/YYZZLook.png"    @click="lookImg($event,require('../../images/YYZZLook.png'))">
+            <img src="../../images/YYZZLook.png"    @touchend="lookImg($event,require('../../images/YYZZLook.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -79,14 +79,14 @@
       <div id="stepT" v-if="nowStep == 3">
         <div class="stepTtop">
           <p>请拍摄五官清晰头像照</p>
-          <div class="fileup3"  @click="BAIDURENLIAN()">
+          <div class="fileup3"  @touchend="BAIDURENLIAN()">
             <img src="../../images/addImg.png" v-if="message.third.people.bendi == ''">
             <!--<input type="file" @change="fileImgUp($event,2)"  accept="image/*"  capture = "user">-->
             <img :onerror="errorlogo" class="fileImg3" :src="message.third.people.bendi" v-if="message.third.people.bendi != ''">
             <h6 v-if="message.third.people.bendi == ''">点击拍照</h6>
           </div>
           <div class="SFZLook">
-            <img src="../../images/ALEX.png"    @click="lookImg($event,require('../../images/ALEX.png'))">
+            <img src="../../images/ALEX.png"    @touchend="lookImg($event,require('../../images/ALEX.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -100,7 +100,7 @@
             <h6 v-if="message.third.idCardZ.bendi == ''">点击拍照</h6>
           </div>
           <div class="SFZFLook">
-            <img src="../../images/SFZZ.png"    @click="lookImg($event,require('../../images/SFZZ.png'))">
+            <img src="../../images/SFZZ.png"    @touchend="lookImg($event,require('../../images/SFZZ.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -114,7 +114,7 @@
             <h6 v-if="message.third.idCardF.bendi == ''">点击拍照</h6>
           </div>
           <div class="SFZFLook">
-            <img src="../../images/SFZF.png"    @click="lookImg($event,require('../../images/SFZZ.png'))">
+            <img src="../../images/SFZF.png"    @touchend="lookImg($event,require('../../images/SFZZ.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -135,12 +135,12 @@
         </div>
       </div>
       <h5 class="calltel">有问题请联系客服</h5>
-      <button @click="goNext()" v-html="nowStep == 1 || nowStep == 2 ? '下一步': '提交'"></button>
+      <button @touchend="goNext()" v-html="nowStep == 1 || nowStep == 2 ? '下一步': '提交'"></button>
       <div v-if="baiduhuotiBox" id="baiduhuotiBox">
         <div id="baiduhuoti">
           <div id="baiduhuotiTop">
             <img src="../../images/baiduhuoti.png">
-            <img src="../../images/closed.png" class="closedBaidu" @click="BAIDURENLIANLosed()">
+            <img src="../../images/closed.png" class="closedBaidu" @touchend="BAIDURENLIANLosed()">
             <h6>正面平视手机、保证光线充足<br>请勿遮挡面部</h6>
           </div>
           <div id="baiduhuotiBottom">
@@ -160,7 +160,7 @@
                 <span class="prompt-box-text-content">完成录制，等待验证结果</span>
                 <!---->
               </div>
-              <button @click="baidudumaNumber()">下一步</button>
+              <button @touchend="baidudumaNumber()">下一步</button>
             </div>
           </div>
         </div>
@@ -175,7 +175,7 @@
             <input type="file" accept="video/*"  capture = "camcorder" @change="video($event)">
           </div>
         </div>
-        <img @click="baidunumberClosed()" src="../../images/icon_close.png">
+        <img @touchend="baidunumberClosed()" src="../../images/icon_close.png">
       </div>
     </div>
 </template>
