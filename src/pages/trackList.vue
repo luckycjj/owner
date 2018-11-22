@@ -489,7 +489,7 @@
     font-size: 0.3125rem;
     right:0rem;
     top:0rem;
-    width:0.64rem;
+    width:0.75rem;
   }
   .yichangOrder{
     position: absolute;
