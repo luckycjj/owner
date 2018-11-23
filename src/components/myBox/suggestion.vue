@@ -1,6 +1,7 @@
 <template>
   <div id="suggestion" style="top:1.3rem;">
     <div id="title" v-title data-title="建议反馈"></div>
+    <p class="title">问题描述</p>
     <div id="textarea">
        <textarea @input="changeGo()" placeholder="请写下您遇到的问题..." :maxlength="maxlength" v-model="suggest"></textarea>
        <p>{{suggest.length}}/{{maxlength}}</p>
@@ -59,25 +60,36 @@
     width:100%;
     background: #f6f6f6;
   }
+  .title{
+    margin-left: 4.5%;
+    font-size: 0.375rem;
+    color:#333;
+    line-height:1.253rem ;
+  }
   #textarea{
-    width:94%;
-    margin: 0.5rem auto;
+    width:91%;
+    margin: 0rem auto 0.5rem auto;
     display: block;
-    border: 1px solid #dadada;
     background: white;
+    border-radius: 0.2rem;
+    position: relative;
   }
   textarea{
-    font-size: 0.375rem;
+    font-size: 0.32rem;
     color:#666;
     resize:none;
-    min-height: 3rem;
-    padding: 3%;
+    min-height: 2.1rem;
+    padding: 0.3rem;
     width:94%;
+    border-radius: 0.2rem;
   }
-  p{
-    float: right;
+  #textarea p{
+    position: absolute;
     padding: 0.3rem 0.2rem;
     color:#999;
+    font-size: 0.3125rem;
+    right:0.2rem;
+    bottom:0.1rem;
   }
   button{
     width:9.1rem;

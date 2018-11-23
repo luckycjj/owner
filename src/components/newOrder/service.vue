@@ -1,15 +1,13 @@
 <template>
     <div id="service">
       <div id="title" v-title data-title="增值服务"></div>
-      <p>增值服务</p>
       <ul>
          <li v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
            <span>{{item.displayName}}</span>
-           <div class="circleBox" @touchend="readChoose(index)" :class="item.check ? 'circletrue' : ''"></div>
+           <div class="circleBox" @touchend="readChoose(index)" :class="item.check ? 'circletrue' : ''"> <div class="quanquan" v-if="item.check "></div></div>
            <div class="clearBoth"></div>
          </li>
       </ul>
-      <p>回单须知</p>
       <h1>如需纸质回单或拍照回单，签收时纸质签名，电子签名请务必清晰</h1>
     </div>
 </template>
@@ -74,9 +72,7 @@
 <style scoped>
   #service{
 
-    background: white;
-    width:92%;
-    padding: 0.3rem 4%;
+    width:100%;
   }
   #service p{
     font-size: 0.4rem;
@@ -85,40 +81,54 @@
   }
   ul{
     width:100%;
-    margin:0.2rem 0 ;
-    border: 1px solid #dcdcdc;
+    margin:0.267rem 0 ;
+    background: white;
   }
   ul li {
      width:100%;
-     border-bottom:1px solid #dcdcdc;
-
+     border-bottom:1px solid #F5F5F5;
+    position: relative;
   }
   li span{
-    font-size: 0.375rem;
-    line-height: 1rem;
+    font-size: 0.3467rem;
+    line-height: 1.32rem;
     margin-left: 0.3rem;
-    color:#666;
+    color:#373737;
     float: left;
   }
   .borderno{
     border: none;
   }
   h1{
-    font-size: 0.35rem;
-    color:#666;
+    width:9.28rem;
+    margin-left: 0.36rem;
+    font-size: 0.32rem;
+    color:#999;
+    margin-top: 0.1rem;
   }
  .circleBox{
-    width:0.35rem;
-    height: 0.35rem;
-    border: 1px solid #333;
-    float: right;
-    margin-top: 0.325rem;
-    margin-right: 0.5rem;
+    width:0.48rem;
+    height: 0.48rem;
+    border: 2px solid #ECECEC;
+    position: absolute;
+   top:50%;
+   margin-top: -0.24rem;
+   right:0.413rem;
+   border-radius: 50%;
   }
   .circletrue{
-    background-image: url("../../images/checkTrue.png");
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: 0.3rem;
+    border: 2px solid #1869A9!important;
+  }
+  .quanquan{
+     width:0.22rem;
+    height: 0.22rem;
+    border-radius: 50%;
+    background: #1869A9;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-top: -0.11rem;
+    margin-left: -0.10rem;
+    box-sizing: border-box;
   }
 </style>

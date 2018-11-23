@@ -62,12 +62,12 @@
           </div>
         </div>
       </div>
-      <div id="add"  v-if="pk==''">
+     <!-- <div id="add"  v-if="pk==''">
          <p @touchend="addList()">增加</p>
          <img src="../../images/add.png" @touchend="addList()">
         <div class="clearBoth"></div>
-      </div>
-      <div  v-if="pk==''" id="insurance" class="label" style="margin-top: 0;">
+      </div>-->
+      <div  v-if="pk==''" id="insurance" class="label" >
         <div class="lablebox" v-if="both.carTypeLook">
           <span class="required">车辆车型</span>
           <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @touchend="tranType()"></p>
@@ -82,65 +82,55 @@
           <div class="clearBoth"></div>
         </div>-->
         <div class="lablebox">
-          <span>增值服务</span>
+          <span>增值服务<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem;">(选填)</span></span>
           <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @touchend="service()"></p>
           <div class="clearBoth"></div>
         </div>
-        <div class="lablebox">
+      <!--  <div class="lablebox">
           <span>承运商</span>
           <p v-html="both.appoint==''?'请选择指定承运商':both.appoint" :class="both.appoint==''?'':'blackColor'" @touchend="appoint()"></p>
           <div class="clearBoth"></div>
-        </div>
-        <div class="lablebox borderno">
-          <span>备注</span>
+        </div>-->
+        <div class="lablebox">
+          <span>备注<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
           <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
           <div class="clearBoth"></div>
         </div>
-      </div>
-    <!--  <div  v-if="pk==''" id="payment" class="label">
-        <div class="lablebox imgno">
-          <span>付款方</span>
-          <div id="pay">
-             <label>发货方<div class="clearBoth"></div></label>
-            <div class="clearBoth"></div>
-          </div>
-          <div class="clearBoth"></div>
-        </div>
-        <div class="lablebox borderno">
-          <span>备注</span>
-          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
-          <div class="clearBoth"></div>
-        </div>
-      </div>-->
-      <div v-if="pk==''" id="price" class="label">
         <div class="lablebox borderno imgno">
-          <span class="required">价格</span>
-          <input type="text" placeholder="请输入价格" maxlength="20" v-model="price" @keyup="asdfgh()"/>
+          <span class="required">货物运费</span>
+          <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @keyup="asdfgh()"/>
           <div class="clearBoth"></div>
         </div>
       </div>
-      <div v-if="pk==''" id="read"  style="margin: 0 auto; width: 94%;background: transparent;height: 1.4rem;line-height: 1.4rem;">
+     <!-- <div v-if="pk==''" id="price" class="label">
+      </div>-->
+      <div v-if="pk==''" id="read"  style="margin: 0.3rem auto; width: 94%;background: transparent;line-height: 0.6rem;">
         <div class=" borderno">
-          <label><div class="circleBox" @touchend="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.35rem;color:#333;">是否加急</span><div class="clearBoth"></div></label>
+          <span style="font-size: 0.32rem;color:#999;">若产生等待费，请用户额外支付费用，请按照司机<span style="font-size: 0.32rem;color:#E72C31;">收费标准</span>结算</span>
+          <div class="clearBoth"></div>
+          <label><div class="circleBox" @touchend="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.32rem;color:#999;">我已阅读并同意<span style="font-size: 0.32rem;color:#E72C31;">《用户发货托运通知》</span></span><div class="clearBoth"></div></label>
+          <div class="clearBoth"></div>
         </div>
       </div>
+      <button id="chengyunshang"  @touchend="appoint()" v-html="both.appoint==''?'指定承运商':both.appoint"></button>
       <button id="submit" class="gogogo" @touchend="submitGo()">提交</button>
+      <div class="clearBoth"></div>
       <div id="vehicleBox" v-if="vehicleBox">
            <div id="vehicle">
-             <img src="../../images/closed.png" @touchend="vehicleBoxClosed()">
+             <img src="../../images/cha.png" @touchend="vehicleBoxClosed()">
              <p>选择车辆车型</p>
              <div class="vehicleBox">
                <div class="vehicle" v-if="both.carList.length > 0">
                  <h6>用车类型</h6>
                  <ul>
-                   <li v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
-                   <li @touchend="lookMore(1)" class="cartypelookMore" v-if="both.carListMore">全部</li>
+                   <li class="carTypeLi" v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
+                   <li @touchend="lookMore(1)" class="cartypelookMore carTypeLi" v-if="both.carListMore">全部</li>
                    <div class="clearBoth"></div>
                  </ul>
                </div>
                <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
                  <h6>车长<span>（米，可多选）</span></h6>
-                 <ul>
+                 <ul style="margin-left: 2%;">
                    <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,2)">{{item.displayName}}</li>
                    <li @touchend="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
                    <div class="clearBoth"></div>
@@ -150,8 +140,8 @@
                <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
                  <h6>车型<span>（可多选）</span></h6>
                  <ul>
-                   <li v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
-                   <li @touchend="lookMore(3)" class="cartypelookMore" v-if="both.carTypeListMore">全部</li>
+                   <li class="carTypeLi" v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
+                   <li @touchend="lookMore(3)" class="carTypeLi cartypelookMore" v-if="both.carTypeListMore">全部</li>
                    <div class="clearBoth"></div>
                  </ul>
                </div>
@@ -244,7 +234,7 @@
               insurance:"",
               remark:"",
               pay:0,
-              read:false,
+              read:true,
               scrollTop:0,
               initialWeight:0,
               price:"",
@@ -272,28 +262,7 @@
             vehicleBox:false,
             newordertrantype:"",
             lindanShow:true,
-            jizhuangjixie:[{
-              code:"0",
-              region:"请选择"
-            },{
-              code:"6",
-              region:"一装一卸"
-            },{
-              code:"1",
-              region:"一装两卸"
-            },{
-              code:"2",
-              region:"一装多卸"
-            },{
-              code:"3",
-              region:"两装一卸"
-            },{
-              code:"4",
-              region:"两装两卸"
-            },{
-              code:"5",
-              region:"多装多卸"
-            }],
+            jizhuangjixie:[],
             suremend: new Debounce(this.ajaxPost, 1000)
           }
        },
@@ -333,7 +302,7 @@
               _this.price=(_this.price.toString().match(/\d+(\.\d{0,2})?/)||[''])[0];
               _this.both.cartypeOther = (_this.both.cartypeOther.toString().match(/\d+(\.\d{0,1})?/)||[''])[0];
               if(_this.pk == ""){
-                if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30)){
+                if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30)){
                   for(var i = 0;i<self.productList.length;i++) {
                     if(_this.price!=""){
                       if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -352,7 +321,7 @@
                   bomb.removeClass("submit","submit");
                 }
               }else{
-                if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" ){
+                if( self.read &&  self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" ){
                   for(var i = 0;i<self.productList.length;i++) {
                     if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
                       bomb.removeClass("submit", "submit");
@@ -396,7 +365,7 @@
               for(var i = 0;i<self.productList.length;i++) {
                 weightBoth =  weightBoth + self.productList[i].wight * self.productList[i].wightTen;
               }
-              if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30) ){
+              if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30) ){
                 for(var i = 0;i<self.productList.length;i++) {
                   if(_this.price!=""){
                     if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -414,7 +383,7 @@
                 bomb.removeClass("submit","submit");
               }
             }else {
-              if (self.startAddress.people != "" && self.timeBeforeF != "" && self.timeBeforeS != "" && self.timeAfterF != "" && self.timeAfterS != "" && self.endAddress.people != "") {
+              if (self.read && self.startAddress.people != "" && self.timeBeforeF != "" && self.timeBeforeS != "" && self.timeAfterF != "" && self.timeAfterS != "" && self.endAddress.people != "") {
                 for (var i = 0; i < self.productList.length; i++) {
                   if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
                     bomb.removeClass("submit", "submit");
@@ -1007,7 +976,7 @@
                      z = i;
                   }
                 }
-                var jizhuangjixie = new LArea();
+               /* var jizhuangjixie = new LArea();
                 jizhuangjixie.init({
                   'trigger': '#Z08',
                   'valueTo': '#Z08',
@@ -1022,7 +991,7 @@
                 jizhuangjixie.addPointer = function (name) {
                   name = JSON.parse(name);
                   _this.both.jizhuangjixie = name.firstCode == 0 ? "" :name.firstVal;
-                }
+                }*/
       /*          if(_this.pk == "" && _this.$route.query.type == undefined){
                   bridge.invoke("guide","1");
                 }*/
@@ -1164,7 +1133,7 @@
           }
           var self = _this.both;
           if(_this.pk == ""){
-            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weight <= 30) ||  weight > 30)){
+            if(self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weight <= 30) ||  weight > 30)){
               for(var i = 0;i<self.productList.length;i++) {
                 if(_this.price!=""){
                   if (self.productList[i].goodsType == "") {
@@ -1188,7 +1157,7 @@
               bomb.removeClass("submit","submit");
             }
           }else{
-            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" ){
+            if(self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" ){
               for(var i = 0;i<self.productList.length;i++) {
                 if (self.productList[i].goodsType == "") {
                   bomb.removeClass("submit", "submit");
@@ -1666,6 +1635,10 @@
                   bomb.first("请选择运输类别");
                   return false;
                 }
+                if(!self.read){
+                  bomb.first("请阅读发货托运通知");
+                  return false;
+                }
               }
             }
         },
@@ -1743,7 +1716,7 @@
               pay:self.pay==1?"收货方":"发货方",
               est_amount:_this.price*1,
               remark:remarkBox,
-              if_urgent:self.read ? "Y" : "N",
+              if_urgent:"",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
               service:self.service,
@@ -1797,10 +1770,10 @@
 
 <style scoped>
   .required{
-    background-image: url("../../images/required.png");
+   /* background-image: url("../../images/required.png");
     background-position: 0 50%;
     background-size: 0.2rem 0.2rem;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
   }
   #newOrderMessageBox{
     position: fixed;
@@ -1891,12 +1864,12 @@
     float: left;
   }
   .message_buttonYes{
-    color:#3399ff;
+    color:#1D68A8;
   }
   #histroyAddress{
     position: absolute;
     right:0;
-    background: #3399FF;
+    background:#1D68A8;
     color:white;
     font-size: 0.3125rem;
     line-height: 0.8rem;
@@ -1910,7 +1883,6 @@
      background: white;
      margin: 0.3rem auto 0 auto;
      border-radius: 0.12rem;
-     box-shadow: 0 0.1rem 10px #d8d8d8;
      position: relative;
    }
   #peopleAddress .right{
@@ -1993,7 +1965,6 @@
     background: white;
     width: 94%;
     border-radius: 0.12rem;
-    box-shadow: 0 0.1rem 10px #d8d8d8;
   }
   .lablebox{
     width:90%;
@@ -2030,7 +2001,7 @@
      font-size: 0.375rem;
      color:#bcbcbc;
      margin-right: 5%;
-     max-width: 70%;
+     max-width: 57%;
      overflow: hidden;
      text-overflow:ellipsis;
      white-space: nowrap;
@@ -2063,9 +2034,9 @@
   #pay .circleBox,#read .circleBox{
     width:0.35rem;
     height: 0.35rem;
-    border: 1px solid #333;
+    border: 1px solid #979797;
     float: left;
-    margin-top: 0.5rem;
+    margin-top: 0.1rem;
     margin-right: 0.1rem;
   }
    .circletrue{
@@ -2077,16 +2048,35 @@
    #pay label{
      margin-left: 0.2rem;
    }
+   #chengyunshang{
+     width:3.4rem;
+     display: block;
+     float: left;
+     margin: 0.5rem 0 0.5rem 1.27rem;
+     line-height: 1rem;
+     font-size: 0.4rem;
+     background: transparent;
+     color:#1869A9;
+     border-radius: 0.1rem;
+     letter-spacing: 0.03125rem;
+     border: 1px solid #1869A9;
+     overflow: hidden;
+     text-overflow:ellipsis;
+     white-space: nowrap;
+     height: 1rem;
+   }
   #submit{
-    width:90%;
+    width:3.4rem;
     display: block;
-    margin: 0.5rem auto;
-    line-height: 1.2rem;
-    font-size: 0.4rem;
-    background: rgb(153, 153, 153);
+    float: right;
+    margin: 0.5rem 1.27rem 0.5rem 0;
+    line-height: 1rem;
+    font-size: 0.5rem;
+    background: #1869A9;
     color:white;
-    border-radius: 0.2rem;
+    border-radius: 0.1rem;
     letter-spacing: 0.03125rem;
+    border: 1px solid #1869A9;
   }
   #gofrommessage{
     width:90%;
@@ -2101,10 +2091,7 @@
   }
   .submit{
  /*   background: #3492ff!important;*/
-    background: -webkit-linear-gradient(left, #00C4FF , #0074FF)!important; /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(right, #00C4FF, #0074FF)!important; /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(right, #00C4FF, #0074FF)!important; /* Firefox 3.6 - 15 */
-    background: linear-gradient(to right, #00C4FF , #0074FF)!important; /* 标准的语法 */
+    background: #1D68A8!important;
   }
   #add p{
     font-size: 0.375rem;
@@ -2182,11 +2169,12 @@
      background: white;
      position: absolute;
     bottom:0;
+    padding-bottom: 0.5rem;
   }
   #vehicle button{
     width:90%;
     line-height: 1rem;
-    background: #2c9cff;
+    background: #1D68A8;
     color:white;
     display: block;
     margin: 0.8rem auto 0.3rem auto;
@@ -2195,10 +2183,9 @@
   }
   #vehicle p{
      text-align: center;
-    font-size: 0.375rem;
+    font-size: 0.45rem;
     color:#333;
-    line-height: 1rem;
-    border-bottom: 1px solid #e6e6e6;
+    line-height: 1.15rem;
   }
   .vehicleBox{
     width:93%;
@@ -2219,12 +2206,13 @@
   .vehicle li{
     float: left;
     display: block;
-    width: 18.5%;
-    padding:0 1.375% ;
+    width: 21.25%;
     text-align: center;
     line-height: 0.8rem;
     font-size: 0.35rem;
-    background-color: #f3f3f3;
+    background-color: transparent;
+    border: 1px solid #999999;
+    box-sizing: border-box;
     color:#666;
     border-radius: 0.2rem;
     margin-top: 0.4rem;
@@ -2233,13 +2221,21 @@
     white-space: nowrap;
     margin-left: 3%;
   }
+  .carTypeLi{
+    width: 2.36rem !important;
+    line-height:1.12rem !important;
+    margin-left: 0.5867rem!important;
+  }
   .chooseTrue{
-     background-color: #2c9cff!important;
+    background: #1D68A8!important;
     color:white!important;
+    border-color: #1D68A8!important;
   }
   #vehicle img{
     position: absolute;
-    width:1rem;
+    width:0.375rem;
+    right:0.413rem;
+    top:0.187rem;
     z-index: 1;
   }
   .cartypelookMore{

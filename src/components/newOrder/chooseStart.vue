@@ -299,7 +299,7 @@
     letter-spacing: 0.03125rem;
   }
   .colorful{
-    background: #3399FF!important;
+    background:#1D68A8!important;
   }
   .morenBox{
      float: right;
@@ -311,7 +311,7 @@
     border: 1px solid #e0e0e0;
   }
   .morenBoxTrue{
-     background: #2c9cff!important;
+    background:#1D68A8!important;
   }
   .moren{
     float: left;

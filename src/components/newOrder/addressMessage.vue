@@ -15,7 +15,7 @@
           <div class="moveDiv" style="position: relative">
             <div  @touchend="chooseLine(item)" style="width:10rem;">
             <div class="firstBox">
-              <p><span style="color:#31b6e7" v-if="item.ifDefault == '1'">[默认]</span>{{item.contact}}<span>{{item.mobile}}</span></p>
+              <p><span style="color:#1D68A8;" v-if="item.ifDefault == '1'">[默认]</span>{{item.contact}}<span>{{item.mobile}}</span></p>
               <h1>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
             </div>
               <div class="clearBoth"></div>
@@ -567,7 +567,7 @@
     width:100%;
     height: 1.2rem;
     color:white;
-    background: #31b6e7;
+    background:#1D68A8;
     position: fixed;
     bottom:0;
     left:0;
@@ -579,7 +579,7 @@
     top: 0;
     width:2rem;
     height: 100%;
-    background: #2c9cff;
+    background:#1D68A8;
   }
   #addressMessage .thirdBox p{
     color:white;

@@ -530,7 +530,7 @@
     width:100%;
     background: white;
     height: 2.3rem;
-    border-top: 2px solid #E5E5E5;
+    border-top: 1px solid #E5E5E5;
     position: relative;
   }
   .imgBox{
