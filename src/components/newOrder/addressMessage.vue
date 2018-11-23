@@ -5,37 +5,40 @@
     <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
         <div class="carTitleback" @touchend="goback()"></div>
-        <input type="tel" placeholder="请输入电话号码" maxlength="11" id="carNumber" v-model="address"  @focus="aaa()">
-        <p @touchend="sousuo()" id="sousuo">管理</p>
+        <h1 style="text-align: center;font-size: 0.426667rem;line-height: 1.3rem;color: #333;letter-spacing: 0.0133rem;" v-html="addressType == 1 ? '我的提货地址' : '我的发货地址'"></h1>
+        <p @click="addNew()" id="sousuo">添加新地址</p>
       </div>
     </div>
-    <div id="mescroll" class="mescroll" style="top:1.3rem;">
+    <div id="mescroll" class="mescroll" style="top:1.5rem;">
       <ul id="dataList" class="data-list">
         <li v-for="(item,index) in pdlist" style="overflow: hidden">
           <div class="moveDiv" style="position: relative">
-            <div  @touchend="chooseLine(item)" style="width:10rem;">
+            <div  @click="chooseLine(item)" style="width:10rem;">
+              <div class="forthBox" v-html="item.contact.length > 2 ? item.contact.substr(0,1) : item.contact">
+              </div>
             <div class="firstBox">
-              <p><span style="color:#1D68A8;" v-if="item.ifDefault == '1'">[默认]</span>{{item.contact}}<span>{{item.mobile}}</span></p>
-              <h1>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
+              <p>{{item.contact}}<span>{{item.mobile}}</span></p>
+              <h1><span style="color:white;padding: 0.07rem 0.2rem;background:#46B2E7;border-radius: 0.06rem;" v-if="item.ifDefault == '1'">默认</span>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
             </div>
               <div class="clearBoth"></div>
             <div class="secondBox">
-              <img src="../../images/edit.png" @touchend="editLine(item)" v-if="manage">
-              <img src="../../images/clean.png" @touchend="cleanLine(index)" v-if="(pk != '' && manage && item.checked == '0') || (pk == '' && manage)">
-              <img src="../../images/checked.png"  v-if="!manage && item.checked == '1'">
+              <!--<img src="../../images/edit.png" @touchend="editLine(item)" v-if="manage">-->
+              <p @click="editLine(item)">编辑</p>
+              <!--<img src="../../images/clean.png" @touchend="cleanLine(index)" v-if="(pk != '' && manage && item.checked == '0') || (pk == '' && manage)">-->
+             <!-- <img src="../../images/checked.png"  v-if="!manage && item.checked == '1'">-->
               <div class="clearBoth"></div>
             </div>
             </div>
             <div class="thirdBox" v-if="addressType == 1">
-              <p v-if="item.ifDefault==0" @touchend="moren(1,index)">设置默认</p>
-              <p v-else-if="item.ifDefault==1" @touchend="moren(0,index)">取消默认</p>
+              <p v-if="item.ifDefault==0" @click="moren(1,index)">设置默认</p>
+              <p v-else-if="item.ifDefault==1" @click="moren(0,index)">取消默认</p>
             </div>
             <div class="clearBoth"></div>
           </div>
         </li>
       </ul>
     </div>
-    <button id="addNew" @touchend="addNew()">新增地址</button>
+  <!--  <button id="addNew" @touchend="addNew()">新增地址</button>-->
   </div>
 </template>
 
@@ -209,7 +212,7 @@
           self.pdlist = self.pdlist.concat(curPageData);
           self.mescroll.endSuccess(curPageData.length);
           self.$nextTick(function () {
-            $("#addressMessage .secondBox").css("height","50%");
+            /*$("#addressMessage .secondBox").css("height","50%");*/
             if(self.addressType == "1"){
               var lines = $(".moveDiv");
               var len = lines.length;
@@ -457,6 +460,14 @@
 <style >
   @import "../../css/mescroll.css";
   @import "../../css/scroll.css";
+  #addressMessage{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: auto;
+    background: #f6f6f6;
+  }
   #addressMessage .carTitleBox{
     width: 100%;
     position: absolute;
@@ -482,7 +493,7 @@
     left:0;
     bottom:0;
     right:0;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0);
     width:auto;
     height: auto;
     z-index:0;
@@ -517,23 +528,37 @@
   #addressMessage ul{
     width:100%;
     background: white;
-    margin-top: 0.2rem;
   }
   #addressMessage li{
     width: 100%;
-    border-bottom: 1px solid #dadada;
+    padding:0.387rem  0 ;
     position: relative;
+
+  }
+  #addressMessage .forthBox{
+    width:0.84rem;
+    height: 0.84rem;
+    border-radius: 50%;
+    line-height: 0.84rem;
+    text-align: center;
+    background: #bbb;
+    color:white;
+    left:0.32rem ;
+    top:50%;
+    margin-top: -0.42rem;
+    position: absolute;
   }
   #addressMessage .firstBox{
-    width:55%;
-    padding: 0.3rem 0 0.1rem 8%;
+    width:6.7rem;
+    padding: 0.3rem 0 0.1rem 1.3867rem;
     float: left;
   }
   #addressMessage .secondBox{
-    width:30%;
+    width:1.4rem;
     right:0;
     position: absolute;
-    margin-top: -0.25rem;
+    height: 0.7rem;
+    margin-top: -0.35rem;
     top:50%;
   }
   #addressMessage .secondBox img{
@@ -541,27 +566,37 @@
     width:0.5rem;
     margin-right: 0.3rem;
   }
-  #addressMessage .firstBox p,#addressMessage .secondBox p{
-    font-size: 0.35rem;
-    color:#333;
+  #addressMessage .secondBox p{
+    float: right;
+    width:1.5rem;
+    padding-left: 0.3rem;
+    line-height: 0.7rem;
+    font-size: 0.32rem;
+    color:#999;
+    height: 0.7rem;
+    border-left: 1px solid #D8D8D8;
+    box-sizing: border-box;
+  }
+  #addressMessage .firstBox p{
+    font-size: 0.4rem;
+    color:#373737;
     line-height: 0.6rem;
   }
   #addressMessage .firstBox p span{
-    font-size: 0.35rem;
-    color:#333;
-    margin-left: 0.1rem;
+    font-size: 0.32rem;
+    color:#999;
+    margin-left: 0.333rem;
   }
   #addressMessage .firstBox h1{
-    font-size: 0.3125rem;
-    color:#666;
-    line-height: 0.6rem;
+    font-size: 0.347rem;
+    color:#373737;
   }
   #addressMessage .mescroll{
     position: fixed;
-    top:1.3rem;
-    bottom: 1.2rem;
+    top:1.4rem;
+    bottom:0rem;
     height: auto;
-    background-color: rgb(245, 245, 249)!important;
+    background-color: rgb(255, 255, 255)!important;
   }
   #addNew{
     width:100%;

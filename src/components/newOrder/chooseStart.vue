@@ -1,31 +1,35 @@
 <template>
   <div id="chooseStart">
-    <div id="title" v-title data-title="发货地址" v-if="addressType == 1"></div>
-    <div id="title" v-title data-title="收货地址" v-if="addressType == 2"></div>
+    <div id="title" v-title data-title="添加提货地址" v-if="addressType == 1 && pk == ''"></div>
+    <div id="title" v-title data-title="添加收货地址" v-if="addressType == 3 && pk == ''"></div>
+    <div id="title" v-title data-title="编辑提货地址" v-if="addressType == 1 && pk != ''"></div>
+    <div id="title" v-title data-title="编辑收货地址" v-if="addressType == 3 && pk !== ''"></div>
     <div id="inputKeyup">
-      <div class="name">
+      <div class="company inputUp">
         <input @input="filterInput()" type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
-        <div class="lineBox"><div class="line"></div></div>
+      </div>
+      <div class="company inputUp">
         <input @keyup="filterInput()" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
-        <div class="clearBoth"></div>
       </div>
       <div class="company inputUp">
         <input @input="filterInput()" type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
       </div>
       <div class="company inputUp">
-        <p id="X00" :class="start.province!=''?'blackColor':''" v-html="start.province==''?'选择省市区':start.province+'-'+start.city+'-'+start.area"></p>
+        <p id="X00" :class="start.province!=''?'blackColor':''" v-html="start.province == '' ? '选择省市区':start.province+'-'+start.city+'-'+start.area"></p>
       </div>
       <div class="address inputUp">
         <input @input="filterInput()" type="text" maxlength="40" placeholder="详细地址"  v-model="start.address"/>
       </div>
-      <div class="address inputUp" style=" color:#666;line-height:1rem;font-size: 0.35rem;border: none" v-if="addressType == 1">
-        设置默认
+      <div class="address inputUp" style=" color:#666;line-height:1.3rem;font-size: 0.35rem;margin-top: 0.2rem" v-if="addressType == 1">
+        设置默认地址
         <div class="morenBox" :class="start.moren == 1 ? 'morenBoxTrue' : ''" @touchend="morenClick()">
           <div class="moren" :class="start.moren == 1 ? 'morenTrue' : ''"></div>
         </div>
       </div>
+      <div class="address inputUp" @touchend="shanchu()" v-html="addressType == 1 ? ' 删除提货地址': '删除收货地址'" style=" color:#CE4346;line-height:1.3rem;font-size: 0.35rem;border: none;" v-if="pk != ''">
+      </div>
     </div>
-    <button :class="start.name!=''&&start.phone!=''&&start.company!=''&&start.address!=''&&start.province!=''?'colorful':''" @touchend="save()" id="save">保存</button>
+
   </div>
 </template>
 
@@ -53,11 +57,17 @@
             moren:0,
           },
           addressType:"",
+          pk:""
         }
+      },
+      beforeMount:function () {
+        var _this = this;
+        _this.addressType = _this.$route.query.type;
+        _this.pk = _this.$route.query.pk == undefined ? '' : _this.$route.query.pk;
       },
       mounted:function () {
           var _this = this;
-        _this.addressType = _this.$route.query.type;
+          _this.addressType = _this.$route.query.type;
           androidIos.bridge(_this);
       },
       methods:{
@@ -114,7 +124,48 @@
               _this.start.area = name.thirdVal;
               _this.start.areaCode = name.thirdCode;
             }
+            $("#sendAddress span").unbind("click").click(function () {
+              _this.save();
+            });
           },
+        shanchu:function () {
+          var _this = this;
+          androidIos.first("确定删除吗？");
+          $("#tanBox-yes").unbind("click").click(function () {
+            $(".tanBox-bigBox").remove();
+            $.ajax({
+              type: "POST",
+              url: androidIos.ajaxHttp()+"/address/deleteAddres",
+              data:JSON.stringify({
+                pk:_this.pk,
+                userCode:sessionStorage.getItem("token"),
+                source:sessionStorage.getItem("source"),
+                type:_this.$route.query.type
+              }),
+              contentType: "application/json;charset=utf-8",
+              dataType: "json",
+              timeout: 10000,
+              async:false,
+              success: function (deleteAddres) {
+                if(deleteAddres.success=="1"){
+                  _this.$cjj("删除成功");
+                  setTimeout(function () {
+                     androidIos.gobackFrom(_this);
+                  },500)
+                }else{
+                  androidIos.second(getAddres.message)
+                }
+              },
+              complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                if(status=='timeout'){//超时,status还有success,error等值的情况
+                  androidIos.second("网络请求超时");
+                }else if(status=='error'){
+                  androidIos.errorwife();
+                }
+              }
+            });
+          })
+        },
         filterInput:function () {
           var _this = this;
           _this.start.name =  _this.start.name.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\，\.\。\;\!\[\]\【\】\-]/g,'');
@@ -132,8 +183,11 @@
         },
           save:function () {
              var _this = this;
-             if(bomb.hasClass("save","colorful")){
                var pk = _this.$route.query.pk;
+               if(_this.start.name == '' || _this.start.phone =='' || _this.start.company == '' || _this.start.address =='' || _this.start.province == ''){
+                 bomb.first("请填写完整相关信息");
+                 return false;
+               }
                if(_this.start.phone.length < 11){
                   bomb.first("手机号码不足11位");
                   return false;
@@ -167,7 +221,10 @@
                    success: function (addAddress) {
                      $("#common-blackBox").remove();
                      if(addAddress.success=="1"){
-                       androidIos.gobackFrom(_this);
+                       _this.$cjj("新增成功");
+                       setTimeout(function () {
+                         androidIos.gobackFrom(_this);
+                       },500)
                      }else{
                        androidIos.second(addAddress.message);
                      }
@@ -207,7 +264,10 @@
                    success: function (addAddress) {
                      $("#common-blackBox").remove();
                      if(addAddress.success=="1"){
-                       androidIos.gobackFrom(_this);
+                       _this.$cjj("修改成功");
+                       setTimeout(function () {
+                         androidIos.gobackFrom(_this);
+                       },500)
                      }else{
                        androidIos.second(addAddress.message);
                      }
@@ -223,7 +283,7 @@
                  })
                }
 
-             }
+
           }
       }
     }
@@ -245,7 +305,6 @@
   }
   #inputKeyup{
     margin-top: 0.25rem;
-    background: white;
   }
   .lineBox{
     width:4%;
@@ -260,29 +319,34 @@
   .name,.address,.company{
     width:94%;
     padding: 0.0625rem 3%;
-    border-bottom:1px solid #dadada;
+    border-bottom:1px solid #F5F5F5;
+    background: white;
   }
   .name input{
     width:48%;
-    height: 0.35rem;
-    padding: 0.325rem 0;
-    font-size: 0.3125rem;
+    height: 0.37rem;
+    padding: 0.478rem 0;
+    font-size: 0.346rem;
     float: left;
     color:#333;
   }
   .inputUp input{
     width:100%;
-    height: 0.35rem;
-    padding: 0.325rem 0;
-    font-size: 0.3125rem;
+    height: 0.37rem;
+    padding: 0.478rem 0;
+    font-size: 0.346rem;
     color:#333;
   }
   #X00{
     width:100%;
-    height: 0.35rem;
-    padding: 0.325rem 0;
-    font-size: 0.3125rem;
+    height: 0.37rem;
+    padding: 0.478rem 0;
+    font-size: 0.346rem;
     color:#bcbcbc;
+    background-image: url("../../images/lookMore.png");
+    background-size: 0.187rem;
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
   }
   .blackColor{
     color:#333!important;
@@ -304,14 +368,14 @@
   .morenBox{
      float: right;
     height: 0.8rem;
-    margin-top: 0.1rem;
+    margin-top: 0.25rem;
     border-radius: 0.4rem;
-    width:1.5rem;
+    width:1.213rem;
     background: #f1f1f1;
     border: 1px solid #e0e0e0;
   }
   .morenBoxTrue{
-    background:#1D68A8!important;
+    background:#6AD56C!important;
   }
   .moren{
     float: left;

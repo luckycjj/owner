@@ -183,7 +183,7 @@
     margin-left: 3%;
   }
   .chooseTrue{
-    background: #2c9cff!important;
+    background: #1869A9!important;
   }
   textarea{
      width:88%;
@@ -198,7 +198,7 @@
   }
   button{
     width:94%;
-    background: #2c9cff;
+    background: #1869A9;
     color:white;
     display: block;
     margin: 0 auto;
