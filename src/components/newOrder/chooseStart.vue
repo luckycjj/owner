@@ -7,6 +7,7 @@
     <div id="inputKeyup">
       <div class="company inputUp">
         <input @input="filterInput()" type="text" maxlength="20" placeholder="请输入姓名" v-model="start.name"/>
+        <img src="../../images/icondianhuapu.png">
       </div>
       <div class="company inputUp">
         <input @keyup="filterInput()" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
@@ -321,6 +322,14 @@
     padding: 0.0625rem 3%;
     border-bottom:1px solid #F5F5F5;
     background: white;
+    position: relative;
+  }
+  .company img{
+    position: absolute;
+    right:0.4rem;
+    top:50%;
+    width:0.45rem;
+    margin-top: -0.2647rem;
   }
   .name input{
     width:48%;

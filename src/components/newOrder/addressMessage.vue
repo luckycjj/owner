@@ -23,15 +23,15 @@
               <div class="clearBoth"></div>
             <div class="secondBox">
               <!--<img src="../../images/edit.png" @touchend="editLine(item)" v-if="manage">-->
-              <p @click="editLine(item)">编辑</p>
+              <p @click.stop="editLine(item)">编辑</p>
               <!--<img src="../../images/clean.png" @touchend="cleanLine(index)" v-if="(pk != '' && manage && item.checked == '0') || (pk == '' && manage)">-->
              <!-- <img src="../../images/checked.png"  v-if="!manage && item.checked == '1'">-->
               <div class="clearBoth"></div>
             </div>
             </div>
             <div class="thirdBox" v-if="addressType == 1">
-              <p v-if="item.ifDefault==0" @click="moren(1,index)">设置默认</p>
-              <p v-else-if="item.ifDefault==1" @click="moren(0,index)">取消默认</p>
+              <p v-if="item.ifDefault==0" @click.stop="moren(1,index)">设置默认</p>
+              <p v-else-if="item.ifDefault==1" @click.stop="moren(0,index)">取消默认</p>
             </div>
             <div class="clearBoth"></div>
           </div>
