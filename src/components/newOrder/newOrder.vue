@@ -2190,7 +2190,8 @@
   .vehicleBox{
     width:93%;
     margin: 0 auto;
-    max-height: 10rem;
+    max-height: 12rem;
+    overflow: scroll;
   }
   .vehicle{
     margin-top: 0.3rem;

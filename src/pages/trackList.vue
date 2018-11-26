@@ -22,7 +22,7 @@
               <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsCode}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
             </div>
             <h6 class="deliDateTime">{{items.deliDate}} - {{items.arriDate}}</h6>
-            <h5 class="remark">{{items.memo}}</h5>
+            <h5 class="remark" v-html="items.memo == '' ? '暂无备注' : items.memo"></h5>
           </li>
         </ul>
       </div>
@@ -114,7 +114,7 @@
              mescrollArr[_this.tabShow]=initMescroll("mescroll" + _this.tabShow, "dataList" + _this.tabShow);
 
              /*初始化菜单*/
-             $("#trackTab li").click(function(){
+             $("#trackTab li").on("touchend",function(){
                var i=Number($(this).attr("i"));
                sessionStorage.setItem("trackTap",i);
                if(curNavIndex!=i) {

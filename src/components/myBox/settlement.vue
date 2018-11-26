@@ -94,7 +94,7 @@
         mescrollArr[_this.tabShow]=initMescroll("mescroll" + _this.tabShow, "dataList" + _this.tabShow);
 
         /*初始化菜单*/
-        $("#trackTab li").click(function(){
+        $("#trackTab li").on("touchend",function(){
           var i=Number($(this).attr("i"));
           sessionStorage.setItem("settlementTap",i);
           $("#trackTab li").removeClass("tableSure");
