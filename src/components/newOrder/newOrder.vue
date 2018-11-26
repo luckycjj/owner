@@ -45,7 +45,7 @@
         <div class="label" :class="both.productList.length>1?'labelTop':''">
           <div class="lablebox goodsTypeLabel borderno">
             <span class="required">货物类别</span>
-            <p v-html="item.goodsType==''?'请选择货物类型':item.goodsType" :class="item.goodsType==''?'':'blackColor'" @touchend="goodsType(index)" :datatype="item.goodstypenumber"></p>
+            <p v-html="item.goodsType==''?'请选择货物类型':(item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: '')" :class="item.goodsType==''?'':'blackColor'" @touchend="goodsType(index)" :datatype="item.goodstypenumber"></p>
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
@@ -73,24 +73,11 @@
           <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @touchend="tranType()"></p>
           <div class="clearBoth"></div>
         </div>
-       <!-- <div class="lablebox">
-          <span>几装几卸</span>
-          <div id="jizhuangjixie">
-            <div class="unit" id="Z08"  v-html="both.jizhuangjixie==''?'选择装卸方式':both.jizhuangjixie" :class="both.jizhuangjixie==''?'':'blackColor'"></div>
-            <div class="clearBoth"></div>
-          </div>
-          <div class="clearBoth"></div>
-        </div>-->
         <div class="lablebox">
           <span>增值服务<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem;">(选填)</span></span>
           <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @touchend="service()"></p>
           <div class="clearBoth"></div>
         </div>
-      <!--  <div class="lablebox">
-          <span>承运商</span>
-          <p v-html="both.appoint==''?'请选择指定承运商':both.appoint" :class="both.appoint==''?'':'blackColor'" @touchend="appoint()"></p>
-          <div class="clearBoth"></div>
-        </div>-->
         <div class="lablebox">
           <span>备注<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
           <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
@@ -102,8 +89,6 @@
           <div class="clearBoth"></div>
         </div>
       </div>
-     <!-- <div v-if="pk==''" id="price" class="label">
-      </div>-->
       <div v-if="pk==''" id="read"  style="margin: 0.3rem auto; width: 94%;background: transparent;line-height: 0.6rem;">
         <div class=" borderno">
           <span style="font-size: 0.32rem;color:#999;">若产生等待费，请用户额外支付费用，请按照司机<span style="font-size: 0.32rem;color:#E72C31;">收费标准</span>结算</span>
@@ -115,41 +100,42 @@
       <button id="chengyunshang"  @touchend="appoint()" v-html="both.appoint==''?'指定承运商':both.appoint"></button>
       <button id="submit" class="gogogo" @touchend="submitGo()">提交</button>
       <div class="clearBoth"></div>
-      <div id="vehicleBox" v-if="vehicleBox">
-           <div id="vehicle">
-             <img src="../../images/cha.png" @touchend="vehicleBoxClosed()">
-             <p>选择车辆车型</p>
-             <div class="vehicleBox">
-               <div class="vehicle" v-if="both.carList.length > 0">
-                 <h6>用车类型</h6>
-                 <ul>
-                   <li class="carTypeLi" v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
-                   <li @touchend="lookMore(1)" class="cartypelookMore carTypeLi" v-if="both.carListMore">全部</li>
-                   <div class="clearBoth"></div>
-                 </ul>
-               </div>
-               <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
-                 <h6>车长<span>（米，可多选）</span></h6>
-                 <ul style="margin-left: 2%;">
-                   <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,2)">{{item.displayName}}</li>
-                   <li @touchend="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
-                   <div class="clearBoth"></div>
-                   <div class="cartypeOther" v-if="!both.carWidthListMore"><span>其它车长：</span><input v-model="both.cartypeOther" placeholder="点击输入"/>米</div>
-                 </ul>
-               </div>
-               <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
-                 <h6>车型<span>（可多选）</span></h6>
-                 <ul>
-                   <li class="carTypeLi" v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
-                   <li @touchend="lookMore(3)" class="carTypeLi cartypelookMore" v-if="both.carTypeListMore">全部</li>
-                   <div class="clearBoth"></div>
-                 </ul>
-               </div>
-             </div>
-             <button @touchend="carListSure()">确定</button>
-           </div>
-      </div>
-      <div id="newOrderMessageBox" v-if="newOrderMessageBox">
+      <transition name="slide-fade">
+        <div id="vehicleBox" v-if="vehicleBox">
+          <div id="vehicle">
+            <img src="../../images/cha.png" @touchend="vehicleBoxClosed()">
+            <p>选择车辆车型</p>
+            <div class="vehicleBox">
+              <div class="vehicle" v-if="both.carList.length > 0">
+                <h6>用车类型</h6>
+                <ul>
+                  <li class="carTypeLi" v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
+                  <li @touchend="lookMore(1)" class="cartypelookMore carTypeLi" v-if="both.carListMore">全部</li>
+                  <div class="clearBoth"></div>
+                </ul>
+              </div>
+              <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
+                <h6>车长<span>（米，可多选）</span></h6>
+                <ul style="margin-left: 2%;">
+                  <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,2)">{{item.displayName}}</li>
+                  <li @touchend="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
+                  <div class="clearBoth"></div>
+                  <div class="cartypeOther" v-if="!both.carWidthListMore"><span>其它车长：</span><input v-model="both.cartypeOther" placeholder="点击输入"/>米</div>
+                </ul>
+              </div>
+              <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
+                <h6>车型<span>（可多选）</span></h6>
+                <ul>
+                  <li class="carTypeLi" v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
+                  <li @touchend="lookMore(3)" class="carTypeLi cartypelookMore" v-if="both.carTypeListMore">全部</li>
+                  <div class="clearBoth"></div>
+                </ul>
+              </div>
+            </div>
+            <button @touchend="carListSure()">确定</button>
+          </div>
+        </div>
+        <div id="newOrderMessageBox" v-if="newOrderMessageBox">
           <div id="newOrderMessage">
             <p>请确认订单信息</p>
             <div class="message_address">
@@ -159,7 +145,7 @@
               <div class="clearBoth"></div>
             </div>
             <div class="message_product" v-for="(item,index) in both.productList">
-              <h6>货物</h6><h5>{{item.goodsType}}</h5><div class="clearBoth"></div>
+              <h6>货物</h6><h5 v-html="item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: ''"></h5><div class="clearBoth"></div>
               <h6>规格</h6><h5>{{item.number * 1}}件<span v-if="item.wight * 1 >0">/{{item.wight * 1}}{{item.unitWight}}</span><span v-if="item.weight * 1 >0">/{{item.weight * 1}}{{item.unitWeight}}</span></h5>
               <div class="clearBoth"></div>
             </div>
@@ -174,7 +160,32 @@
               <div class="clearBoth"></div>
             </div>
           </div>
-      </div>
+        </div>
+        <div id="productBox" v-if="productBox">
+          <div id="product">
+            <img src="../../images/cha.png" @touchend="productListClosed()">
+            <p>货物名称</p>
+            <div class="vehicleBox">
+              <div class="vehicle">
+                <h6>运输类型</h6>
+                <ul>
+                  <li v-for="(item,index) in productList.first" :class="item.check ? 'chooseTrue' : ''" @touchend="productListName(index,1)">{{item.displayName}}</li>
+                  <div class="clearBoth"></div>
+                </ul>
+              </div>
+              <div class="vehicle">
+                <h6>货物类型</h6>
+                <ul>
+                  <li v-for="(item,index) in productList.second" :class="item.check ? 'chooseTrue' : ''" @touchend="productListName(index,2)">{{item.displayName}}</li>
+                  <div class="clearBoth"></div>
+                  <div class="productOther"><span>其他</span><input @keyup="productorderkeyup()" maxlength="15" v-model="productOther" placeholder="如：冰箱"/></div>
+                </ul>
+              </div>
+              <button @touchend="getProduct()">确定</button>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
 </template>
 
@@ -263,6 +274,28 @@
             newordertrantype:"",
             lindanShow:true,
             jizhuangjixie:[],
+            productList:{
+               first:[{
+                 displayName:"冷链",
+                 value:1,
+                 check:false,
+               },{
+                 displayName:"普货",
+                 value:2,
+                 check:false,
+               },{
+                 displayName:"危险品",
+                 value:3,
+                 check:false,
+               },{
+                 displayName:"集装箱",
+                 value:4,
+                 check:false,
+               }],
+               second:[],
+            },
+            productBox:false,
+            productOther:"",
             suremend: new Debounce(this.ajaxPost, 1000)
           }
        },
@@ -293,16 +326,11 @@
                   }
                 }
               }
-              if( weightBoth > 30){
-                self.carTypeLook = false;
-              }else{
-                self.carTypeLook = true;
-              }
               _this.both.price=(_this.both.price.toString().match(/\d+(\.\d{0,2})?/)||[''])[0];
               _this.price=(_this.price.toString().match(/\d+(\.\d{0,2})?/)||[''])[0];
               _this.both.cartypeOther = (_this.both.cartypeOther.toString().match(/\d+(\.\d{0,1})?/)||[''])[0];
               if(_this.pk == ""){
-                if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30)){
+                if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.tranType != ""){
                   for(var i = 0;i<self.productList.length;i++) {
                     if(_this.price!=""){
                       if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -365,7 +393,7 @@
               for(var i = 0;i<self.productList.length;i++) {
                 weightBoth =  weightBoth + self.productList[i].wight * self.productList[i].wightTen;
               }
-              if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weightBoth <= 30) || weightBoth > 30) ){
+              if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.tranType != "" ){
                 for(var i = 0;i<self.productList.length;i++) {
                   if(_this.price!=""){
                     if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
@@ -976,25 +1004,6 @@
                      z = i;
                   }
                 }
-               /* var jizhuangjixie = new LArea();
-                jizhuangjixie.init({
-                  'trigger': '#Z08',
-                  'valueTo': '#Z08',
-                  'keys': {
-                    id: 'id',
-                    name: 'name'
-                  },
-                  'type': 1,
-                  'data': _this.jizhuangjixie
-                });
-                jizhuangjixie.value = [z];
-                jizhuangjixie.addPointer = function (name) {
-                  name = JSON.parse(name);
-                  _this.both.jizhuangjixie = name.firstCode == 0 ? "" :name.firstVal;
-                }*/
-      /*          if(_this.pk == "" && _this.$route.query.type == undefined){
-                  bridge.invoke("guide","1");
-                }*/
               })
             });
           },
@@ -1053,7 +1062,7 @@
             volumn = volumn*1 + _this.both.productList[x].weight * _this.both.productList[x].weightTen;
           }
           if(_this.pk == ""){
-            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" &&((self.tranType != self.tranTypeValue && weight <= 30) ||  weight > 30)){
+            if(self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" &&self.tranType != self.tranTypeValue){
               if(( weight*1 > 0 || volumn*1 > 0) && _this.both.price == ""){
                 var carListSureValueList = self.carListSureValue.split(",");
                 var carListSureValue = "";
@@ -1097,7 +1106,7 @@
                 var json = {
                   startCity:_this.both.startAddress.city.split("-")[1].replace("市",""),
                   endCity:_this.both.endAddress.city.split("-")[1].replace("市",""),
-                  carLength:weight <= 30 && carListSureValue == "5fda0edc8df34b4d8c1ed44a6f1f866e" ? carWidthListSureValue : "",
+                  carLength: carWidthListSureValue,
                   weight:weight,
                   volume:volumn,
                   userCode:sessionStorage.getItem("token"),
@@ -1133,7 +1142,7 @@
           }
           var self = _this.both;
           if(_this.pk == ""){
-            if(self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&((self.tranType != ""&& weight <= 30) ||  weight > 30)){
+            if(self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.tranType != "" ){
               for(var i = 0;i<self.productList.length;i++) {
                 if(_this.price!=""){
                   if (self.productList[i].goodsType == "") {
@@ -1222,6 +1231,98 @@
             _this.carTypeList[index].choose = !_this.carTypeList[index].choose;
           }
 
+        },
+        getProduct:function () {
+          var _this = this;
+          var list1 = [] , list2 = [] ;
+          for(var i = 0 ;i < _this.productList.first.length;i++){
+            if( _this.productList.first[i].check){
+              list1.push(_this.productList.first[i].value);
+              break;
+            }
+          }
+          for(var i = 0 ;i < _this.productList.second.length;i++){
+            if( _this.productList.second[i].check){
+              list2.push(_this.productList.second[i].displayName);
+              break;
+            }
+          }
+          if(_this.productOther != ""){
+            list2.push(_this.productOther);
+          }
+          if(list1.length == 0){
+             bomb.first("请选择运输类型");
+             return false;
+          }
+          if(list2.length == 0){
+            bomb.first("请选择或填写货物类型");
+            return false;
+          }
+          _this.productOther = "";
+          for(var i = 0 ;i < _this.productList.first.length;i++){
+            _this.productList.first[i].check = false;
+          }
+          for(var i = 0 ;i < _this.productList.second.length;i++){
+            _this.productList.second[i].check = false;
+          }
+          _this.both.productList[0].goodsType =list2[0];
+          _this.both.productList[0].goodstypenumber =list2[0];
+          _this.both.productList[0].protype = 2;
+          _this.both.productList[0].tranpk = list1[0];
+          _this.productBox = false;
+        },
+        productListClosed:function () {
+          var _this = this;
+          _this.productBox = false;
+          for(var i = 0 ;i < _this.productList.first.length;i++){
+            _this.productList.first[i].check = false;
+          }
+          for(var i = 0 ;i < _this.productList.second.length;i++){
+            _this.productList.second[i].check = false;
+          }
+          _this.productOther = "";
+        },
+        productorderkeyup:function () {
+          var _this = this;
+          var list1 = [];
+          for(var i = 0 ;i < _this.productList.second.length;i++){
+            if( _this.productList.second[i].check){
+              list1.push(_this.productList.second[i].value);
+              break;
+            }
+          }
+          if(list1.length > 0){
+            _this.productOther = "";
+            bomb.first("您已经选择货物无法输入");
+          }else{
+            _this.productOther = androidIos.checkText(_this.productOther);
+          }
+        },
+        productListName:function (index,type) {
+            var _this = this;
+            if(type == 1){
+              if(_this.productList.first[index].check){
+                _this.productList.first[index].check = !_this.productList.first[index].check;
+                return false;
+              }
+             for(var i = 0 ;i < _this.productList.first.length;i++){
+               _this.productList.first[i].check = false;
+             }
+            _this.productList.first[index].check = true;
+            }else if(type == 2){
+              if(_this.productOther == ""){
+                if(_this.productList.second[index].check){
+                  _this.productList.second[index].check = !_this.productList.second[index].check;
+                  return false;
+                }
+                for(var i = 0 ;i < _this.productList.second.length;i++){
+                  _this.productList.second[i].check = false;
+                }
+                _this.productList.second[index].check = true;
+              }else{
+                bomb.first("您已经输入其它货物无法选择");
+              }
+            }
         },
         weightKeyup:function(){
           var _this = this;
@@ -1326,6 +1427,10 @@
                   })
                }
             }
+          if(x.length == 0){
+            bomb.first("请选择用车类型");
+            return false;
+          }
           for(var i = 0; i < self.carWidthList.length ; i++){
             if(x[0].name.indexOf("零担") != -1){
               self.carWidthList[i].choose = false;
@@ -1347,10 +1452,6 @@
                 value : self.carTypeList[i].value
               })
             }
-          }
-          if(x.length == 0){
-               bomb.first("请选择用车类型");
-               return false;
           }
           if(y.length == 0 && x[0].value == "5fda0edc8df34b4d8c1ed44a6f1f866e"){
             bomb.first("请选择车长");
@@ -1410,11 +1511,52 @@
         goodsType:function (index) {
           var _this = this;
           if(_this.pk == ""){
-            _this.both.price = _this.price;
+            var ajax;
+            if( _this.productList.second.length == 0){
+              ajax = $.ajax({
+                type: "GET",
+                url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
+                data:{str:"product_Name",userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
+                dataType: "json",
+                timeout: 10000,
+                success: function (getSysConfigList) {
+                  for(var i = 0; i < getSysConfigList.length;i++){
+                    getSysConfigList[i].check = false;
+                  }
+                  _this.productList.second = getSysConfigList;
+                },
+                complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                  if(status=='timeout'){//超时,status还有success,error等值的情况
+                    androidIos.second("网络请求超时");
+                  }else if(status=='error'){
+                    androidIos.errorwife();
+                  }
+                }
+              })
+            }
+            for(var i = 0 ;i < _this.productList.first.length;i++){
+              if( _this.productList.first[i].value == _this.both.productList[0].tranpk){
+                _this.productList.first[i].check = true;
+              }
+            }
+            Promise.all([ajax]).then(function(values) {
+              var list = [];
+              for (var i = 0; i < _this.productList.second.length; i++) {
+                if (_this.both.productList[0].goodsType == _this.productList.second[i].displayName) {
+                  _this.productList.second[i].check = true;
+                  list.push(_this.productList.second[i].displayName);
+                }
+              }
+              if(list.length == 0){
+                _this.productOther = _this.both.productList[0].goodsType;
+              }
+            })
+            _this.productBox = true;
+            /*_this.both.price = _this.price;
             _this.both.scrollTop =  _this.getPageScroll();
             sessionStorage.setItem("newOrder",JSON.stringify(_this.both));
             androidIos.addPageList();
-            _this.$router.push({ path: '/newOrder/goodsType',query:{index: index}});
+            _this.$router.push({ path: '/newOrder/goodsType',query:{index: index}});*/
           }
         },
         appoint:function(){
@@ -1602,36 +1744,36 @@
                 for(var i = 0;i<self.productList.length;i++) {
                   weightBoth = weightBoth + self.productList[i].wight * self.productList[i].wightTen;
                   if (self.productList[i].goodsType == ""){
-                    bomb.first("请选择第" + (i+1) + "个货物");
+                    bomb.first("请选择货物");
                     return false;
                   }
                   if(self.productList[i].protype == 0){
                     if(self.productList[i].wight*1 == "0"){
-                      bomb.first("请填写第" + (i+1) + "个货物的重量");
+                      bomb.first("请填写货物的重量");
                       return false;
                     }
                   }else if(self.productList[i].protype == 1){
                     if(self.productList[i].weight*1 == "0"){
-                      bomb.first("请填写第" + (i+1) + "个货物的体积");
+                      bomb.first("请填写货物的体积");
                       return false;
                     }
                     if( self.productList[i].wight*1 == "0"){
-                      bomb.first("请填写第" + (i+1) + "个货物的重量");
+                      bomb.first("请填写货物的重量");
                       return false;
                     }
                   }else if(self.productList[i].protype == 2){
                     if(self.productList[i].weight*1 == "0"){
-                      bomb.first("请填写第" + (i+1) + "个货物的体积");
+                      bomb.first("请填写货物的体积");
                       return false;
                     }
                     if( self.productList[i].wight*1 == "0"){
-                      bomb.first("请填写第" + (i+1) + "个货物的重量");
+                      bomb.first("请填写货物的重量");
                       return false;
                     }
                   }
 
                 }
-                if(self.tranType == "" && weightBoth <= 30){
+                if(self.tranType == "" ){
                   bomb.first("请选择运输类别");
                   return false;
                 }
@@ -1651,8 +1793,9 @@
             for( var i = 0 ; i < self.productList.length ; i++ ){
               var listjson = {
                 pkInvPackB:self.productList[i].pkInvPackB == ""?undefined:self.productList[i].pkInvPackB,
-                goodsClass:self.productList[i].goodstypenumber.split("-")[0],
-                goodsCode: self.productList[i].goodstypenumber.split("-")[1],
+                goodsClass:self.productList[i].goodstypenumber,
+                goodsCode: "",
+                tranType:self.productList[i].tranpk,
                 num: self.productList[i].number*1,
                 weight:self.productList[i].wight*self.productList[i].wightTen*1000,
                 volume:self.productList[i].weight*self.productList[i].weightTen
@@ -1707,16 +1850,16 @@
               act_leav_date:self.timeBeforeS + " " + self.timeBeforeF,
               act_arri_date:self.timeAfterS +" " + self.timeAfterF,
               goodspack:list,
-              vehicleType:weightBoth <= 30 ? carListSureValue : "",
-              carLength:weightBoth <= 30 && carListSureValue == "5fda0edc8df34b4d8c1ed44a6f1f866e" ? carWidthListSureValue : "",
-              carModel:weightBoth <= 30 && carListSureValue == "5fda0edc8df34b4d8c1ed44a6f1f866e" ? carTypeListSureValue : "",
+              vehicleType:carListSureValue,
+              carLength: carWidthListSureValue ,
+              carModel:carTypeListSureValue,
               pk_carrier:self.pk_carrier,
               driver_name:self.driver_name,
               if_insurance:self.insurance,
               pay:self.pay==1?"收货方":"发货方",
               est_amount:_this.price*1,
               remark:remarkBox,
-              if_urgent:"",
+              if_urgent:remarkBox.indexOf("加急") != -1 ? "Y" : "N",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
               service:self.service,
@@ -2001,7 +2144,8 @@
      font-size: 0.375rem;
      color:#bcbcbc;
      margin-right: 5%;
-     max-width: 57%;
+     width: 57%;
+     text-align: right;
      overflow: hidden;
      text-overflow:ellipsis;
      white-space: nowrap;
@@ -2155,7 +2299,7 @@
   .imgno{
     background-image: none!important;
   }
-  #vehicleBox{
+  #vehicleBox,#productBox{
     position: fixed;
     width:100%;
     top:0;
@@ -2164,14 +2308,14 @@
     z-index: 44;
     background: rgba(0,0,0,0.3);
   }
-  #vehicle{
+  #vehicle,#product{
      width: 100%;
      background: white;
      position: absolute;
     bottom:0;
     padding-bottom: 0.5rem;
   }
-  #vehicle button{
+  #vehicle button,#product button{
     width:90%;
     line-height: 1rem;
     background: #1D68A8;
@@ -2181,7 +2325,7 @@
     font-size: 0.375rem;
     border-radius: 0.2rem;
   }
-  #vehicle p{
+  #vehicle p,#product p{
      text-align: center;
     font-size: 0.45rem;
     color:#333;
@@ -2232,7 +2376,7 @@
     color:white!important;
     border-color: #1D68A8!important;
   }
-  #vehicle img{
+  #vehicle img,#product img{
     position: absolute;
     width:0.375rem;
     right:0.413rem;
@@ -2245,14 +2389,14 @@
      background-repeat: no-repeat;
     background-position: 93% 50%;
   }
-  .cartypeOther{
+  .cartypeOther,.productOther{
      margin-left: 3%;
     font-size: 0.375rem;
     color:#333;
     line-height: 1rem;
     margin-top: 0.2rem;
   }
-  .cartypeOther span{
+  .cartypeOther span,.productOther span{
     font-size: 0.375rem;
     color:#999;
   }
@@ -2263,5 +2407,27 @@
      padding:0.15rem 0.2rem ;
     margin: 0 0.1rem 0 0.3rem;
     border: 1px solid #dcdcdc;
+  }
+  .productOther input{
+    width:4.253rem;
+    height: 0.375rem;
+    font-size: 0.375rem;
+    padding:0.2rem 0.2rem ;
+    margin: 0 0.1rem 0 0.3rem;
+    border: 1px solid #999999;
+    border-radius: 0.1rem;
+  }
+  /* 可以设置不同的进入和离开动画 */
+  /* 设置持续时间和动画函数 */
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(0.13rem);
+    opacity: 0;
   }
 </style>

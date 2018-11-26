@@ -28,7 +28,7 @@
         remark:{
           handler:function(val,oldval){
             var _this = this;
-            _this.remark = androidIos.checkText(_this.remark);
+            _this.remark = _this.remark.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\,\.\。\;\!\[\]\【\】\-]/g,'');
           },
           deep:true
         }
@@ -60,16 +60,45 @@
             })
             var newOrder = sessionStorage.getItem("newOrder");
             if(newOrder != undefined){
-                newOrder = JSON.parse(newOrder);
-                _this.remark = newOrder.remark;
-                _this.$nextTick(function () {
-                  _this.keyUp();
-                })
+                newOrder = JSON.parse(newOrder).remark;
+               var newOrderList = newOrder.split("，");
+               var tabList;
+               if(newOrderList.length > 1){
+                 _this.remark = newOrderList[1];
+                 tabList =  newOrderList[0].split(",");
+               }else{
+                 var list = [];
+                 var list3 = [];
+                 var list2 =  newOrderList[0].split(",");
+                   for(var x = 0 ;x <  list2.length ; x++){
+                     var z = 0;
+                     for(var i = 0 ;i <  _this.remarkList.length ; i++){
+                        if(_this.remarkList[i].displayName == list2[x]){
+                          list.push(list2[x]);
+                          break;
+                        }
+                        z++;
+                     }
+                     if(z == _this.remarkList.length){
+                       list3.push(list2[x]);
+                     }
+                   }
+                 _this.remark =  list3.join(",");
+                 tabList = list;
+               }
+              for(var x = 0 ;x <  tabList.length ; x++){
+                for(var i = 0 ;i <  _this.remarkList.length ; i++){
+                  if(_this.remarkList[i].displayName == tabList[x]){
+                    _this.remarkList[i].show = true;
+                    break;
+                  }
+                }
+              }
             }
           },
           keyUp:function () {
              var _this = this;
-             var list = _this.remark.split(",");
+            /* var list = _this.remark.split(",");
              for(var x = 0 ; x < _this.remarkList.length ; x++ ){
                var jjj = 0;
                for(var i = 0 ; i < list.length; i++) {
@@ -83,7 +112,7 @@
                  _this.remarkList[x].show = false;
                  _this.removeClass(document.getElementsByClassName("ulli")[x],"chooseTrue");
                }
-             }
+             }*/
           },
         remarkKeyUp:function () {
             var _this = this;
@@ -94,7 +123,7 @@
             if( !item.show){
               _this.addClass(e.target,"chooseTrue");
               _this.remarkList[index].show = !_this.remarkList[index].show;
-              if(_this.remark == ""){
+              /*if(_this.remark == ""){
                 _this.remark = item.displayName + "," ;
               }else if(_this.remark != ""){
                 var re = _this.remark[_this.remark.length - 1];
@@ -103,11 +132,11 @@
                 }else if(re != ","){
                   _this.remark = _this.remark + "," + item.displayName + "," ;
                 }
-              }
+              }*/
             }else{
               _this.removeClass(e.target,"chooseTrue");
               _this.remarkList[index].show = !_this.remarkList[index].show;
-              var list = _this.remark.split(",");
+              /*var list = _this.remark.split(",");
               for(var i = 0; i < list.length; i++){
                  if(item.displayName == list[i]){
                    list.splice(i,1);
@@ -119,12 +148,25 @@
                 if(list[i] != ""){
                   _this.remark += list[i] + ",";
                 }
-              }
+              }*/
             }
           },
         save:function () {
             var _this = this;
-           sessionStorage.setItem("remark",_this.remark);
+            var list = [];
+            for(var i = 0;i<_this.remarkList.length;i++){
+               if(_this.remarkList[i].show){
+                 list.push(_this.remarkList[i].displayName);
+               }
+            }
+            var list2 = [];
+            if(list.join(",") != ""){
+              list2.push(list.join(","));
+            }
+          if(_this.remark != ""){
+            list2.push(_this.remark);
+          }
+           sessionStorage.setItem("remark",list2.join("，"));
            androidIos.gobackFrom(_this);
         },
         addClass:function(obj,cls){//增加class

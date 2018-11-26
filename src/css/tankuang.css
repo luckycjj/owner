@@ -85,6 +85,8 @@
     font-size: 0.4rem;
     color:#666;
     line-height: 1rem;
+  max-height: 4rem;
+  overflow: hidden;
 }
 .tanBox-class h4,.tanBox-classS h4{
     text-align: left;

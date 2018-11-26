@@ -319,7 +319,7 @@
      .imgBox{
        width:0.58rem;
        height: 0.58rem;
-       margin: 0.2rem  auto 0 auto;
+       margin: 0.24rem  auto 0 auto;
        background-position: 0 0;
        background-size: 0.58rem 1.16rem;
        background-repeat: no-repeat;
@@ -330,9 +330,9 @@
        font-size: 0.3125rem;
        color:white;
        position: absolute;
-       top:0;
+       top:-0.15rem;
        right:0rem;
-       padding: 0.01rem 0.2rem;
+       padding: 0.08rem 0.2rem;
        border-radius: 0.3rem;
      }
      .hall{
@@ -359,8 +359,9 @@
       text-align: center;
       height: 1.3rem;
       color:#999;
-      font-size: 0.3125rem;
+      font-size:  0.24rem;
       background: white;
+      line-height: 0.35rem;
       position: relative;
     }
    #footerUserTX{
