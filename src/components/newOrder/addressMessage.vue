@@ -18,7 +18,7 @@
               </div>
             <div class="firstBox">
               <p>{{item.contact}}<span>{{item.mobile}}</span></p>
-              <h1><span style="color:white;padding: 0.07rem 0.2rem;background:#46B2E7;border-radius: 0.06rem;" v-if="item.ifDefault == '1'">默认</span>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
+              <h1><span style="color:white;margin-right:0.2rem;padding: 0.02rem 0.2rem;background:#46B2E7;border-radius: 0.06rem;" v-if="item.ifDefault == '1'">默认</span>{{item.province}}-{{item.city}}-{{item.area}}&nbsp;&nbsp;{{item.detailAddr}}</h1>
             </div>
               <div class="clearBoth"></div>
             <div class="secondBox">
@@ -98,7 +98,8 @@
             page: {
               num: 0, //当前页码,默认0,回调之前会加1,即callback(page)会从1开始
               size: 15, //每页数据的数量
-            }
+            },
+            htmlNodata:""
           },
           down: {
             offset: 2.1 * $("html").css("font-size").replace("px", ""),

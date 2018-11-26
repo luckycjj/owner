@@ -447,24 +447,25 @@
         var self = this;
         self.orderSource = self.$route.query.type;
         /*var centerJ = self.pdlist[0].ordertypeType ==*/
-        var map = new AMap.Map("container", {
-          resizeEnable: true,
-          center: [self.startJ,  self.startW],//地图中心点
-          zoom: 13 //地图显示的缩放级别
-        });
+        var map = new AMap.Map("container", {});
         map.on("click",function () {
           self.mapLook();
         })
-        AMap.plugin(['AMap.Scale'],
-          function(){
-            map.addControl(new AMap.Scale());
-          });
-        //构造路线导航类
-        var driving = new AMap.Driving({
+        var truckOptions = {
           map: map,
-          panel: "panel"
-        });
-        driving.search([self.startJ, self.startW],[self.endJ,self.endW], function(status, result) {});
+          policy:0,
+          size:1,
+          city:'beijing',
+          panel:'panel',
+          province:"",
+          number:""
+        };
+        var path = [];
+        path.push({lnglat:[self.startJ, self.startW]});//起点
+        path.push({lnglat:[self.endJ,self.endW]});//途径
+
+        var driving = new AMap.TruckDriving(truckOptions);
+        driving.search(path, function(status, result) {});
         for(var i = 0 ; i < self.carList.length;i++){
           var marker;
           marker = new AMap.Marker({
