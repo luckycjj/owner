@@ -607,7 +607,7 @@
                       }
                     }
                     var servList = [];
-                    var service1 = invoiceDetail.photo_back;
+                    /*var service1 = invoiceDetail.photo_back;
                     var service2 = invoiceDetail.paper_back;
                     var service3 = invoiceDetail.elect_back;
                     if(service1 == 1){
@@ -615,10 +615,7 @@
                     }
                     if(service2 == 1){
                       servList.push("纸质回单（免费）");
-                    }
-                    if(service2 == 1){
-                      servList.push("开具电子发票");
-                    }
+                    }*/
                     var pdlist = {
                       startAddress:{
                         people:invoiceDetail.delivery.contact,
@@ -1892,7 +1889,7 @@
               weightBoth:weightBoth,
               photo_back: self.service.indexOf("拍照") != -1 ? 1 : 0,
               paper_back: self.service.indexOf("纸质") != -1 ? 1 : 0,
-              elect_back: self.service.indexOf("电子发票") != -1 ? 1 : 0,
+              elect_back: self.service.indexOf("电子发票") != -1 ? sessionStorage.getItem("servicePk") : 0,
               goods_name:self.productList[0].goodstypenumber,
               num_count: self.productList[0].number*1,
               weight_count:self.productList[0].wight*self.productList[0].wightTen*1000,
@@ -1914,6 +1911,7 @@
                 if(createOrder.success=="1"){
                   _this.newOrderMessageBox = false;
                   _this.$cjj("提交成功");
+                  sessionStorage.removeItem("servicePk");
                   setTimeout(function () {
                     androidIos.gobackFrom(_this);
                   },1000)

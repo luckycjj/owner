@@ -6,7 +6,7 @@
       <div class="clearBoth"></div>
     </ul>
     <textarea placeholder="请填写备注" v-model="remark" @input="remarkKeyUp()"></textarea>
-    <button @touchend="save()">保存</button>
+    <button @touchend.stop.prevent="save()">保存</button>
   </div>
 </template>
 

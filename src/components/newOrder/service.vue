@@ -20,13 +20,33 @@
           <div class="clearBoth"></div>
         </div>
         <div class="tab" style="margin-top: 0.2rem;">
-          <p>开户银行名称</p>
+          <p>公司地址</p>
+          <h3>{{message.address}}</h3>
+          <div class="clearBoth"></div>
+        </div>
+        <div class="tab" style="margin-top: 1px">
+          <p>电话号码</p>
+          <h3>{{message.phone}}</h3>
+          <div class="clearBoth"></div>
+        </div>
+        <div class="tab" style="margin-top: 0.2rem;">
+          <p>开户银行</p>
           <h3>{{message.bank}}</h3>
           <div class="clearBoth"></div>
         </div>
         <div class="tab" style="margin-top: 1px">
-          <p>开户银行账号</p>
+          <p>银行账号</p>
           <h3>{{message.bankNumber}}</h3>
+          <div class="clearBoth"></div>
+        </div>
+        <div class="tab" style="margin-top: 0.2rem;">
+          <p>联系电话</p>
+          <h3>{{message.moblie}}</h3>
+          <div class="clearBoth"></div>
+        </div>
+        <div class="tab" style="margin-top: 1px">
+          <p>电子邮箱</p>
+          <h3>{{message.email}}</h3>
           <div class="clearBoth"></div>
         </div>
       </div>
@@ -48,13 +68,33 @@
             <div class="clearBoth"></div>
           </div>
           <div class="tab" style="margin-top: 0.2rem;">
-            <p>开户银行名称</p>
-            <input type="text" placeholder="请输入开户银行名称" v-model="message.bank"/>
+            <p>公司地址</p>
+            <input type="text" placeholder="请输入公司地址(选填)" v-model="message.address"/>
             <div class="clearBoth"></div>
           </div>
           <div class="tab" style="margin-top: 1px">
-            <p>开户银行账号</p>
-            <input type="tel" placeholder="请输入开户银行账号" maxlength="20" v-model="message.bankNumber"/>
+            <p>电话号码</p>
+            <input type="tel" placeholder="请输入电话号码(选填)" maxlength="11" v-model="message.phone"/>
+            <div class="clearBoth"></div>
+          </div>
+          <div class="tab" style="margin-top: 0.2rem;">
+            <p>开户银行</p>
+            <input type="text" placeholder="请输入开户银行名称(选填)" v-model="message.bank"/>
+            <div class="clearBoth"></div>
+          </div>
+          <div class="tab" style="margin-top: 1px">
+            <p>银行账号</p>
+            <input type="tel" placeholder="请输入开户银行账号(选填)" maxlength="20" v-model="message.bankNumber"/>
+            <div class="clearBoth"></div>
+          </div>
+          <div class="tab" style="margin-top: 0.2rem;">
+            <p>联系电话</p>
+            <input type="tel" placeholder="请输入您的联系电话(选填)" maxlength="11" v-model="message.moblie"/>
+            <div class="clearBoth"></div>
+          </div>
+          <div class="tab" style="margin-top: 1px">
+            <p>电子邮箱</p>
+            <input type="email" placeholder="请输入电子邮箱账号(选填)" v-model="message.email"/>
             <div class="clearBoth"></div>
           </div>
           <button @click="saveFa()">保存发票信息</button>
@@ -86,6 +126,10 @@
             message:{
               company:"",
               shuihao:"",
+              address:"",
+              phone:"",
+              moblie:"",
+              email:"",
               bank:"",
               bankNumber:"",
             },
@@ -126,16 +170,21 @@
       },
       methods:{
           go:function () {
-
+            var _this = this;
+               _this.getFa();
           },
         fapiaoFalse:function () {
           var _this = this;
-          _this.message = {
-              company:"",
-              shuihao:"",
-              bank:"",
-              bankNumber:"",
-          }
+         /* _this.message = {
+            company:"",
+            shuihao:"",
+            address:"",
+            phone:"",
+            moblie:"",
+            email:"",
+            bank:"",
+            bankNumber:"",
+          }*/
           _this.serviceList[2].check = false;
           var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
           if(fapiaoXinxi != undefined){
@@ -181,8 +230,89 @@
             bomb.first("请填写税号");
             return false;
           }
-          sessionStorage.setItem("fapiaoXinxi",JSON.stringify(_this.message));
-          _this.fapiao = false;
+          if(_this.message.moblie != ""){
+             if(!androidIos.telCheck(_this.message.moblie)){
+               bomb.first("联系电话有误");
+               return false;
+             }
+          }
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/company/electronicBill",
+            data:JSON.stringify({
+              corpName:_this.message.company,
+              taxNo:_this.message.shuihao,
+              ifDefault:1,
+              corpAddr:_this.message.address,
+              phone:_this.message.phone,
+              mobile:_this.message.moblie,
+              email:_this.message.email,
+              bank:_this.message.bank,
+              bankAccount:_this.message.bankNumber,
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 10000,
+            success: function (orderConfirm) {
+              if(orderConfirm.success == "1"){
+                _this.$cjj("保存成功");
+                sessionStorage.setItem("servicePk",orderConfirm.errorCode);
+                _this.fapiao = false;
+                _this.getFa();
+              }else{
+                androidIos.second(orderConfirm.message);
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              $("#common-blackBox").remove();
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
+        },
+        getFa:function () {
+            var _this = this;
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/company/getElectronicBill",
+            data:JSON.stringify({
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source"),
+              pk:sessionStorage.getItem("servicePk") != undefined ? sessionStorage.getItem("servicePk") : ""
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 10000,
+            success: function (getElectronicBill) {
+              if(getElectronicBill.success == "1"){
+                _this.message = {
+                    company:getElectronicBill.corpName,
+                    shuihao:getElectronicBill.taxNo,
+                    address:getElectronicBill.corpAddr,
+                    phone:getElectronicBill.phone,
+                    moblie:getElectronicBill.mobile,
+                    email:getElectronicBill.email,
+                    bank:getElectronicBill.bank,
+                    bankNumber:getElectronicBill.bankAccount,
+                }
+              }else{
+                androidIos.second(getElectronicBill.message);
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              $("#common-blackBox").remove();
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
         }
       }
     }

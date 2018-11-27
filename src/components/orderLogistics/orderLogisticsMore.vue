@@ -8,7 +8,7 @@
     </div>
     <div id="container"></div>
     <div id="panel"></div>
-    <li id="messageBigBox" :class="moveSure ? 'move' : ''" v-for="item in pdlist">
+    <li :style="{bottom:liBottom + 'rem'}"  id="messageBigBox" :class="moveSure ? 'move' : ''" v-for="item in pdlist">
           <div class="message">
             <div class="goodsmessage">
               <p :data-start="item.pickMessage.address" :data-end="item.endMessage.address" class="startEnd"><span style="float: left;font-size: 0.42rem;color:#373737;">{{item.goodsmessage.startAddress}}<img style="display: inline-block;margin:0rem 0.3rem 0.13rem 0.3rem;width:0.41rem;" src="../../images/addressImg.png">{{item.goodsmessage.endAddress}}</span><div class="clearBoth"></div></p>
@@ -205,6 +205,12 @@
         endJ:0,
         endW:0,
         moveSure:false,
+        startX :0,
+        startY :0,
+        endX :0,
+        endY : 0,
+        liBottom:0,
+        jisuan:false,
       }
     },
     mounted:function () {
@@ -214,6 +220,31 @@
 
     },
     methods:{
+      liTouchstart:function (event) {
+        var _this = this;
+        var touch = event.targetTouches[0];
+        _this.startX = touch.pageX;
+        _this.startY = touch.pageY;
+        _this.jisuan = false;
+      },
+      liTouchmove:function () {
+        var _this = this;
+        var touch = event.targetTouches[0];
+        if(_this.jisuan){
+          _this.startX = _this.endX;
+          _this.startY = _this.endY;
+        }
+        _this.jisuan = true;
+        _this.endX = touch.pageX;
+        _this.endY = touch.pageY;
+        console.log((_this.endY -  _this.startY) )
+          _this.liBottom = _this.liBottom -(_this.endY -  _this.startY) / document.getElementsByTagName("html")[0].style.fontSize.replace("px","");
+        console.log(document.getElementById("messageBigBox").style.bottom)
+
+      },
+      liTouchend:function () {
+        var _this = this;
+      },
       telCall:function (tel) {
         androidIos.telCall(tel);
       },
