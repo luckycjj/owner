@@ -1,7 +1,7 @@
 <template>
   <div id="footer">
     <ul>
-      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @touchend="urlGoshow(item.push,index)">
+      <li v-for='(item,index) of items' :class='[{on:index === idx} ]' @touchend.stop.prevent="urlGoshow(item.push,index)">
         <div class="imgBox"  :class='[ item.cls , {imgSure:index === idx} ]'><div :style="{marginRight:item.marginRight}" class="corner" v-show=" item.number > 0">{{item.number}}</div></div>
         <div id="footerUserTX" v-if="index == 4" :style="{display: item.show ? 'block' : 'none'}"></div>
         <div id="newOrderGo" @touchend="gonewOrder()" v-if="index == 2">
@@ -68,7 +68,7 @@
           androidIos.judgeIphoneX("footer",1);
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
           sessionStorage.removeItem("NEWORDERTRANTYPE");
-          _this.cookie = androidIos.getcookie("MESSAGEDRIVER");
+          _this.cookie = androidIos.getcookie("MESSAGEOWNER");
           if(driverBottomIcon != undefined){
             _this.items = JSON.parse(driverBottomIcon);
           }

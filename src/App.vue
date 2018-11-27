@@ -44,7 +44,7 @@
       var _this = this;
       _this.title = document.title;
       androidIos.judgeIphoneX("iphoneXX",4);
-      var cookie = androidIos.getcookie("MESSAGEDRIVER");
+      var cookie = androidIos.getcookie("MESSAGEOWNER");
       sessionStorage.setItem("source",1);
       if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
         cookie = JSON.parse(cookie);

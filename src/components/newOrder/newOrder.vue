@@ -6,18 +6,18 @@
       <div id="title" v-if="newordertrantype == '3'" v-title data-title="发布危险品池货源"></div>
       <div id="title" v-if="newordertrantype == '4'" v-title data-title="发布集装箱池货源"></div>
       <div id="peopleAddress">
-          <div id="histroyAddress" @touchend="histroyAddress()"  v-if="pk==''&& both.histroyAddressLength">
+          <div id="histroyAddress" @click.stop="histroyAddress()"  v-if="pk==''&& both.histroyAddressLength">
             常用路线
           </div>
           <div class="right">
             <div class="message  pickmessage">
               <p>发货方信息</p>
-              <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @touchend="goStartAddress()"></h1>
+              <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @click="goStartAddress()"></h1>
             </div>
             <div class="borderBottom"></div>
             <div class="message arrmessage">
               <p>收货方信息</p>
-              <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @touchend="goEndAddress()"></h1>
+              <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @click="goEndAddress()"></h1>
             </div>
           </div>
         <div class="clearBoth"></div>
@@ -39,13 +39,13 @@
       <div  v-for="(item,index) in both.productList" :id="'goods'+index" class="goodsLabel">
         <div class="labelTitle" v-if="both.productList.length>1">
           <p v-html="item.goodsType==''?'货物：暂无':'货物：'+item.goodsType">货物{{index+1}}</p>
-          <h6 @touchend="removeList(index)" v-if="pk==''">删除</h6>
+          <h6 @click="removeList(index)" v-if="pk==''">删除</h6>
           <div class="clearBoth"></div>
         </div>
         <div class="label" :class="both.productList.length>1?'labelTop':''">
           <div class="lablebox goodsTypeLabel borderno">
             <span class="required">货物类别</span>
-            <p v-html="item.goodsType==''?'请选择货物类型':(item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: '')" :class="item.goodsType==''?'':'blackColor'" @touchend="goodsType(index)" :datatype="item.goodstypenumber"></p>
+            <p v-html="item.goodsType==''?'请选择货物类型':(item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: '')" :class="item.goodsType==''?'':'blackColor'" @click="goodsType(index)" :datatype="item.goodstypenumber"></p>
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
@@ -60,6 +60,12 @@
             <input type="text" placeholder="请输入货物体积" maxlength="10" v-model="item.weight" @keyup="volumeKeyup()"/>
             <div class="clearBoth"></div>
           </div>
+          <div class="lablebox borderno imgno" style="border-top: 1px solid #dadada!important;">
+            <span class="required">件数</span>
+            <div class="unit">件</div>
+            <input type="text" placeholder="请输入货物件数" maxlength="10" v-model="item.number" @keyup="numberKeyup(item)"/>
+            <div class="clearBoth"></div>
+          </div>
         </div>
       </div>
      <!-- <div id="add"  v-if="pk==''">
@@ -70,17 +76,17 @@
       <div  v-if="pk==''" id="insurance" class="label" >
         <div class="lablebox" v-if="both.carTypeLook">
           <span class="required">车辆车型</span>
-          <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @touchend="tranType()"></p>
+          <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @click="tranType()"></p>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox">
           <span>增值服务<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem;">(选填)</span></span>
-          <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @touchend="service()"></p>
+          <p v-html="both.service==''?'是否需要回单':both.service" :class="both.service==''?'':'blackColor'" @click="service()"></p>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox">
           <span>备注<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
-          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @touchend="remark()"></p>
+          <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @click="remark()"></p>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox borderno imgno">
@@ -93,32 +99,32 @@
         <div class=" borderno">
           <span style="font-size: 0.32rem;color:#999;">若产生等待费，请用户额外支付费用，请按照司机<span style="font-size: 0.32rem;color:#E72C31;">收费标准</span>结算</span>
           <div class="clearBoth"></div>
-          <label><div class="circleBox" @touchend="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.32rem;color:#999;">我已阅读并同意<span style="font-size: 0.32rem;color:#E72C31;">《用户发货托运通知》</span></span><div class="clearBoth"></div></label>
+          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.32rem;color:#999;">我已阅读并同意<span style="font-size: 0.32rem;color:#E72C31;">《用户发货托运通知》</span></span><div class="clearBoth"></div></label>
           <div class="clearBoth"></div>
         </div>
       </div>
-      <button id="chengyunshang"  @touchend="appoint()" v-html="both.appoint==''?'指定承运商':both.appoint"></button>
-      <button id="submit" class="gogogo" @touchend="submitGo()">提交</button>
+      <button id="chengyunshang"  @click="appoint()" v-html="both.appoint==''?'指定承运商':both.appoint"></button>
+      <button id="submit" class="gogogo" @click="submitGo()">提交</button>
       <div class="clearBoth"></div>
       <transition name="slide-fade">
         <div id="vehicleBox" v-if="vehicleBox">
           <div id="vehicle">
-            <img src="../../images/cha.png" @touchend="vehicleBoxClosed()">
+            <img src="../../images/cha.png" @touchend.stop.prevent="vehicleBoxClosed()">
             <p>选择车辆车型</p>
             <div class="vehicleBox">
               <div class="vehicle" v-if="both.carList.length > 0">
                 <h6>用车类型</h6>
                 <ul>
-                  <li class="carTypeLi" v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,1)">{{item.displayName}}</li>
-                  <li @touchend="lookMore(1)" class="cartypelookMore carTypeLi" v-if="both.carListMore">全部</li>
+                  <li class="carTypeLi" v-for="(item,index) in both.carList" :class="item.choose ? 'chooseTrue' : ''" @touchend.stop.prevent="carListS(index,1)">{{item.displayName}}</li>
+                  <li @touchend.stop.prevent="lookMore(1)" class="cartypelookMore carTypeLi" v-if="both.carListMore">全部</li>
                   <div class="clearBoth"></div>
                 </ul>
               </div>
               <div class="vehicle" v-if="both.carWidthList.length > 0 && lindanShow">
                 <h6>车长<span>（米，可多选）</span></h6>
                 <ul style="margin-left: 2%;">
-                  <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,2)">{{item.displayName}}</li>
-                  <li @touchend="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
+                  <li v-for="(item,index) in both.carWidthList" v-if="item.look" :class="item.choose ? 'chooseTrue' : ''" @touchend.stop.prevent="carListS(index,2)">{{item.displayName}}</li>
+                  <li @touchend.stop.prevent="lookMore(2)" class="cartypelookMore" v-if="both.carWidthListMore">全部</li>
                   <div class="clearBoth"></div>
                   <div class="cartypeOther" v-if="!both.carWidthListMore"><span>其它车长：</span><input v-model="both.cartypeOther" placeholder="点击输入"/>米</div>
                 </ul>
@@ -126,13 +132,13 @@
               <div class="vehicle" v-if="both.carTypeList.length > 0 && lindanShow">
                 <h6>车型<span>（可多选）</span></h6>
                 <ul>
-                  <li class="carTypeLi" v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend="carListS(index,3)">{{item.displayName}}</li>
-                  <li @touchend="lookMore(3)" class="carTypeLi cartypelookMore" v-if="both.carTypeListMore">全部</li>
+                  <li class="carTypeLi" v-for="(item,index) in both.carTypeList" v-if="item.look"  :class="item.choose ? 'chooseTrue' : ''" @touchend.stop.prevent="carListS(index,3)">{{item.displayName}}</li>
+                  <li @touchend.stop.prevent="lookMore(3)" class="carTypeLi cartypelookMore" v-if="both.carTypeListMore">全部</li>
                   <div class="clearBoth"></div>
                 </ul>
               </div>
             </div>
-            <button @touchend="carListSure()">确定</button>
+            <button @touchend.stop.prevent="carListSure()">确定</button>
           </div>
         </div>
         <div id="newOrderMessageBox" v-if="newOrderMessageBox">
@@ -154,34 +160,34 @@
               <div class="clearBoth"></div>
             </div>
             <div class="message_button">
-              <button @touchend="messageButtonNo()">取消</button>
+              <button @touchend.stop.prevent="messageButtonNo()">取消</button>
               <div class='message_shuxian'></div>
-              <button class="message_buttonYes"  @touchend="messageButtonYes()">确定</button>
+              <button class="message_buttonYes"  @touchend.stop.prevent="messageButtonYes()">确定</button>
               <div class="clearBoth"></div>
             </div>
           </div>
         </div>
         <div id="productBox" v-if="productBox">
           <div id="product">
-            <img src="../../images/cha.png" @touchend="productListClosed()">
+            <img src="../../images/cha.png" @touchend.stop.prevent="productListClosed()">
             <p>货物名称</p>
             <div class="vehicleBox">
               <div class="vehicle">
                 <h6>运输类型</h6>
                 <ul>
-                  <li v-for="(item,index) in productList.first" :class="item.check ? 'chooseTrue' : ''" @touchend="productListName(index,1)">{{item.displayName}}</li>
+                  <li v-for="(item,index) in productList.first" :class="item.check ? 'chooseTrue' : ''" @touchend.stop.prevent="productListName(index,1)">{{item.displayName}}</li>
                   <div class="clearBoth"></div>
                 </ul>
               </div>
               <div class="vehicle">
                 <h6>货物类型</h6>
                 <ul>
-                  <li v-for="(item,index) in productList.second" :class="item.check ? 'chooseTrue' : ''" @touchend="productListName(index,2)">{{item.displayName}}</li>
+                  <li v-for="(item,index) in productList.second" :class="item.check ? 'chooseTrue' : ''" @touchend.stop.prevent="productListName(index,2)">{{item.displayName}}</li>
                   <div class="clearBoth"></div>
                   <div class="productOther"><span>其他</span><input @keyup="productorderkeyup()" maxlength="15" v-model="productOther" placeholder="如：冰箱"/></div>
                 </ul>
               </div>
-              <button @touchend="getProduct()">确定</button>
+              <button @touchend.stop.prevent="getProduct()">确定</button>
             </div>
           </div>
         </div>
@@ -600,6 +606,19 @@
                         _this.both.carWidthList[i].look = true;
                       }
                     }
+                    var servList = [];
+                    var service1 = invoiceDetail.photo_back;
+                    var service2 = invoiceDetail.paper_back;
+                    var service3 = invoiceDetail.elect_back;
+                    if(service1 == 1){
+                      servList.push("拍照回单（免费）");
+                    }
+                    if(service2 == 1){
+                      servList.push("纸质回单（免费）");
+                    }
+                    if(service2 == 1){
+                      servList.push("开具电子发票");
+                    }
                     var pdlist = {
                       startAddress:{
                         people:invoiceDetail.delivery.contact,
@@ -650,7 +669,7 @@
                       carWidthListMore:_this.both.carWidthListMore,
                       carTypeListMore:_this.both.carTypeListMore,
                       carTypeLook:true,
-                      service:"",
+                      service:servList.join(","),
                     }
                     _this.price = invoiceDetail.price*1;
                     _this.both = pdlist;
@@ -1046,6 +1065,9 @@
           var volumn = 0;
           var weightList = [];
           for(var x = 0;x<_this.both.productList.length;x++){
+            if(_this.both.productList[x].number < 1){
+              _this.both.productList[x].number = 1;
+            }
             if( _this.both.productList[x].wight != ""){
               weightList.push( _this.both.productList[x].wight);
             }
@@ -1331,6 +1353,12 @@
           _this.suremend();
         },
         volumeKeyup:function(){
+          var _this = this;
+          _this.price = "";
+          _this.both.price = "";
+          _this.suremend();
+        },
+        numberKeyup:function (item) {
           var _this = this;
           _this.price = "";
           _this.both.price = "";
@@ -1862,7 +1890,14 @@
               if_urgent:remarkBox.indexOf("加急") != -1 ? "Y" : "N",
               pk:_this.$route.query.type == 3 ? _this.$route.query.pk : _this.pk,
               weightBoth:weightBoth,
-              service:self.service,
+              photo_back: self.service.indexOf("拍照") != -1 ? 1 : 0,
+              paper_back: self.service.indexOf("纸质") != -1 ? 1 : 0,
+              elect_back: self.service.indexOf("电子发票") != -1 ? 1 : 0,
+              goods_name:self.productList[0].goodstypenumber,
+              num_count: self.productList[0].number*1,
+              weight_count:self.productList[0].wight*self.productList[0].wightTen*1000,
+              volume_count:self.productList[0].weight*self.productList[0].weightTen,
+              trans_type:self.productList[0].tranpk,
             };
             androidIos.loading("正在提交");
             bomb.removeClass("submit","gogogo");
@@ -2334,7 +2369,7 @@
   .vehicleBox{
     width:93%;
     margin: 0 auto;
-    max-height: 12rem;
+    max-height: 13rem;
     overflow: scroll;
   }
   .vehicle{

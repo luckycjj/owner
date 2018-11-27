@@ -30,7 +30,7 @@
       mounted:function () {
           var _this = this;
           sessionStorage.removeItem("token");
-          androidIos.delCookie("MESSAGEDRIVER");
+          androidIos.delCookie("MESSAGEOWNER");
           androidIos.delCookie("BAIDUTOKEN");
           androidIos.delCookie("locationAMap");
           sessionStorage.removeItem("haveCarTap");
@@ -109,7 +109,7 @@
               if (login.success == "1") {
                 sessionStorage.setItem("token",login.data.userCode);
                 sessionStorage.setItem("tokenBefore",login.data.userCode);
-                androidIos.setcookie("MESSAGEDRIVER",JSON.stringify({
+                androidIos.setcookie("MESSAGEOWNER",JSON.stringify({
                    token:login.data.userCode,
                 }),80);
                 $.ajax({
