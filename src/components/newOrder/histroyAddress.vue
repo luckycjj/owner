@@ -10,7 +10,7 @@
     </div>
     <div id="mescroll" class="mescroll" style="top:1.3rem;">
       <ul id="dataList" class="data-list">
-        <li v-for="item in pdlist" @touchend="chooseLine(item.pkInvoice)">
+        <li v-for="item in pdlist" @click="chooseLine(item.pkInvoice)">
           <div class="firstBox">
             <p>{{item.deliContact}}<span>{{item.deliMobile}}</span></p>
             <h1>{{item.deliAddr}}</h1>
