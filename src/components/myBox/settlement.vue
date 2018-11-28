@@ -24,7 +24,7 @@
             <div class="proBox">
               <h6 class="deliDateTime">{{items.deliDate}}</h6>
               <h6 class="arriDateTime">{{items.arriDate}}</h6>
-              <h6 class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsCode}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></h6>
+              <h6 class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></h6>
               <h6 class="driver">{{items.deliContact}}</h6>
               <h5 class="remark">{{items.memo}}</h5>
               <div class="clearBoth"></div>
