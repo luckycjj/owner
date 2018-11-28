@@ -263,7 +263,7 @@
               for(var i =0;i<invoiceDetail.invPackDao.length;i++){
                 var weight = invoiceDetail.invPackDao[i].weigthUnit==3?invoiceDetail.invPackDao[i].weight*1000:invoiceDetail.invPackDao[i].weight*1;
                 var listJson = {
-                  goods:invoiceDetail.invPackDao[i].goodsName+"-"+invoiceDetail.invPackDao[i].goodsTypeName,
+                  goods:invoiceDetail.invPackDao[i].goodsName/*+"-"+invoiceDetail.invPackDao[i].goodsTypeName*/,
                   number:invoiceDetail.invPackDao[i].num,
                   weight : weight/1000 - 1 <0 ? weight + "千克" : weight/1000 + "吨",
                   volume:invoiceDetail.invPackDao[i].volume*1 - 1 < 0 ? invoiceDetail.invPackDao[i].volume*1000 + "升" : invoiceDetail.invPackDao[i].volume*1 + "立方米",

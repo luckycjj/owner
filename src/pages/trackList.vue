@@ -19,7 +19,7 @@
               <img v-if="items.ifUrgent == 'Y'" class="jinjiOrder" src="../images/jiaji.png">
               <img v-if="items.expFlag == 'Y'" class="yichangOrder" src="../images/yichang.png">
               <p class="startEnd"><span class="startEndSpan">{{items.deliAddr}}<img src="../images/addressImg.png">{{items.arriAddr}}</span><div class="clearBoth"></div></p>
-              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsCode}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
+              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0">/{{pro.weight*1}}吨</span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
             </div>
             <h6 class="deliDateTime">{{items.deliDate}} - {{items.arriDate}}</h6>
             <h5 class="remark" v-html="items.memo == '' ? '暂无备注' : items.memo"></h5>
