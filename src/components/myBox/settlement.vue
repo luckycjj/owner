@@ -14,7 +14,7 @@
       </div>
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist" @touchend="lookTrackMore(items.pkInvoice)">
+          <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice)">
             <div class="startEndBox">
               <div class="startEnd"><div class="circleList"></div><span class="startEndSpan">{{items.deliAddr}}-{{items.arriAddr}}</span></div>
               <div class="triangle_border_right"></div>

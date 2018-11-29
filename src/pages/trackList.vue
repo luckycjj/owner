@@ -12,7 +12,7 @@
       </div>
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist" @touchend="lookTrackMore(items.pkInvoice,index)">
+          <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice,index)">
             <h1>订单编号：{{items.vbillno}}</h1>
             <h3 :class="'trackList'+ items.status" v-html="items.status == -1 ? '已驳回' :items.status == 0 ? '新建': items.status == 1 ? '待调度' :items.status == 2 ? '待提货': items.status == 3 ? '待到达': items.status == 4 ? '已到货': items.status == 5 ? '已签收': items.status == 6 ? '已失效' : ''"></h3>
             <div class="proBox">
