@@ -559,8 +559,8 @@
                       var listJson = {
                         tranpk:invoiceDetail.category,
                         pkInvPackB:invoiceDetail.invPackDao[i].pkInvPackB,
-                        goodsType:invoiceDetail.invPackDao[i].goodsName+"-"+invoiceDetail.invPackDao[i].goodsTypeName,
-                        goodstypenumber:invoiceDetail.invPackDao[i].goodsCode+"-"+invoiceDetail.invPackDao[i].goodsType,
+                        goodsType:invoiceDetail.invPackDao[i].goodsName,
+                        goodstypenumber:invoiceDetail.invPackDao[i].goodsCode,
                         number:invoiceDetail.invPackDao[i].num,
                         unitWight:"吨",
                         wight:invoiceDetail.invPackDao[i].weight/1000,
@@ -647,7 +647,7 @@
                       jizhuangjixie:"",
                       remark:invoiceDetail.remark == null ? "" : invoiceDetail.remark,
                       pay:0,
-                      read:false,
+                      read:true,
                       scrollTop:0,
                       initialWeight:_this.both.initialWeight,
                       price:invoiceDetail.price,
@@ -1891,10 +1891,10 @@
               paper_back: self.service.indexOf("纸质") != -1 ? 1 : 0,
               elect_back: self.service.indexOf("电子发票") != -1 ? sessionStorage.getItem("servicePk") : 0,
               goods_name:self.productList[0].goodstypenumber,
-              num_count: self.productList[0].number*1,
-              weight_count:self.productList[0].wight*self.productList[0].wightTen*1000,
-              volume_count:self.productList[0].weight*self.productList[0].weightTen,
-              trans_type:self.productList[0].tranpk,
+              num_count: (self.productList[0].number*1).toString(),
+              weight_count:(self.productList[0].wight*self.productList[0].wightTen*1000).toString(),
+              volume_count:(self.productList[0].weight*self.productList[0].weightTen).toString(),
+              trans_type:self.productList[0].tranpk.toString(),
             };
             androidIos.loading("正在提交");
             bomb.removeClass("submit","gogogo");
