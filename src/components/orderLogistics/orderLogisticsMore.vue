@@ -42,30 +42,30 @@
           </ul>
           <div id="sure">
             <div class="go" v-if="type=='10000' && orderSource == 2 " >
-              <button  @touchend="payOrder()" class="zhifu">支付</button>
+              <button  @touchend.stop.prevent="payOrder()" class="zhifu">支付</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type*1 < 10 && type*1 > 0  && orderSource == 1">
-              <button @touchend="closedOrder(1)">关闭订单</button>
-              <button @touchend="orderAgain(3)" class="zhifu">修改订单</button>
+              <button @touchend.stop.prevent="closedOrder(1)">关闭订单</button>
+              <button @touchend.stop.prevent="orderAgain(3)" class="zhifu">修改订单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type == '10' && orderSource == 1">
-              <button    @touchend="closedOrder(1)">取消订单</button>
+              <button    @touchend.stop.prevent="closedOrder(1)">取消订单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if=" type == '0' && orderSource == 1">
-              <button class="zhifu" @touchend="shenhe()">确认</button>
-              <button @touchend="closedOrder(2)">驳回</button>
+              <button class="zhifu" @touchend.stop.prevent="shenhe()">确认</button>
+              <button @touchend.stop.prevent="closedOrder(2)">驳回</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
-              <button class="zhifu"  @touchend="orderAgain(2)">再下一单</button>
+              <button class="zhifu"  @touchend.stop.prevent="orderAgain(2)">再下一单</button>
               <button @touchend="scoreYes(1)">评价</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else-if="(type=='1001' && orderSource == 1) || (type=='100' && orderSource == 1) || orderSource == 3">
-              <button class="zhifu" @touchend="orderAgain(2)">再下一单</button>
+              <button class="zhifu" @touchend.stop.prevent="orderAgain(2)">再下一单</button>
               <div class="clearBoth"></div>
             </div>
             <div class="go" v-else>
@@ -535,26 +535,32 @@
         self.cancelReasonBox = true;
         if(self.cancelReason.length == 0 || self.closedType*1 != type ){
           self.closedType = type;
-          var orderClosed = self.closedType == "1" ? "order_closed" : "reject_order";
-          $.ajax({
-            type: "GET",
-            url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
-            data:{str:orderClosed,userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
-            dataType: "json",
-            timeout: 10000,
-            success: function (getSysConfigList) {
-              self.cancelReason = getSysConfigList;
-            },
-            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
-              if(status=='timeout'){//超时,status还有success,error等值的情况
-                androidIos.second("网络请求超时");
-              }else if(status=='error'){
-                androidIos.errorwife();
+          self.$nextTick(function () {
+            androidIos.judgeIphoneX("score",1);
+            androidIos.judgeIphoneX("cancelReason",1);
+            var orderClosed = self.closedType == "1" ? "order_closed" : "reject_order";
+            $.ajax({
+              type: "GET",
+              url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
+              data:{str:orderClosed,userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
+              dataType: "json",
+              timeout: 10000,
+              success: function (getSysConfigList) {
+                self.cancelReason = getSysConfigList;
+              },
+              complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                if(status=='timeout'){//超时,status还有success,error等值的情况
+                  androidIos.second("网络请求超时");
+                }else if(status=='error'){
+                  androidIos.errorwife();
+                }
               }
-            }
+            })
           })
+
         }
         $("#errorwifeBox").remove();
+
       },
       pickMessage:function (m) {
         var _this = this;
@@ -1248,7 +1254,7 @@
     width:96%;
     margin-left: 2%;
     border-radius: 0.3rem;
-    background: #3399FF;
+    background: #1D68A8;
     color:white;
     font-size: 0.375rem;
     letter-spacing: 0.0625rem;
@@ -1266,8 +1272,8 @@
     filter: gray;
   }
   .errorPriceBoxLi{
-    border-color:#3399FF!important;
-    color:#3399FF!important;
+    border-color:#1D68A8!important;
+    color:#1D68A8!important;
   }
   #carPeopleMessage{
     padding:0.2rem 3%;
