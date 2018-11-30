@@ -168,7 +168,7 @@
                 productList:[{
                   pkInvPackB:"",
                   goodsType:"",
-                  protype:2,
+                  protype:0,
                   goodstypenumber:"",
                   number:1,
                   wight:"",

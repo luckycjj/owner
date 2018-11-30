@@ -54,7 +54,7 @@
             <input type="text" placeholder="请输入货物重量" maxlength="10" v-model="item.wight" @keyup="weightKeyup()"/>
             <div class="clearBoth"></div>
           </div>
-          <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;" v-if="item.protype == 1 || item.protype == 2">
+          <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
             <span class="required">货物体积</span>
             <div class="unit" :id="'Z01'+index">{{item.unitWeight}}</div>
             <input type="text" placeholder="请输入货物体积" maxlength="10" v-model="item.weight" @keyup="volumeKeyup()"/>
@@ -91,7 +91,7 @@
         </div>
         <div class="lablebox borderno imgno">
           <span class="required">货物运费</span>
-          <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @keyup="asdfgh()"/>
+          <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @input="asdfgh()"/>
           <div class="clearBoth"></div>
         </div>
       </div>
@@ -99,7 +99,7 @@
         <div class=" borderno">
           <span style="font-size: 0.32rem;color:#999;">若产生等待费，请用户额外支付费用，请按照司机<span style="font-size: 0.32rem;color:#E72C31;">收费标准</span>结算</span>
           <div class="clearBoth"></div>
-          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.32rem;color:#999;">我已阅读并同意<span style="font-size: 0.32rem;color:#E72C31;">《用户发货托运通知》</span></span><div class="clearBoth"></div></label>
+          <label><div class="circleBox" @click="readChoose()" :class="both.read ? 'circletrue' : ''"></div><span style="font-size: 0.32rem;color:#999;">我已阅读并同意<span style="font-size: 0.32rem;color:#E72C31;" @click="lookTuoyun()">《用户发货托运通知》</span></span><div class="clearBoth"></div></label>
           <div class="clearBoth"></div>
         </div>
       </div>
@@ -231,7 +231,7 @@
               productList:[{
                 pkInvPackB:"",
                 goodsType:"",
-                protype:2,
+                protype:0,
                 goodstypenumber:"",
                 number:1,
                 wight:"",
@@ -339,7 +339,7 @@
                 if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.tranType != ""){
                   for(var i = 0;i<self.productList.length;i++) {
                     if(_this.price!=""){
-                      if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
+                      if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
                         bomb.removeClass("submit", "submit");
                         break;
                       } else {
@@ -357,7 +357,7 @@
               }else{
                 if( self.read &&  self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!="" ){
                   for(var i = 0;i<self.productList.length;i++) {
-                    if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
+                    if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
                       bomb.removeClass("submit", "submit");
                       break;
                     } else {
@@ -388,6 +388,11 @@
           androidIos.bridge(_this);
       },
       methods:{
+        lookTuoyun:function () {
+          var _this = this;
+          androidIos.addPageList();
+          _this.$router.push({path:"/newOrder/needKnow"});
+        },
           asdfgh:function(){
             var _this = this;
             var self = _this.both;
@@ -402,7 +407,7 @@
               if( self.read && self.startAddress.people!=""&&self.timeBeforeF!=""&&self.timeBeforeS!=""&&self.timeAfterF!=""&&self.timeAfterS!=""&&self.endAddress.people!=""&&self.tranType != "" ){
                 for(var i = 0;i<self.productList.length;i++) {
                   if(_this.price!=""){
-                    if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
+                    if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0") ) {
                       bomb.removeClass("submit", "submit");
                       break;
                     } else {
@@ -419,7 +424,7 @@
             }else {
               if (self.read && self.startAddress.people != "" && self.timeBeforeF != "" && self.timeBeforeS != "" && self.timeAfterF != "" && self.timeAfterS != "" && self.endAddress.people != "") {
                 for (var i = 0; i < self.productList.length; i++) {
-                  if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
+                  if (self.productList[i].goodsType == "" || ((self.productList[i].protype == 2 || self.productList[i].protype == 1) && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0" ) ) || (self.productList[i].protype == 0 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")) {
                     bomb.removeClass("submit", "submit");
                     break;
                   } else {
@@ -568,7 +573,7 @@
                         unitWeight:"立方米",
                         weight:invoiceDetail.invPackDao[i].volume*1,
                         weightTen:"1",
-                        protype:invoiceDetail.invPackDao[i].weight*1 != 0 && invoiceDetail.invPackDao[i].volume*1 == 0 ? 0 :invoiceDetail.invPackDao[i].weight*1 == 0 && invoiceDetail.invPackDao[i].volume*1 != 0 ? 1 : 2,
+                        protype:0,
                       }
                       list.push(listJson);
                     }
@@ -806,7 +811,7 @@
                 goodsType = JSON.parse(goodsType);
                 _this.both.productList[goodsType.index].goodsType =goodsType.parentName + '-' +goodsType.name;
                 _this.both.productList[goodsType.index].goodstypenumber =goodsType.parentcode + '-' +goodsType.code;
-                _this.both.productList[goodsType.index].protype = goodsType.protype;
+                _this.both.productList[goodsType.index].protype = 0;
                 _this.both.productList[goodsType.index].number = 1;
                 _this.both.productList[goodsType.index].tranpk = goodsType.tranpk;
                 _this.both.productList[goodsType.index].wight = "";
@@ -1071,10 +1076,10 @@
             if(_this.both.productList[x].protype == 0 && _this.both.productList[x].wight*1 == 0){
               return false;
             }
-            if(_this.both.productList[x].protype == 1 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+            if(_this.both.productList[x].protype == 1 && (_this.both.productList[x].wight*1 == 0 && _this.both.productList[x].weight*1 == 0)){
               return false;
             }
-            if(_this.both.productList[x].protype == 2 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+            if(_this.both.productList[x].protype == 2 && (_this.both.productList[x].wight*1 == 0 && _this.both.productList[x].weight*1 == 0)){
               return false;
             }
             weight = weight*1 + _this.both.productList[x].wight * _this.both.productList[x].wightTen;
@@ -1170,10 +1175,10 @@
                   }else if(self.productList[i].protype == 0 && self.productList[i].wight*1 == "0"){
                     bomb.removeClass("submit", "submit");
                     break;
-                  }else if(self.productList[i].protype == 1 && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0")){
+                  }else if(self.productList[i].protype == 1 && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")){
                     bomb.removeClass("submit", "submit");
                     break;
-                  }else if(self.productList[i].protype == 2 && (self.productList[i].wight*1 == "0" || self.productList[i].weight*1 == "0")){
+                  }else if(self.productList[i].protype == 2 && (self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0")){
                     bomb.removeClass("submit", "submit");
                     break;
                   } else {
@@ -1191,7 +1196,7 @@
                   bomb.removeClass("submit", "submit");
                 }else if(self.productList[i].protype == 0 && self.productList[i].wight*1 == "0"){
                   bomb.removeClass("submit", "submit");
-                }else if(self.productList[i].protype == 1 && self.productList[i].weight*1 == "0"){
+                }else if(self.productList[i].protype == 1 && self.productList[i].weight*1 == "0" && self.productList[i].weight*1 == "0"){
                   bomb.removeClass("submit", "submit");
                 }else if(self.productList[i].protype == 2 && self.productList[i].wight*1 == "0" && self.productList[i].weight*1 == "0"){
                   bomb.removeClass("submit", "submit");
@@ -1286,7 +1291,7 @@
           }
           _this.both.productList[0].goodsType =list2[0];
           _this.both.productList[0].goodstypenumber =list2[0];
-          _this.both.productList[0].protype = 2;
+          _this.both.productList[0].protype = 0;
           _this.both.productList[0].tranpk = list1[0];
           _this.productBox = false;
         },
@@ -1357,8 +1362,8 @@
         },
         numberKeyup:function (item) {
           var _this = this;
-          _this.price = "";
-          _this.both.price = "";
+         /* _this.price = "";
+          _this.both.price = "";*/
           _this.suremend();
         },
         readChoose:function(){
@@ -1646,7 +1651,7 @@
              var json = {
                pkInvPackB:"",
                goodsType:"",
-               protype:2,
+               protype:0,
                goodstypenumber:"",
                number:1,
                wight:"",
@@ -1778,23 +1783,23 @@
                       return false;
                     }
                   }else if(self.productList[i].protype == 1){
-                    if(self.productList[i].weight*1 == "0"){
-                      bomb.first("请填写货物的体积");
+                    if(self.productList[i].weight*1 == "0" && self.productList[i].wight*1 == "0"){
+                      bomb.first("请填写货物的体积或重量");
                       return false;
                     }
-                    if( self.productList[i].wight*1 == "0"){
+                   /* if( self.productList[i].wight*1 == "0"){
                       bomb.first("请填写货物的重量");
                       return false;
-                    }
+                    }*/
                   }else if(self.productList[i].protype == 2){
-                    if(self.productList[i].weight*1 == "0"){
-                      bomb.first("请填写货物的体积");
+                    if(self.productList[i].weight*1 == "0"  && self.productList[i].wight*1 == "0"){
+                      bomb.first("请填写货物的体积或重量");
                       return false;
                     }
-                    if( self.productList[i].wight*1 == "0"){
+                  /*  if( self.productList[i].wight*1 == "0"){
                       bomb.first("请填写货物的重量");
                       return false;
-                    }
+                    }*/
                   }
 
                 }
@@ -1804,6 +1809,10 @@
                 }
                 if(!self.read){
                   bomb.first("请阅读发货托运通知");
+                  return false;
+                }
+                if(_this.price == "" ){
+                  bomb.first("请填写价格");
                   return false;
                 }
               }

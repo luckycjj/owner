@@ -2,9 +2,9 @@
     <div id="service">
       <div id="title" v-title data-title="增值服务"></div>
       <ul>
-         <li v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
+         <li  @click.stop="biaodan(index,$event)" v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
            <span>{{item.displayName}}</span>
-           <div class="circleBox" @touchend="readChoose(index)" :class="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' ) ? 'circletrue' : ''"> <div class="quanquan" v-if="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' )"></div></div>
+           <div class="circleBox" @click="readChoose(index)" :class="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' ) ? 'circletrue' : ''"> <div class="quanquan" v-if="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' )"></div></div>
            <div class="clearBoth"></div>
          </li>
       </ul>
@@ -59,7 +59,7 @@
           </div>
           <div class="tab" style="margin-top: 0.3rem;">
             <p>公司名称</p>
-            <input type="text" placeholder="请输入公司名称" v-model="message.company"/>
+            <input type="text" maxlength="20" placeholder="请输入公司名称" v-model="message.company"/>
             <div class="clearBoth"></div>
           </div>
           <div class="tab" style="margin-top: 1px">
@@ -69,7 +69,7 @@
           </div>
           <div class="tab" style="margin-top: 0.2rem;">
             <p>公司地址</p>
-            <input type="text" placeholder="请输入公司地址(选填)" v-model="message.address"/>
+            <input type="text" maxlength="20" placeholder="请输入公司地址(选填)" v-model="message.address"/>
             <div class="clearBoth"></div>
           </div>
           <div class="tab" style="margin-top: 1px">
@@ -79,7 +79,7 @@
           </div>
           <div class="tab" style="margin-top: 0.2rem;">
             <p>开户银行</p>
-            <input type="text" placeholder="请输入开户银行名称(选填)" v-model="message.bank"/>
+            <input type="text" maxlength="20" placeholder="请输入开户银行名称(选填)" v-model="message.bank"/>
             <div class="clearBoth"></div>
           </div>
           <div class="tab" style="margin-top: 1px">
@@ -94,7 +94,7 @@
           </div>
           <div class="tab" style="margin-top: 1px">
             <p>电子邮箱</p>
-            <input type="email" placeholder="请输入电子邮箱账号(选填)" v-model="message.email"/>
+            <input type="email" maxlength="40" placeholder="请输入电子邮箱账号(选填)" v-model="message.email"/>
             <div class="clearBoth"></div>
           </div>
           <button @click="saveFa()">保存发票信息</button>
@@ -185,12 +185,12 @@
             bank:"",
             bankNumber:"",
           }*/
-          _this.serviceList[2].check = false;
-          var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
+          /*_this.serviceList[2].check = false;*/
+         /* var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
           if(fapiaoXinxi != undefined){
             _this.serviceList[2].check = true;
             _this.message = JSON.parse(fapiaoXinxi);
-          }
+          }*/
           _this.fapiao = false;
           _this.chooseServiceBox();
         },
@@ -200,6 +200,7 @@
           _this.chooseServiceBox();
           if(index == 2 && _this.serviceList[index].check){
               _this.fapiao = true;
+              _this.getFa();
               var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
               if(fapiaoXinxi != undefined){
                 _this.message = JSON.parse(fapiaoXinxi);
@@ -209,6 +210,23 @@
                 androidIos.judgeIphoneX("imgClosed",2);
               })
           }
+        },
+        biaodan:function (index,e) {
+            var _this = this;
+           if(e.target.className.indexOf("circleBox") == -1 && e.target.className.indexOf("quanquan") == -1){
+             if(index == 2){
+               _this.fapiao = true;
+               _this.getFa();
+               var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
+               if(fapiaoXinxi != undefined){
+                 _this.message = JSON.parse(fapiaoXinxi);
+               }
+               _this.$nextTick(function () {
+                 androidIos.judgeIphoneX("fapiaoTop",0);
+                 androidIos.judgeIphoneX("imgClosed",2);
+               })
+             }
+           }
         },
         chooseServiceBox:function () {
             var _this = this;
@@ -260,6 +278,7 @@
                 _this.$cjj("保存成功");
                 sessionStorage.setItem("servicePk",orderConfirm.errorCode);
                 _this.fapiao = false;
+                _this.serviceList[ _this.serviceList.length - 1].check = true;
                 _this.getFa();
               }else{
                 androidIos.second(orderConfirm.message);
