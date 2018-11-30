@@ -113,7 +113,7 @@
           timeout: 10000,
           success: function (invoiceDetail) {
             $("#common-blackBox").remove();
-            if(invoiceDetail.success!="-1"){
+            if(invoiceDetail.success == "1"){
               var list=[];
               for(var i =0;i<invoiceDetail.invPackDao.length;i++){
                 var protype = 0;
@@ -128,9 +128,9 @@
                 }
                 var listJson = {
                   pkInvPackB:invoiceDetail.invPackDao[i].pkInvPackB,
-                  goodsType:invoiceDetail.invPackDao[i].goodsName+"-"+invoiceDetail.invPackDao[i].goodsTypeName,
+                  goodsType:invoiceDetail.invPackDao[i].goodsName,
                   protype:protype,
-                  goodstypenumber:invoiceDetail.invPackDao[i].goodsCode+"-"+invoiceDetail.invPackDao[i].goodsType,
+                  goodstypenumber:invoiceDetail.invPackDao[i].goodsCode,
                   number:invoiceDetail.invPackDao[i].num,
                   unitWight:"吨",
                   wight:invoiceDetail.invPackDao[i].weight/1000,
@@ -165,7 +165,20 @@
                 timeBeforeS:_this.day(60*60*1000).split(" ")[0],
                 timeAfterF:"08:00:00",
                 timeAfterS:_this.day(24*60*60*1000).split(" ")[0],
-                productList:list,
+                productList:[{
+                  pkInvPackB:"",
+                  goodsType:"",
+                  protype:2,
+                  goodstypenumber:"",
+                  number:1,
+                  wight:"",
+                  unitWight:"吨",
+                  wightTen:"1",
+                  weight:"",
+                  unitWeight:"立方米",
+                  weightTen:"1",
+                  tranpk:"",
+                }],
                 tranType:"",
                 trantypenumber:"",
                 appoint:"",

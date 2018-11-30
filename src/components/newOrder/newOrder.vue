@@ -761,7 +761,7 @@
                     timeout: 10000,
                     success: function (getHistoryOrder) {
                       if(getHistoryOrder.success="1"){
-                        if(getHistoryOrder.total-1>0){
+                        if(getHistoryOrder.total > 0){
                           _this.both.histroyAddressLength = true;
                         }
                       }else{
