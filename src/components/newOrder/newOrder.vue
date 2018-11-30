@@ -11,12 +11,12 @@
           </div>
           <div class="right">
             <div class="message  pickmessage">
-              <p>发货方信息</p>
+              <p>装货地址</p>
               <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @click="goStartAddress()"></h1>
             </div>
             <div class="borderBottom"></div>
             <div class="message arrmessage">
-              <p>收货方信息</p>
+              <p>卸货地址</p>
               <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @click="goEndAddress()"></h1>
             </div>
           </div>
@@ -24,7 +24,7 @@
       </div>
       <div id="time" class="label">
         <div class="lablebox">
-          <span>提货时间</span>
+          <span>装货时间</span>
           <input type="text" style="width:21%;" name="USER_AGE" id="USER_AGE" readonly class="input" placeholder="请选择时分" v-model="both.timeBeforeF"/>
           <input type="text" style="width:28%;" name="USER_AGE" id="USER_AGES" readonly class="input" placeholder="请选择年月日" v-model="both.timeBeforeS"/>
           <div class="clearBoth"></div>
@@ -44,8 +44,8 @@
         </div>
         <div class="label" :class="both.productList.length>1?'labelTop':''">
           <div class="lablebox goodsTypeLabel borderno">
-            <span class="required">货物类别</span>
-            <p v-html="item.goodsType==''?'请选择货物类型':(item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: '')" :class="item.goodsType==''?'':'blackColor'" @click="goodsType(index)" :datatype="item.goodstypenumber"></p>
+            <span class="required">货物名称</span>
+            <p v-html="item.goodsType==''?'请选择货物名称':(item.tranpk == 1 ? '冷链-' + item.goodsType : item.tranpk == 2 ? '普货-' + item.goodsType: item.tranpk == 3 ? '危险品-' + item.goodsType : item.tranpk == 4 ? '集装箱-' + item.goodsType: '')" :class="item.goodsType==''?'':'blackColor'" @click="goodsType(index)" :datatype="item.goodstypenumber"></p>
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
@@ -61,7 +61,7 @@
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno imgno" style="border-top: 1px solid #dadada!important;">
-            <span class="required">件数</span>
+            <span class="required">货物件数</span>
             <div class="unit">件</div>
             <input type="text" placeholder="请输入货物件数" maxlength="10" v-model="item.number" @keyup="numberKeyup(item)"/>
             <div class="clearBoth"></div>
@@ -75,7 +75,7 @@
       </div>-->
       <div  v-if="pk==''" id="insurance" class="label" >
         <div class="lablebox" v-if="both.carTypeLook">
-          <span class="required">车辆车型</span>
+          <span class="required">车辆类型</span>
           <p v-html="both.tranType==''?'请选择车辆车型':both.tranType" :class="both.tranType==''?'':'blackColor'" @click="tranType()"></p>
           <div class="clearBoth"></div>
         </div>

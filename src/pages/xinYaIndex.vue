@@ -353,11 +353,16 @@
     position: absolute;
     right:0.4rem;
     top:0.375rem;
+    padding-right: 0.6rem;
   }
   #imgBoxTab p{
     color:white;
     font-size: 0.347rem;
-    float:left;
+   position: absolute;
+    right:-0.38rem;
+    z-index: 10;
+    top:-0.8rem;
+    padding: 0.8rem 0.38rem;
   }
   .topleftInputBox img{
        position: absolute;
@@ -387,8 +392,8 @@
     left:0;
     top:0;
     bottom:0;
-    height:auto;
-    width:100%;
+    width:0.48rem;
+    height: 0.48rem;
     opacity: 0;
   }
   .topLeft{
@@ -554,7 +559,7 @@
     left:50%;
     margin-left: -3.55rem;
     background: white;
-    top:25%;
+    top:15%;
   }
   #searchDate p {
      color:#373737;
