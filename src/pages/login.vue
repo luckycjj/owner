@@ -43,9 +43,9 @@
           sessionStorage.removeItem("driverBottomIcon");
           sessionStorage.removeItem("messageCount");
           sessionStorage.removeItem("indexCorner");
-          localStorage.removeItem("noviceguidance1");
+         /* localStorage.removeItem("noviceguidance1");
           localStorage.removeItem("noviceguidance2");
-          localStorage.removeItem("noviceguidance3");
+          localStorage.removeItem("noviceguidance3");*/
           localStorage.removeItem("getPageScroll0");
           localStorage.removeItem("getPageScroll1");
           localStorage.removeItem("getPageScroll2");

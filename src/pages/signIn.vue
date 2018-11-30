@@ -342,7 +342,7 @@
         });
         $.ajax({
           type: "POST",
-          url: androidIos.ajaxHttp() + "/order/getGoodsDetail ",
+          url: androidIos.ajaxHttp() + "/order/getGoodsDetail",
           data:JSON.stringify({
              userCode:sessionStorage.getItem("token"),
              source : sessionStorage.getItem("source"),

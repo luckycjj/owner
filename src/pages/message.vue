@@ -13,7 +13,7 @@
     </div>
     <div v-for="(item,index) in messageList" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
       <ul v-if="index == 0" :id="'dataList' + index" class="data-list">
-        <li  v-for="(items,indexs) in item.prolist" @touchend="lookMessage(items.pkInv)">
+        <li  v-for="(items,indexs) in item.prolist" @click="lookMessage(items.pkInv)">
           <p :style="{paddingLeft: items.haveRead == 0 ? '0.2rem' : '0rem'}"><span class="noread" v-if="items.haveRead == 0"></span>{{items.taskStatusMemo}}</p>
           <h6>{{items.time}}</h6>
           <div class="clearBoth"></div>
@@ -377,7 +377,7 @@
   #dataList1 li .body{
     font-size:0.35rem ;
     color:#606060;
-    width:8.5rem;
+    width:97%;
     margin: 0.4rem auto 0 auto;
     padding: 0.15rem 0.15rem;
     background:#f9f9f9 ;

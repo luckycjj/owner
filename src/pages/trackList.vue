@@ -6,7 +6,7 @@
       <div class="wrapper" id="trackTab">
         <div class="scroller">
           <ul class="clearfix">
-            <li  tapmode="" v-for="(item,index) in list" :style="{width : 10 / list.length + 'rem'}" :i="index"><a href="javascript:void(0)">{{item.name}}<span v-if="item.number*1 > 0">{{item.number}}</span></a></li>
+            <li  tapmode="" v-for="(item,index) in list" :style="{width : 10 / list.length + 'rem'}" :i="index"><a href="javascript:void(0)">{{item.name}}<span style="margin-left: 0.1rem" v-if="item.number*1 > 0">({{item.number}})</span></a></li>
           </ul>
         </div>
       </div>
@@ -47,7 +47,7 @@
                 number:0,
                 prolist:[]
              },{
-               name:"待付款",
+               name:"待运输",
                number:0,
                prolist:[]
              },{
@@ -84,11 +84,15 @@
          sessionStorage.removeItem("orderType");
          androidIos.judgeIphoneX("trackList",2);
          androidIos.judgeIphoneX("mescroll",1);
+         var trackTap = sessionStorage.getItem("trackTap");
+         if(trackTap != undefined){
+           _this.tabShow = trackTap*1;
+         }
          var type = _this.$route.query.type;
          if(type != undefined){
            _this.type = type;
            var json = {
-               name:"待分配",
+               name:"待运输",
                number:0,
                prolist:[]
              }
@@ -103,10 +107,7 @@
        methods:{
          go:function () {
              var _this = this;
-             var trackTap = sessionStorage.getItem("trackTap");
-             if(trackTap != undefined){
-                _this.tabShow = trackTap*1;
-             }
+
             $('.wrapper').navbarscroll({defaultSelect:_this.tabShow});
              var curNavIndex = _this.tabShow;//首页0; 奶粉1; 面膜2; 图书3;
              var mescrollArr=new Array(_this.list.length);//4个菜单所对应的4个mescroll对象
@@ -198,7 +199,7 @@
                      page:pageNum,
                      size:pageSize,
                      type:2,
-                     state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 14 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
+                     state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 16 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
                      userCode:sessionStorage.getItem("token"),
                      source:sessionStorage.getItem("source"),
                      today:_this.$route.query.today != undefined ? 1 : 0,
@@ -253,7 +254,7 @@
                    list2 = carrOrderListHeaderIcon.completedCount*1;
                  }else{
                    list0 = carrOrderListHeaderIcon.myTotalCount*1;
-                   list1 =  carrOrderListHeaderIcon.pendingAllocation*1;
+                   list1 =  carrOrderListHeaderIcon.waitTransport*1;
                    list2 = carrOrderListHeaderIcon.onTheWayCount*1;
                    list3 = carrOrderListHeaderIcon.completedCount*1;
                  }
@@ -351,18 +352,21 @@
     width:3.333333rem;
   }
   .wrapper .scroller li a{
-    color:#373737;
+    color:#999999;
     display:block;
     font-size: 0.35rem;
     margin:0 0.1rem;
   }
   .wrapper .scroller li a span{
-    color:#2c9cff;
+    color:#999;
     font-size: 0.3125rem;
   }
   .wrapper .scroller li.cur a{
-    color:#2c9cff;
-    border-bottom: 1px solid #2c9cff;
+    color:#1D68A8;
+    border-bottom: 1px solid #1D68A8;
+  }
+  .wrapper .scroller li.cur a span{
+    color:#1D68A8;
   }
 .data-list{
   width:100%;
