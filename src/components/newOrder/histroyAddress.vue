@@ -30,16 +30,19 @@
   import MeScroll from '../../js/mescroll'
   import {iscroll} from '../../js/iscroll'
   import {androidIos} from "../../js/app";
+  var thisthat;
   export default {
     name: "histroyAddress",
     data(){
       return{
         pdlist:[],
-        address:""
+        address:"",
+        ajax1:"",
       }
     },
     mounted:function () {
       var _this = this;
+      thisthat = _this;
       androidIos.judgeIphoneX("mescroll",2);
       androidIos.bridge(_this);
     },
@@ -240,6 +243,14 @@
         }
         return min;
       }
+    },
+    beforeDestroy:function () {
+      var _this = this;
+      _this.ajax1.abort();
+    },
+    destroy:function () {
+      var _this = this;
+      _this.ajax1.abort();
     }
   }
   function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
@@ -254,7 +265,7 @@
         type:sessionStorage.getItem("NEWORDERTRANTYPE") == '0' ? '' :sessionStorage.getItem("NEWORDERTRANTYPE"),
       }
       var listData=[]
-      $.ajax({
+      thisthat.ajax1 = $.ajax({
         type: "POST",
         url: androidIos.ajaxHttp()+"/order/getHistoryOrder",
         data:JSON.stringify(json),

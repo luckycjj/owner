@@ -69,6 +69,7 @@
              prolist:[]
            }],
            tabShow:0,
+           ajax1:null,
          }
       },
       mounted:function () {
@@ -168,7 +169,7 @@
               //延时一秒,模拟联网
               setTimeout(function () {
                var http = curNavIndex == 0 ? "/order/messageList" :"/settings/getBulletin" ;
-                $.ajax({
+                _this.ajax1 = $.ajax({
                   type: "POST",
                   url: androidIos.ajaxHttp() + http,
                   data:JSON.stringify({
@@ -242,6 +243,14 @@
           htmlSize:function () {
             return document.getElementsByTagName("html")[0].style.fontSize.replace("px","");
           }
+      },
+      beforeDestroy:function () {
+        var _this = this;
+        _this.ajax1.abort();
+      },
+      destroy:function () {
+        var _this = this;
+        _this.ajax1.abort();
       }
     }
 </script>

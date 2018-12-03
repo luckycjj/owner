@@ -60,6 +60,7 @@
         manage:false,
         addressType:"",
         total:100,
+        ajax1:null,
       }
     },
     mounted:function () {
@@ -384,6 +385,14 @@
         sessionStorage.setItem("addresspk",JSON.stringify(pk));
         _this.$router.push({ path: '/newOrder/chooseStart',query:{pk:pk.pkAddress,type:_this.$route.query.type}});
       }
+    },
+    beforeDestroy:function () {
+      var _this = this;
+      _this.ajax1.abort();
+    },
+    destroy:function () {
+      var _this = this;
+      _this.ajax1.abort();
     }
   }
   function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
@@ -399,7 +408,7 @@
         type:thisthatsecond.$route.query.type
       }
       var listData=[];
-        $.ajax({
+      thisthatsecond.ajax1 = $.ajax({
           type: "POST",
           url: androidIos.ajaxHttp()+"/address/getAddres",
           data:JSON.stringify(json),

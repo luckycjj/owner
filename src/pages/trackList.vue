@@ -61,6 +61,7 @@
              }],
             tabShow:0,
             type:null,
+            ajax1:null,
           }
        },
         beforeMount:function () {
@@ -192,7 +193,7 @@
                //延时一秒,模拟联网
                setTimeout(function () {
                  _this.corner();
-                 $.ajax({
+                 _this.ajax1 = $.ajax({
                    type: "POST",
                    url: androidIos.ajaxHttp() + "/order/loadInvoice",
                    data:JSON.stringify({
@@ -291,6 +292,7 @@
         if(listDom != null){
           body.removeChild(listDom);
         }
+        _this.ajax1.abort();
       },
       destroy:function () {
         var _this = this;
@@ -299,6 +301,7 @@
         if(listDom != null){
           body.removeChild(listDom);
         }
+        _this.ajax1.abort();
       }
     }
 </script>
