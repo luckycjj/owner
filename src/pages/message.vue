@@ -70,6 +70,7 @@
            }],
            tabShow:0,
            ajax1:null,
+           settime:null,
          }
       },
       mounted:function () {
@@ -167,7 +168,7 @@
             }
             function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
               //延时一秒,模拟联网
-              setTimeout(function () {
+              _this.settime = setTimeout(function () {
                var http = curNavIndex == 0 ? "/order/messageList" :"/settings/getBulletin" ;
                 _this.ajax1 = $.ajax({
                   type: "POST",
@@ -246,11 +247,17 @@
       },
       beforeDestroy:function () {
         var _this = this;
-        _this.ajax1.abort();
+        clearTimeout(_this.settime);
+        if(_this.ajax1 != null){
+          _this.ajax1.abort();
+        }
       },
       destroy:function () {
         var _this = this;
-        _this.ajax1.abort();
+        clearTimeout(_this.settime);
+        if(_this.ajax1 != null){
+          _this.ajax1.abort();
+        }
       }
     }
 </script>

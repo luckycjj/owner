@@ -60,6 +60,8 @@
           img:require("../../images/settlementYespay.png")
         }],
         tabShow:0,
+        ajax1:null,
+        settime:null,
       }
     },
     mounted:function () {
@@ -169,8 +171,8 @@
         }
         function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
           //延时一秒,模拟联网
-          setTimeout(function () {
-            $.ajax({
+          _this.settime = setTimeout(function () {
+            _this.ajax1 = $.ajax({
               type: "POST",
               url: androidIos.ajaxHttp() + "/pay/payList",
               data:JSON.stringify({
@@ -217,6 +219,10 @@
       if(listDom != null){
         body.removeChild(listDom);
       }
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
+      }
     },
     destroy:function () {
       var _this = this;
@@ -224,6 +230,10 @@
       var listDom=document.getElementsByClassName("mescroll-totop")[0];
       if(listDom != null){
         body.removeChild(listDom);
+      }
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
       }
     }
   }

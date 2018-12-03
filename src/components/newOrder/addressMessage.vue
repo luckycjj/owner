@@ -61,6 +61,7 @@
         addressType:"",
         total:100,
         ajax1:null,
+        settime:null,
       }
     },
     mounted:function () {
@@ -388,16 +389,22 @@
     },
     beforeDestroy:function () {
       var _this = this;
-      _this.ajax1.abort();
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
+      }
     },
     destroy:function () {
       var _this = this;
-      _this.ajax1.abort();
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
+      }
     }
   }
   function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
     //延时一秒,模拟联网
-    setTimeout(function () {
+    thisthatsecond.settime = setTimeout(function () {
       var json = {
         page:pageNum,
         size:pageSize,
