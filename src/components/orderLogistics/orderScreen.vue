@@ -45,6 +45,8 @@
         manage:false,
         addressType:"",
         total:100,
+        settime:null,
+        ajax1:null,
       }
     },
     mounted:function () {
@@ -141,13 +143,27 @@
         androidIos.addPageList();
         _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
       },
+    },
+    beforeDestroy:function () {
+      var _this = this;
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
+      }
+    },
+    destroy:function () {
+      var _this = this;
+      clearTimeout(_this.settime);
+      if(_this.ajax1 != null){
+        _this.ajax1.abort();
+      }
     }
   }
   function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
     //延时一秒,模拟联网
-    setTimeout(function () {
+    thisthatsecond.settime = setTimeout(function () {
       if(thisthatsecond.address != ""){
-        $.ajax({
+        thisthatsecond.ajax1 = $.ajax({
           type: "POST",
           url: androidIos.ajaxHttp() + "/order/loadInvoice",
           data:JSON.stringify({
