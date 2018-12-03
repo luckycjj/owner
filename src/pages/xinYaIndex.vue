@@ -15,7 +15,7 @@
             <div class="topLeft">
               <div class="topleftInputBox">
                 <input type="text" @touchend="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
-                <img src="../images/huatong-2.png">
+                <img src="../images/huatong-2.png"  @click="yuyin = true">
               </div>
             </div>
             <div class="topRight">
@@ -52,6 +52,11 @@
               </li>
             </ul>
             <button @touchend="searchDateGo()">确定</button>
+          </div>
+        </div>
+        <div id="yuyinBox" v-if="yuyin" @click.stop="yuyinFlase($event)">
+          <div id="yuyin"  @touchstart="liTouchstart()" @touchmove="liTouchmove()"  @touchend="liTouchend()">
+            <p>按住识别</p>
           </div>
         </div>
       </transition>
@@ -119,7 +124,9 @@
                number:0,
                icon:require("../images/trackList4.png"),
                marginRight:0,
-             }]
+             }],
+             iflyRecognition:null,
+             yuyin:false
            }
         },
       mounted:function () {
@@ -139,9 +146,73 @@
           sessionStorage.removeItem("indexKeyword");
           sessionStorage.removeItem("trackTap");
           sessionStorage.removeItem("settlementTap");
+        try{
+          _this.iflyRecognition = api.require('iflyRecognition');
+          _this.iflyRecognition.createUtility({
+            android_appid: '5c04a475'
+          }, function(ret, err) {
+            if (ret.status) {
+              console.log("创建成功");
+            } else {
+              console.log("创建失败");
+            }
+          });
+        }
+        catch (e){
+          _this.iflyRecognition = null;
+        }
           androidIos.bridge(_this);
       },
       methods:{
+        liTouchstart:function () {
+          var _this = this;
+          if(_this.iflyRecognition != null){
+            _this.iflyRecognition.record({
+              vadbos: 5000,
+              vadeos: 5000,
+              rate: 16000,
+              asrptt: 1,
+              audioPath: 'fs://speechRecogniser/speech.pcm'
+            }, function(ret, err) {
+              if (ret.status) {
+                console.log(ret.wordStr);
+                _this.keyWord = ret.wordStr.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'').toUpperCase();
+              } else {
+                console.log(err.msg);
+              }
+            });
+          }else{
+            _this.yuyin = false;
+            androidIos.second("暂不支持语音搜索")
+          }
+        },
+        liTouchmove:function () {
+          var _this = this;
+          if(_this.iflyRecognition != null){
+          }else{
+            _this.yuyin = false;
+            androidIos.second("暂不支持语音搜索")
+          }
+        },
+        liTouchend:function () {
+          var _this = this;
+          if(_this.iflyRecognition != null){
+            _this.iflyRecognition.stopRecord();
+            _this.yuyin = false;
+            androidIos.addPageList();
+            sessionStorage.setItem("indexKeyword",_this.keyWord);
+            _this.$router.push({path:"/orderScreen",query:{keyword:_this.keyWord}});
+          }else{
+            _this.yuyin = false;
+            androidIos.second("暂不支持语音搜索");
+          }
+        },
+        yuyinFlase:function (e) {
+          var _this = this;
+          if(e.target.id == "yuyinBox"){
+            _this.yuyin = false;
+          }
+        },
         jiexi:function (enevt) {
           var _this = this;
           androidIos.loading("正在扫描");
@@ -626,5 +697,34 @@
     /* .slide-fade-leave-active for below version 2.1.8 */ {
     transform: translateY(0.13rem);
     opacity: 0;
+  }
+  #yuyinBox{
+    position: fixed;
+    top:0;
+    bottom:0;
+    width:100%;
+    height: auto;
+    background: rgba(0,0,0,0);
+  }
+  #yuyin{
+    width:2rem;
+    height: 2rem;
+    background-color:rgba(0,0,0,0.5);
+    background-image: url("../images/huatong-2.png");
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    border-radius: 0.2rem;
+    background-size: 0.5rem;
+    position: absolute;
+    top:50%;
+    margin-top: -1rem;
+    left:50%;
+    margin-left: -1rem;
+  }
+  #yuyin p {
+    font-size: 0.35rem;
+    color:white;
+    text-align: center;
+    margin-top: 1.3rem;
   }
 </style>
