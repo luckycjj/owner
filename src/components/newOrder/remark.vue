@@ -5,7 +5,7 @@
       <li v-for="(item,index) in remarkList" class="ulli" :class="item.show ? 'chooseTrue': ''" @touchend="chooseLine(item,index,$event)">{{item.displayName}}</li>
       <div class="clearBoth"></div>
     </ul>
-    <textarea placeholder="请填写备注" v-model="remark" @input="remarkKeyUp()"></textarea>
+    <textarea placeholder="请填写备注(最多100字)" maxlength="100" v-model="remark" @input="remarkKeyUp()"></textarea>
     <button @touchend.stop.prevent="save()">保存</button>
   </div>
 </template>
