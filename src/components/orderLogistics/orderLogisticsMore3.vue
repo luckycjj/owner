@@ -52,16 +52,16 @@
       <div id="mescroll" class="mescroll" :style="{bottom:type == 1 || type ==2 || type==3 ?'1.2rem':'0'} ">
         <ul id="dataList" class="data-list">
           <li v-for="item in pdlist">
-            <ul id="logisticsBox" class="logisticsBox" :class="logisticsOk?'logisticsBoxDown':''"  v-if="item.logistics.length > 0">
-              <li v-for="(cjj,index) in item.logistics">
-                <div class="logisticsL">
+            <ul id="logisticsBox" class="logisticsBox" :class="logisticsOk?'logisticsBoxDown':''"  v-if="item.abnormalEventVo.length > 0">
+              <li v-for="(cjj,index) in item.abnormalEventVo">
+                <!--<div class="logisticsL">
                   <div class="logisticsCircle" :class="index==0?'logisticsCircleFull':''"></div>
                   <div class="logisticsShuxian"></div>
-                </div>
-                <div class="logisticsR">
+                </div>-->
+                <div class="logisticsR" style="min-height: 0.8rem;">
                   {{cjj.type}}&nbsp;&nbsp;{{cjj.time}}
                 </div>
-                <img src="../../images/icon-return1.png"  :class="logisticsOk?'logisticsImg':''" v-if="index==0 && item.logistics.length > 1" @click="logisticsBoxDown()">
+                <img src="../../images/icon-return1.png"  :class="logisticsOk?'logisticsImg':''" v-if="index==0 && item.abnormalEventVo.length > 1" @click="logisticsBoxDown()">
                 <div class="clearBoth"></div>
               </li>
             </ul>
@@ -79,7 +79,7 @@
                     <h1>{{item.goodsmessage.tranType}}</h1>
                     <div class="clearBoth"></div>
                     <h5 >{{item.goodsmessage.startTime}} - {{item.goodsmessage.endTime}}</h5>
-                    <div class="fuwu">{{item.pickPay.remark}}</div>
+                    <div class="fuwu">{{item.addValue}}</div>
                     <div class="meno">{{item.pickPay.remark}}</div>
                   </div>
                   <div id="sure">
@@ -661,6 +661,14 @@
                 }
                 tracking.push(trackingJson);
               }
+              var abnormalEventVo=[];
+              for(var i =0 ;i<invoiceDetail.abnormalEventVo.length;i++){
+                var trackingJson = {
+                  type:invoiceDetail.abnormalEventVo[i].memo,
+                  time:invoiceDetail.abnormalEventVo[i].createTime,
+                }
+                abnormalEventVo.push(trackingJson);
+              }
               // 新建=0 已确认=10 司机发车=20 部分提货=30 已提货=40 部分到货=50 已到货=60 部分签收=70 已签收=80 已回单=90 关闭=100
               // $route.query.type 1发货方2付款3收货方
               var trackingStatusValue = "";
@@ -698,6 +706,7 @@
                 ordertypeType:invoiceDetail.trackingStatusValue,
                 orderTypeName:invoiceDetail.trackingStatus,
                 logistics:tracking,
+                abnormalEventVo:abnormalEventVo,
                 evaluate:{
                   grade:invoiceDetail.appraiseScore==""?0:invoiceDetail.appraiseScore
                 },
@@ -753,6 +762,7 @@
                 fabu:invoiceDetail.userRole,
                 number:invoiceDetail.orderNo,
                 time:invoiceDetail.createTime,
+                addValue:invoiceDetail.increaseValue == "" || invoiceDetail.increaseValue == undefined ? "暂无增值服务" : invoiceDetail.increaseValue ,
               }]
               // fabu 1业务员 2审核员 3管理员
               if(invoiceDetail.driverDto != null && invoiceDetail.driverDto.length != 0){
@@ -786,18 +796,34 @@
               var listData=data;//模拟分页数据
               successCallback&&successCallback(listData);//成功回调
             }else{
-              androidIos.second(loadSegmentDetail.message);
-              successCallback&&successCallback(thisThat.pdlist);//成功回调
+              androidIos.second(invoiceDetail.message);
+              if(thisThat.pdlist.length > 0 ){
+                successCallback&&successCallback(thisThat.pdlist);//成功回调
+              }else{
+                thisThat.titleName = "订单详情";
+                successCallback&&successCallback([])
+              }
+
             }
 
           },
           complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
             thisThat.carloading = false;
             if(status=='timeout'){//超时,status还有success,error等值的情况
-              successCallback&&successCallback(thisThat.pdlist);
+              if(thisThat.pdlist.length > 0 ){
+                successCallback&&successCallback(thisThat.pdlist);//成功回调
+              }else{
+                thisThat.titleName = "订单详情";
+                successCallback&&successCallback([])
+              }
               androidIos.second("网络请求超时");
             }else if(status=='error'){
-              successCallback&&successCallback(thisThat.pdlist);
+              if(thisThat.pdlist.length > 0 ){
+                successCallback&&successCallback(thisThat.pdlist);//成功回调
+              }else{
+                thisThat.titleName = "订单详情";
+                successCallback&&successCallback([])
+              }
               androidIos.errorwife();
             }
           }
@@ -1219,8 +1245,8 @@
         height: auto;
       }
       .logisticsBox li{
-        width: 97%;
-        margin-left: 3%;
+        width: 94%;
+        margin-left: 6%;
       }
       .logisticsBox li .logisticsL{
         float: left;
