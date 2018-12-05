@@ -219,7 +219,7 @@
             success: function (messageRead) {
               if(messageRead.success == "1" ){
                 androidIos.addPageList();
-                _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+                _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:1}});
               }else{
                 androidIos.second(messageRead.message);
               }

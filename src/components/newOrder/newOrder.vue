@@ -390,6 +390,9 @@
       methods:{
         lookTuoyun:function () {
           var _this = this;
+          _this.both.price = _this.price;
+          _this.both.scrollTop =  _this.getPageScroll();
+          sessionStorage.setItem("newOrder",JSON.stringify(_this.both));
           androidIos.addPageList();
           _this.$router.push({path:"/newOrder/needKnow"});
         },
@@ -565,7 +568,7 @@
                         tranpk:invoiceDetail.category,
                         pkInvPackB:invoiceDetail.invPackDao[i].pkInvPackB,
                         goodsType:invoiceDetail.invPackDao[i].goodsName,
-                        goodstypenumber:invoiceDetail.invPackDao[i].goodsCode,
+                        goodstypenumber:invoiceDetail.invPackDao[i].goodsName,
                         number:invoiceDetail.invPackDao[i].num,
                         unitWight:"吨",
                         wight:invoiceDetail.invPackDao[i].weight/1000,
@@ -645,7 +648,7 @@
                       productList:list,
                       tranType:transTypeName + carLengthName + carModelName ,
                       trantypenumber:"",
-                      appoint:invoiceDetail.carrierDto.carrierName,
+                      appoint:invoiceDetail.carrierDto.corpName,
                       pk_carrier:invoiceDetail.carrierDto.pkCarrier,
                       driver_name:"",
                       insurance:"",

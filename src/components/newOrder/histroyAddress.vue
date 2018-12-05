@@ -172,7 +172,7 @@
                 productList:[{
                   pkInvPackB:"",
                   goodsType:"",
-                  protype:0,
+                  protype:2,
                   goodstypenumber:"",
                   number:1,
                   wight:"",
@@ -189,6 +189,7 @@
                 pk_carrier:"",
                 jizhuangjixie:"",
                 driver_name:"",
+                carTypeLook:true,
                 insurance:"",
                 pay:0,
                 read:false,

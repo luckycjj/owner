@@ -230,7 +230,7 @@
       lookTrackMore:function (pk,index) {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:index == 0 ? 1 :3}});
+        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:index == 0 ? 1 :3}});
       },
       corner:function () {
         var _this = this;

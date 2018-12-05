@@ -37,6 +37,8 @@ import  newOrder12 from '@/components/newOrder/needKnow'
 import  newOrder13 from '@/components/newOrder/inquiry'
 import  newOrder14 from '@/components/newOrder/service'
 import  orderLogisticsF from '@/components/orderLogistics/orderLogisticsMore'
+import  orderLogisticsMore2 from '@/components/orderLogistics/orderLogisticsMore2'
+import  orderLogisticsMore3 from '@/components/orderLogistics/orderLogisticsMore3'
 import  orderLogisticsS from '@/components/orderLogistics/map'
 import  orderScreen from '@/components/orderLogistics/orderScreen'
 import uploadDataF from '@/components/uploadData/pdf'
@@ -244,6 +246,16 @@ Vue.filter('selectTime',function (time) {
 })
 export default new Router({
   routes: [
+    {
+      path:'/orderLogisticsMore3',
+      name:'orderLogisticsMore3',
+      component:orderLogisticsMore3,
+    },
+    {
+    path:'/orderLogisticsMore2',
+    name:'orderLogisticsMore2',
+    component:orderLogisticsMore2,
+    },
     {
       path:'/carMessageMore',
       name:'carMessageMore',

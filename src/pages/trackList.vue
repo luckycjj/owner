@@ -86,10 +86,6 @@
          sessionStorage.removeItem("orderType");
          androidIos.judgeIphoneX("trackList",2);
          androidIos.judgeIphoneX("mescroll",1);
-         var trackTap = sessionStorage.getItem("trackTap");
-         if(trackTap != undefined){
-           _this.tabShow = trackTap*1;
-         }
          var type = _this.$route.query.type;
          if(type != undefined){
            _this.type = type;
@@ -109,7 +105,10 @@
        methods:{
          go:function () {
              var _this = this;
-
+             var trackTap = sessionStorage.getItem("trackListTap");
+             if(trackTap != undefined){
+               _this.tabShow = trackTap*1;
+             }
             $('.wrapper').navbarscroll({defaultSelect:_this.tabShow});
              var curNavIndex = _this.tabShow;//首页0; 奶粉1; 面膜2; 图书3;
              var mescrollArr=new Array(_this.list.length);//4个菜单所对应的4个mescroll对象
@@ -117,9 +116,9 @@
              mescrollArr[_this.tabShow]=initMescroll("mescroll" + _this.tabShow, "dataList" + _this.tabShow);
 
              /*初始化菜单*/
-             $("#trackTab li").on("touchend",function(){
+             $("#trackTab li").on("click",function(){
                var i=Number($(this).attr("i"));
-               sessionStorage.setItem("trackTap",i);
+               sessionStorage.setItem("trackListTap",i);
                if(curNavIndex!=i) {
                  //更改列表条件
                  //隐藏当前列表和回到顶部按钮
@@ -233,7 +232,7 @@
          lookTrackMore:function (pk,index) {
             var _this = this;
            androidIos.addPageList();
-           _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+           _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:1}});
          },
          corner:function () {
            var _this = this;

@@ -215,7 +215,7 @@
         var _this = this;
         sessionStorage.setItem("ORDERSCREEN",_this.address);
         androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogistics/orderLogisticsMore',query:{pk:pk,type:1}});
+        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:1}});
       },
     },
     beforeDestroy:function () {
