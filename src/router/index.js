@@ -139,14 +139,19 @@ Vue.filter('orderTypeName', function(value) {
   }
   return valueTypeName
 });
-Vue.filter('time',function (time) {
+Vue.filter('time',function (time,type) {
   var list0 = time.split(" ");
   var list1 = list0[0].split("-");
   var list2 = list0[1].split(":");
   list1.splice(0,1);
   list2.splice(2,1);
-  return list1.join("-") + " " + list2.join(":")
+  if(type == 0 ){
+    return list1.join("-");
+  }else{
+    return list2.join(":");
+  }
 })
+
 Vue.filter('distanceWidth',function (address) {
   if(address >= 1000){
     address = (address/1000).toFixed(3)*1 + "公里";

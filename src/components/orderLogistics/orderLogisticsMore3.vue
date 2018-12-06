@@ -149,7 +149,7 @@
                 </div>
               </div>
             </div>
-            <div class="company">
+            <div class="company" v-if="item.carrier.company != ''">
               <p class="peoplemessageP2">承运商信息</p>
               <div style="position: relative;margin:0.1rem auto 0 auto;width:9.3rem;margin-left: 0.7rem;padding-bottom: 0.4rem">
                 <div class="messageBox">
@@ -977,8 +977,19 @@
     color:#333;
     float: right;
   }
-  .goodsmessage h1,.goodsmessage h2,.goodsmessage h3,.goodsmessage h4{
-    width: 42%;
+  .goodsmessage h1,.goodsmessage h3{
+    width: 55%;
+    padding-left: 8%;
+    font-size: 0.375rem;
+    min-height: 0.7rem;
+    float: left;
+    background-repeat: no-repeat;
+    background-size: 0.375rem;
+    background-position: 0 0.08rem;
+    color:#666;
+  }
+ .goodsmessage h2,.goodsmessage h4{
+    width: 27%;
     padding-left: 8%;
     font-size: 0.375rem;
     min-height: 0.7rem;
@@ -1410,7 +1421,7 @@
         width:96%;
         margin-left: 2%;
         border-radius: 0.3rem;
-        background: #3399FF;
+        background: #1D68A8;
         color:white;
         font-size: 0.375rem;
         letter-spacing: 0.0625rem;
@@ -1428,8 +1439,8 @@
         filter: gray;
       }
       .errorPriceBoxLi{
-        border-color:#3399FF!important;
-        color:#3399FF!important;
+        border-color:#1D68A8!important;
+        color:#1D68A8!important;
       }
       #carPeopleMessage{
         padding:0.2rem 3%;

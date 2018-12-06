@@ -101,7 +101,8 @@
         <h6>物流跟踪</h6>
         <li v-for="(cjj,index) in item.logistics">
           <div class="logisticsLL" :style="{color:index==0 ? '#373737' : '#999'}">
-            {{cjj.time | time}}
+            {{cjj.time | time(0)}}
+            <span :style="{color:index==0 ? '#373737' : '#999'}"> {{cjj.time | time(1)}}</span>
           </div>
           <div class="logisticsL">
             <div class="logisticsCircle" :class="index==0?'logisticsCircleFull':''"></div>
@@ -1161,6 +1162,11 @@
     width:15%;
     font-size: 0.3125rem;
     color:#999;
+    line-height: 0.35rem;
+    text-align: center;
+  }
+  .logisticsLL span{
+      font-size:0.24rem ;
     line-height: 0.35rem;
     text-align: center;
   }
