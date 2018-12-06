@@ -54,11 +54,11 @@
           <li v-for="item in pdlist">
             <ul id="logisticsBox" class="logisticsBox" :class="logisticsOk?'logisticsBoxDown':''"  v-if="item.abnormalEventVo.length > 0">
               <li v-for="(cjj,index) in item.abnormalEventVo">
-                <!--<div class="logisticsL">
+                <div class="logisticsL">
                   <div class="logisticsCircle" :class="index==0?'logisticsCircleFull':''"></div>
                   <div class="logisticsShuxian"></div>
-                </div>-->
-                <div class="logisticsR" style="min-height: 0.8rem;">
+                </div>
+                <div class="logisticsR">
                   {{cjj.type}}&nbsp;&nbsp;{{cjj.time}}
                 </div>
                 <img src="../../images/icon-return1.png"  :class="logisticsOk?'logisticsImg':''" v-if="index==0 && item.abnormalEventVo.length > 1" @click="logisticsBoxDown()">
@@ -156,7 +156,7 @@
                   <h1 style="font-size: 0.375rem; color:#373737;margin-top: 0.34rem;">公司名称:&nbsp;&nbsp;{{item.carrier.company}}</h1>
                   <h1 style="font-size: 0.375rem; color:#999;margin-top: 0.2rem;">运输类型:&nbsp;&nbsp;{{item.carrier.tranType}}</h1>
                   <h1 style="font-size: 0.375rem;float: left; color:#999;margin-top: 0.2rem;">信誉评分:&nbsp;&nbsp;</h1>
-                  <div style="float:left;margin-top: 0.26rem" id="star_grade111" class="star_grade scorelistscore"></div>
+                  <div style="float:left;margin-top: 0.26rem" id="star_grade111" class="star_grade"></div>
                   <h1 style="font-size: 0.375rem;float: left; color:#999;margin-top: 0.2rem;margin-left: 0.2rem">{{item.carrier.grade}}分</h1>
                   <div class="clearBoth"></div>
                 </div>
@@ -267,6 +267,7 @@
               });
               self.$nextTick(function () {
                 $(document).unbind("click").on("click",".scorelistscore .set_image_item",function () {
+                  debugger
                   var idname = $(this).parents(".scorelistscore").attr("id");
                   var x = $(this).index("#"+idname+"  .set_image_item");
                   $("#"+idname).html("");
@@ -300,6 +301,12 @@
               self.mescroll.endSuccess(curPageData.length);
               self.orderType = self.pdlist[0].orderType;
               self.$nextTick(function () {
+                if(self.pdlist[0].logistics.length > 0){
+                  var htmlFont = document.getElementsByTagName("html");
+                  var logisticsBox = document.getElementById("logisticsBox");
+                  var logisticsBoxFont = logisticsBox.firstChild.offsetHeight / htmlFont[0].style.fontSize.replace("px","");
+                  logisticsBox.style.height = logisticsBoxFont + "rem";
+                }
                 $("#star_grade111").html("");
                 $("#star_grade111").markingSystem({
                   num: 5,
@@ -665,8 +672,8 @@
               if(invoiceDetail.abnormalEventVo != undefined){
                 for(var i =0 ;i<invoiceDetail.abnormalEventVo.length;i++){
                   var trackingJson = {
-                    type:invoiceDetail.abnormalEventVo[i].memo,
-                    time:invoiceDetail.abnormalEventVo[i].createTime,
+                    type:invoiceDetail.abnormalEventVo[0].memo,
+                    time:invoiceDetail.abnormalEventVo[0].createTime,
                   }
                   abnormalEventVo.push(trackingJson);
                 }
@@ -1256,22 +1263,27 @@
         width: 100%;
       }
       .logisticsBoxDown{
-        height: auto;
+        height: auto!important;
+        max-height: none!important;
       }
       .logisticsBox li{
         width: 94%;
         margin-left: 6%;
+        margin-bottom: 0.1rem;
       }
       .logisticsBox li .logisticsL{
         float: left;
         width:10%;
+        visibility:hidden;
       }
       .logisticsR{
         float: left;
         min-width:44%;
+        max-width: 85%;
         font-size: 0.35rem;
         color:#E93C42;
         line-height: 0.35rem;
+        margin-left: -1rem;
       }
       .logisticsBox li img{
         width:0.35rem;
