@@ -662,13 +662,16 @@
                 tracking.push(trackingJson);
               }
               var abnormalEventVo=[];
-              for(var i =0 ;i<invoiceDetail.abnormalEventVo.length;i++){
-                var trackingJson = {
-                  type:invoiceDetail.abnormalEventVo[i].memo,
-                  time:invoiceDetail.abnormalEventVo[i].createTime,
+              if(invoiceDetail.abnormalEventVo != undefined){
+                for(var i =0 ;i<invoiceDetail.abnormalEventVo.length;i++){
+                  var trackingJson = {
+                    type:invoiceDetail.abnormalEventVo[i].memo,
+                    time:invoiceDetail.abnormalEventVo[i].createTime,
+                  }
+                  abnormalEventVo.push(trackingJson);
                 }
-                abnormalEventVo.push(trackingJson);
               }
+
               // 新建=0 已确认=10 司机发车=20 部分提货=30 已提货=40 部分到货=50 已到货=60 部分签收=70 已签收=80 已回单=90 关闭=100
               // $route.query.type 1发货方2付款3收货方
               var trackingStatusValue = "";
