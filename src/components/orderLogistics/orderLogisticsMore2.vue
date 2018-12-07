@@ -895,8 +895,19 @@
     color:#333;
     float: right;
   }
-  .goodsmessage h1,.goodsmessage h2,.goodsmessage h3,.goodsmessage h4{
-    width: 42%;
+  .goodsmessage h1,.goodsmessage h3{
+    width: 55%;
+    padding-left: 8%;
+    font-size: 0.375rem;
+    min-height: 0.7rem;
+    float: left;
+    background-repeat: no-repeat;
+    background-size: 0.375rem;
+    background-position: 0 0.08rem;
+    color:#666;
+  }
+  .goodsmessage h2,.goodsmessage h4{
+    width: 27%;
     padding-left: 8%;
     font-size: 0.375rem;
     min-height: 0.7rem;
