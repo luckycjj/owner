@@ -301,7 +301,7 @@
               self.mescroll.endSuccess(curPageData.length);
               self.orderType = self.pdlist[0].orderType;
               self.$nextTick(function () {
-                if(self.pdlist[0].logistics.length > 0){
+                if(self.pdlist[0].abnormalEventVo.length > 0){
                   var htmlFont = document.getElementsByTagName("html");
                   var logisticsBox = document.getElementById("logisticsBox");
                   var logisticsBoxFont = logisticsBox.firstChild.offsetHeight / htmlFont[0].style.fontSize.replace("px","");
