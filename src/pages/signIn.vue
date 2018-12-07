@@ -115,6 +115,7 @@
         status:0,
         imgList:[],
         imgListLength:4,
+        map:null,
         errorlogo: 'this.src="' + require('../images/timg.jpg') + '"'
       }
     },
@@ -402,22 +403,25 @@
             }
           }
         })
-        var map = new AMap.Map("container", {
-          resizeEnable: true,
-          center: [_this.startJ, _this.startW],//地图中心点
-          zoom: 13 //地图显示的缩放级别
-        });
-        AMap.plugin(['AMap.Scale'],
-          function(){
-            map.addControl(new AMap.Scale());
-          });
+        var truckOptions = {
+          map: _this.map,
+          policy:0,
+          size:1,
+          city:'beijing',
+          panel:'panel',
+          province:"",
+          number:""
+        };
         //构造路线导航类
-        var driving = new AMap.Driving({
-          map: map,
-          panel: "panel"
-        });
-        driving.search([_this.startJ, _this.startW], [_this.endJ, _this.endW], function(status, result) {
-        });
+        _this.map = new AMap.Map("container", {});
+        var driving = new AMap.TruckDriving(truckOptions);
+        _this.map.clearMap();
+        if(_this.startJ != "" && _this.startW != undefined  && _this.endJ != ""  && _this.endW != undefined ){
+          var path = [];
+          path.push({lnglat:[_this.startJ, _this.startW]});//起点
+          path.push({lnglat:[_this.endJ,_this.endW]});//途径
+          driving.search(path, function(status, result) {});
+        }
       },
       normalSignListClick:function (type,index) {
         if(type == 1){
