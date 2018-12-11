@@ -267,7 +267,6 @@
               });
               self.$nextTick(function () {
                 $(document).unbind("click").on("click",".scorelistscore .set_image_item",function () {
-                  debugger
                   var idname = $(this).parents(".scorelistscore").attr("id");
                   var x = $(this).index("#"+idname+"  .set_image_item");
                   $("#"+idname).html("");
@@ -672,8 +671,8 @@
               if(invoiceDetail.abnormalEventVo != undefined){
                 for(var i =0 ;i<invoiceDetail.abnormalEventVo.length;i++){
                   var trackingJson = {
-                    type:invoiceDetail.abnormalEventVo[0].memo,
-                    time:invoiceDetail.abnormalEventVo[0].createTime,
+                    type:invoiceDetail.abnormalEventVo[i].memo,
+                    time:invoiceDetail.abnormalEventVo[i].createTime,
                   }
                   abnormalEventVo.push(trackingJson);
                 }
