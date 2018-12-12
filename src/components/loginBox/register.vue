@@ -16,12 +16,12 @@
       </div>
       <div class="modelView img2">
         <input @input="filterInput()" :type="lookPassWord ? 'text' : 'password' " maxlength="25"  v-model="password" placeholder="请输入密码"/>
-        <div id="lookPassWord" :class="lookPassWord ? 'lookPassWord' : '' " @touchend="lookpass()"></div>
+        <div id="lookPassWord" :class="lookPassWord ? 'lookPassWord' : '' " @touchend="lookpass(1)"></div>
         <div class="clearBoth"></div>
       </div>
       <div class="modelView img3">
         <input @input="filterInput()"  :type="lookPassWord1 ? 'text' : 'password' "  maxlength="25"  v-model="passwordSure" placeholder="请确认密码"/>
-        <div id="lookPassWord1" :class="lookPassWord1 ? 'lookPassWord' : '' " @touchend="lookpass(2)"></div>
+        <div id="lookPassWord1" :class="lookPassWord1 ? 'lookPassWord' : '' " @touchend="lookpass()"></div>
         <div class="clearBoth"></div>
       </div>
     </div>

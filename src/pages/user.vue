@@ -73,31 +73,21 @@
           url:"/settlement",
           number:0,
         },{
-          name:"扫码签收",
-          icon:require("../images/saoyisao.png"),
-          url:"",
-          number:0,
-        },{
-          name:"地址管理",
+          name:"我的地址",
           icon:require("../images/addressmanagement.png"),
           url:"/newOrder/addressMessage?type=1",
+          number:0,
+        },{
+          name:"分享",
+          icon:require("../images/fenxiang-4.png"),
+          url:"",
           number:0,
         },{
           name:"建议反馈",
           icon:require("../images/feedback.png"),
           url:"/suggestion",
           number:0,
-        }/*,{
-          name:"关于我们",
-          icon:require("../images/aboutUs.png"),
-          url:"/aboutUs",
-          number:0,
-        }*//*,{
-          name:"新手指引",
-          icon:require("../images/noviceguidance.png"),
-          url:"/noviceguidance",
-          number:0,
-        }*/],
+        }],
         errorlogo: 'this.src="' + require('../images/userImg.png') + '"',
         httpurl:"",
         shareListTrue:false,
@@ -247,7 +237,6 @@
             img = "";
           }
           $("#common-blackBox").remove();
-          debugger
           if(img == ""){
             androidIos.second("扫描二维码失败,请重试!");
           }else{
@@ -275,6 +264,9 @@
         }else{
           if(item.name.indexOf("扫") == -1){
             _this.shareListTrue = true;
+            _this.$nextTick(function () {
+              androidIos.judgeIphoneX("shareBody",1);
+            })
           }
         }
       },
@@ -560,7 +552,7 @@
   }
   #head h1{
     color:#999999;
-    font-size: 0.3125rem;
+    font-size:0.267rem;
   }
   .lookMore{
     width:50%;
@@ -579,7 +571,7 @@
     padding-right: 4%;
   }
   .lookMore span{
-    font-size: 0.3125rem;
+    font-size: 0.267rem;
   }
   ul{
     width:100%;
@@ -589,11 +581,11 @@
     position: relative;
   }
   .tableIcon{
-    width:0.43rem;
+    width:0.48rem;
     height: 1.3rem;
     margin-left: 0.44rem;
     background-repeat: no-repeat;
-    background-size: 0.43rem;
+    background-size: 0.48rem;
     background-position: 50% 50%;
     float: left;
   }
@@ -609,7 +601,7 @@
     margin-left: 0.27rem;
     color:white;
     background:#1D68A8;
-    padding: 0.1rem 0.2rem;
+    padding: 0.067rem 0.2rem;
     border-radius: 0.25rem;
   }
   .marTop{
