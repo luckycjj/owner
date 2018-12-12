@@ -178,7 +178,11 @@
       renzhen:function () {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({path:'/statusNow'});
+        if(_this.message.status == 0){
+          _this.$router.push({path:'/authentication',query:{type:1}});
+        }else{
+          _this.$router.push({path:'/statusNow'});
+        }
       },
       go:function () {
         var _this = this;

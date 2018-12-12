@@ -796,7 +796,7 @@
   margin:0 0.1rem;
 }
   .stepNow{
-     background: #2c9cff!important;
+     background: #1D68A8!important;
   }
   .stepBefore{
     background: #90caf6!important;
@@ -805,7 +805,7 @@
     background: #e7e6e7!important;
   }
 .stepNowColor{
-  color: #2c9cff!important;
+  color: #1D68A8!important;
 }
 .stepBeforeColor{
   color: #90caf6!important;
@@ -973,10 +973,7 @@
     color:white;
     border-radius: 0.2rem;
     margin:0.4rem auto;
-    background: -webkit-linear-gradient(left, #00C4FF , #0074FF); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(right, #00C4FF, #0074FF); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(right, #00C4FF, #0074FF); /* Firefox 3.6 - 15 */
-    background: linear-gradient(to right, #00C4FF , #0074FF); /* 标准的语法 */
+    background:#1D68A8;
     font-size: 0.427rem;
     line-height: 1.08rem;
   }
@@ -1077,9 +1074,9 @@
   -webkit-border-radius: 0.3rem;
   -moz-border-radius: 0.3rem;
   border-radius:  0.3rem;
-  border: 1px solid #0073eb;
+  border: 1px solid #1D68A8;
   text-align: center;
-  color: #0073eb;
+  color: #1D68A8;
   display: inline-block;
   width: 0.42688rem;
   height:0.42688rem;
@@ -1103,7 +1100,7 @@
   height:0.608rem;
   margin: .13344rem 0 .13344rem .1888rem;
   width: 0;
-  border-left: 1px dotted #0073eb;
+  border-left: 1px dotted #1D68A8;
   display: block;
 }
 #baiduhuoti button{
@@ -1112,10 +1109,7 @@
   color:white;
   border-radius: 0.2rem;
   margin:0.4rem auto;
-  background: -webkit-linear-gradient(left, #00C4FF , #0074FF); /* Safari 5.1 - 6.0 */
-  background: -o-linear-gradient(right, #00C4FF, #0074FF); /* Opera 11.1 - 12.0 */
-  background: -moz-linear-gradient(right, #00C4FF, #0074FF); /* Firefox 3.6 - 15 */
-  background: linear-gradient(to right, #00C4FF , #0074FF); /* 标准的语法 */
+  background:#1D68A8;
   font-size: 0.427rem;
   line-height: 1.08rem;
 }
@@ -1137,10 +1131,7 @@
   display: block;
   color:white;
   border-radius: 0.2rem;
-  background: -webkit-linear-gradient(left, #00C4FF , #0074FF); /* Safari 5.1 - 6.0 */
-  background: -o-linear-gradient(right, #00C4FF, #0074FF); /* Opera 11.1 - 12.0 */
-  background: -moz-linear-gradient(right, #00C4FF, #0074FF); /* Firefox 3.6 - 15 */
-  background: linear-gradient(to right, #00C4FF , #0074FF); /* 标准的语法 */
+  background:#1D68A8;
   font-size: 0.427rem;
   line-height: 1.08rem;
 }
