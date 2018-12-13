@@ -9,7 +9,7 @@
           <li><h3>{{carModel}}</h3></li>
           <div class="clearBoth"></div>
           <li v-for="item in proList">
-            <h1>{{item.goodsCode}} -{{item.goodsName}}</h1>
+            <h1>{{item.goodsName}}</h1>
             <div class="clearBoth"></div>
             <h2>{{item.num}}件/{{item.weight}}/{{item.volume}}</h2>
             <div class="clearBoth"></div>
@@ -17,27 +17,27 @@
           <div class="clearBoth"></div>
         </ul>
         <div class="clearBoth"></div>
-        <p @touchend="telphone()">有问题请联系客服</p>
+        <p @click="telphone()">有问题请联系客服</p>
         <div id="letGo">
-          <button class="error" @touchend="errorClick()">异常签收</button>
-          <button @touchend="qianshou()" class="noerror">签收</button>
+          <button class="error" @click="errorClick()">异常签收</button>
+          <button @click="qianshou()" class="noerror">签收</button>
         </div>
       </div>
       <div id="signYes2" v-if="normalSign">
-        <div class="title"><span @touchend="goback(1)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @touchend="signyesYY(1)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
+        <div class="title"><span @click="goback(1)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @click="signyesYY(1)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
         <div id="star_grade" class="star_grade scorelistscore"></div>
         <ul>
-           <li v-for="(item,index) in normalSignList" @touchend="normalSignListClick(1,index)" :class="item.choose ? 'chooseTrue' : ''">
-               {{item.displayName}}
-           </li>
-           <div class="clearBoth"></div>
-         </ul>
-         <textarea placeholder="其他想说的，可以填在这里" maxlength="100" @input="remarkKeyup(1)" v-model="normalSignRemark"></textarea>
+          <li v-for="(item,index) in normalSignList" @click="normalSignListClick(1,index)" :class="item.choose ? 'chooseTrue' : ''">
+            {{item.displayName}}
+          </li>
+          <div class="clearBoth"></div>
+        </ul>
+        <textarea placeholder="其他想说的，可以填在这里" maxlength="100" @input="remarkKeyup(1)" v-model="normalSignRemark"></textarea>
         <div class="addImg">
           <h1>货物</h1>
           <div class="imgBox"  v-for="(item,index) in imgList">
-            <img :src="item.file" :onerror="errorlogo"  @touchend="lookImg($event,item.file)">
-            <div class='closed' @touchend="removeImg(index)"></div>
+            <img :src="item.file" :onerror="errorlogo"  @click="lookImg($event,item.file)">
+            <div class='closed' @click="removeImg(index)"></div>
           </div>
           <div class="addImgFirst" v-if="imgList.length < imgListLength">
             <img src="../images/addImgP.png">
@@ -48,20 +48,20 @@
         </div>
       </div>
       <div id="signYes3" v-if="errorSign">
-        <div class="title"><span @touchend="goback(2)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @touchend="signyesYY(2)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
+        <div class="title"><span @click="goback(2)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span><span @click="signyesYY(2)" style="float: right;padding-right: 5%;color:#2C9CFF;">确定</span></div>
         <ul>
-          <li v-for="(item,index) in errorSignList" @touchend="normalSignListClick(2,index)" :class="item.choose ? 'chooseTrue' : ''">
+          <li v-for="(item,index) in errorSignList" @click="normalSignListClick(2,index)" :class="item.choose ? 'chooseTrue' : ''">
             {{item.displayName}}
           </li>
           <div class="clearBoth"></div>
         </ul>
         <textarea placeholder="其他异常情况，请如实填写，稍后将有客服人员与 您电话联系" @input="remarkKeyup(2)"  maxlength="100" v-model="errorSignRemark"></textarea>
         <div class="addImg">
-           <h1>货物缺损图片</h1>
-           <div class="imgBox"  v-for="(item,index) in imgList">
-             <img :src="item.file"  @touchend="lookImg($event,item.file)"  :onerror="errorlogo" >
-             <div class='closed' @touchend="removeImg(index)"></div>
-           </div>
+          <h1>货物缺损图片</h1>
+          <div class="imgBox"  v-for="(item,index) in imgList">
+            <img :src="item.file"  @click="lookImg($event,item.file)"  :onerror="errorlogo" >
+            <div class='closed' @click="removeImg(index)"></div>
+          </div>
           <div class="addImgFirst" v-if="imgList.length < imgListLength">
             <img src="../images/addImgP.png">
             <input type="file" accept=".jpg,.png" multiple id="imgFile" @change="inputChange($event,1)">
@@ -71,13 +71,13 @@
         </div>
       </div>
       <div id="signYes4" v-if="errorSignEnd">
-        <div class="title"><span @touchend="goback(3)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
+        <div class="title"><span @click="goback(3)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
         <img src="../images/errorSignEnd.png">
         <p>感谢您的反馈!</p>
         <h1>稍后将会有客服人员联系您核实信息，请保持手机畅通</h1>
       </div>
       <div id="signYes5" v-if="normalSignEnd">
-        <div class="title"><span @touchend="goback(4)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
+        <div class="title"><span @click="goback(4)" style="float: left;padding-left: 5%;color:#6E6E6E;">取消</span></div>
         <img src="../images/okgoyes.png">
         <p v-if="status == 0">感谢您的评价!</p>
         <p v-else>签收成功!</p>
@@ -87,9 +87,8 @@
 </template>
 
 <script>
-  import AMap from 'AMap'
+  /*import AMap from 'AMap'*/
   import {androidIos} from "../js/app";
-  import bridge from '../js/bridge';
   import {bomb} from "../js/zujian";
   import  "../js/markingSystem";
   import PinchZoom from "../js/pinchzoom";
@@ -115,18 +114,21 @@
         status:0,
         imgList:[],
         imgListLength:4,
+        errorlogo: 'this.src="' + require('../images/timg.jpg') + '"',
+        peopleTel:"",
         map:null,
-        errorlogo: 'this.src="' + require('../images/timg.jpg') + '"'
       }
     },
     mounted: function () {
       var _this = this;
+      _this.peopleTel = sessionStorage.getItem("token");
       androidIos.judgeIphoneX("container",2);
-      androidIos.bridge(_this);
+      _this.go();
     },
     methods: {
       go:function () {
         var _this = this;
+        _this.map = new AMap.Map("container", {});
         _this.init();
       },
       inputChange:function (e,type) {
@@ -197,21 +199,21 @@
               type: type == 1 ? "errorImg" : "normalImg",
               name:"",
               file: base64.substr(23),
-              userCode:sessionStorage.getItem("token"),
-              source:sessionStorage.getItem("source")
+              userCode: _this.peopleTel ,
+              source:"wx",
             }),
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             timeout: 30000,
             success: function (json) {
               if (json.success == "1") {
-                  _this.imgList.push({
-                     file:base64,
-                     httpfile:json.path,
-                  });
-                  _this.$nextTick(function () {
-                    _this.height();
-                  });
+                _this.imgList.push({
+                  file:base64,
+                  httpfile:json.path,
+                });
+                _this.$nextTick(function () {
+                  _this.height();
+                });
               } else{
                 androidIos.second(json.message);
               }
@@ -221,7 +223,7 @@
               if (status == 'timeout') { //超时,status还有success,error等值的情况
                 androidIos.second("当前状况下网络状态差，请检查网络！")
               } else if (status == "error") {
-                androidIos.errorwife();
+                androidIos.second("网络请求超时");
               }
             }
           });
@@ -304,7 +306,7 @@
         $.ajax({
           type: "GET",
           url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
-          data:{str:"normal_Receipt",userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
+          data:{str:"normal_Receipt",userCode:_this.peopleTel,source:"wx",},
           dataType: "json",
           timeout: 10000,
           success: function (getSysConfigList) {
@@ -317,14 +319,14 @@
             if(status=='timeout'){//超时,status还有success,error等值的情况
               androidIos.second("网络请求超时");
             }else if(status=='error'){
-              androidIos.errorwife();
+              androidIos.second("网络请求超时");
             }
           }
         });
         $.ajax({
           type: "GET",
           url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
-          data:{str:"error_Receipt",userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
+          data:{str:"error_Receipt",userCode:_this.peopleTel,source:"wx",},
           dataType: "json",
           timeout: 10000,
           success: function (getSysConfigList) {
@@ -345,28 +347,28 @@
           type: "POST",
           url: androidIos.ajaxHttp() + "/order/getGoodsDetail",
           data:JSON.stringify({
-             userCode:sessionStorage.getItem("token"),
-             source : sessionStorage.getItem("source"),
-             pk:_this.$route.query.pk,
+            userCode:_this.peopleTel,
+            pk:_this.$route.query.pk,
+            source:"wx",
           }),
           contentType: "application/json;charset=utf-8",
           dataType: "json",
-          async:false,
           success: function (getGoodsDetail) {
             if(getGoodsDetail.success == "1"){
               _this.startJ = getGoodsDetail.deliAddr.addressLatAndLon == undefined ? "120.40" : getGoodsDetail.deliAddr.addressLatAndLon.split(",")[0] ;
               _this.startW = getGoodsDetail.deliAddr.addressLatAndLon == undefined ? "30.26" : getGoodsDetail.deliAddr.addressLatAndLon.split(",")[1] ;
               _this.endJ = getGoodsDetail.arriAddr.addressLatAndLon == undefined ? "121.40" : getGoodsDetail.arriAddr.addressLatAndLon.split(",")[0] ;
               _this.endW = getGoodsDetail.arriAddr.addressLatAndLon == undefined ? "30.36" : getGoodsDetail.arriAddr.addressLatAndLon.split(",")[1] ;
+              _this.mapDriver();
               var carLength = getGoodsDetail.carLength != "" && getGoodsDetail.carLength != null ? "(" + getGoodsDetail.carLength + "米)" : "";
               var carModel = getGoodsDetail.carModel != "" && getGoodsDetail.carModel != null ? "(" + getGoodsDetail.carModel + ")" : "";
               _this.carModel  = getGoodsDetail.transType  + carLength + carModel;
               for(var i = 0 ;i < getGoodsDetail.list.length ; i++){
-                 if(getGoodsDetail.list[i].volume * 1000 - 1000 < 0 ){
-                   getGoodsDetail.list[i].volume = getGoodsDetail.list[i].volume*1000 + "升";
-                 }else{
-                   getGoodsDetail.list[i].volume = getGoodsDetail.list[i].volume*1 + "立方米";
-                 }
+                if(getGoodsDetail.list[i].volume * 1000 - 1000 < 0 ){
+                  getGoodsDetail.list[i].volume = getGoodsDetail.list[i].volume*1000 + "升";
+                }else{
+                  getGoodsDetail.list[i].volume = getGoodsDetail.list[i].volume*1 + "立方米";
+                }
                 if(getGoodsDetail.list[i].weight - 1000 < 0 ){
                   getGoodsDetail.list[i].weight = getGoodsDetail.list[i].weight*1 + "千克";
                 }else{
@@ -399,10 +401,13 @@
             if(status=='timeout'){//超时,status还有success,error等值的情况
               androidIos.second("网络请求超时");
             }else if(status=='error'){
-              androidIos.errorwife();
+              androidIos.second("网络请求超时");
             }
           }
-        })
+        });
+      },
+      mapDriver:function () {
+        var _this = this;
         var truckOptions = {
           map: _this.map,
           policy:0,
@@ -413,7 +418,6 @@
           number:""
         };
         //构造路线导航类
-        _this.map = new AMap.Map("container", {});
         var driving = new AMap.TruckDriving(truckOptions);
         _this.map.clearMap();
         if(_this.startJ != "" && _this.startW != undefined  && _this.endJ != ""  && _this.endW != undefined ){
@@ -443,9 +447,9 @@
           type: "POST",
           url: androidIos.ajaxHttp() + "/order/signInv",
           data:JSON.stringify({
-            userCode:sessionStorage.getItem("token"),
-            source : sessionStorage.getItem("source"),
+            userCode: _this.peopleTel ,
             pk:_this.$route.query.pk,
+            source:"wx",
           }),
           contentType: "application/json;charset=utf-8",
           dataType: "json",
@@ -498,7 +502,7 @@
           _this.errorSignEnd = false;
           _this.normalSignEnd = false;
           for(var i = 0; i < _this.errorSignList.length;i++){
-           _this.errorSignList[i].choose = false;
+            _this.errorSignList[i].choose = false;
           }
           _this.errorSignRemark = "";
           _this.imgList = [];
@@ -507,7 +511,7 @@
             _this.positionWidth();
           })
         }else if(type == 1 ||type == 3 || type == 4){
-          androidIos.gobackFrom(_this);
+          _this.$router.go(-1);
         }
       },
       remarkKeyup:function (type) {
@@ -528,25 +532,25 @@
             }
           }
           var number = $("#star_grade .grade").text();
-          if(list.length == 0 && _this.normalSignRemark == ""){
-            bomb.first("请选择或填写内容");
-            return false;
-          }
+          /* if(list.length == 0 && _this.normalSignRemark == ""){
+             bomb.first("请选择或填写内容");
+             return false;
+           }*/
           var listImg = [];
           for(i = 0 ; i< _this.imgList.length ;i++){
             listImg.push(_this.imgList[i].httpfile)
           }
           var json = {
             scoreList:JSON.stringify([{
-               name:"货物",
-               score:number.replace("分",""),
+              name:"货物",
+              score:number.replace("分",""),
             }]),
             evaluationPicture:listImg.join(","),
             average:number.replace("分",""),
             scorereason:list.join(",") + "," + _this.normalSignRemark,
             pk:_this.$route.query.pk,
-            userCode:sessionStorage.getItem("token"),
-            source:sessionStorage.getItem("source")
+            userCode: _this.peopleTel ,
+            source:"wx",
           }
           $.ajax({
             type: "POST",
@@ -573,20 +577,20 @@
               if(status=='timeout'){//超时,status还有success,error等值的情况
                 androidIos.second("网络请求超时");
               }else if(status=='error'){
-                androidIos.errorwife();
+                androidIos.second("网络请求超时");
               }
             }
           })
         }else if(type == 2){
           var list = [];
           for(var i = 0; i < _this.errorSignList.length;i++){
-             if(_this.errorSignList[i].choose){
-                list.push(_this.errorSignList[i].value)
-             }
+            if(_this.errorSignList[i].choose){
+              list.push(_this.errorSignList[i].value)
+            }
           }
           if(list.length == 0 && _this.errorSignRemark == ""){
-             bomb.first("请选择或填写异常类型");
-             return false;
+            bomb.first("请选择或填写异常类型");
+            return false;
           }
           var listImg = [];
           for(i = 0 ; i< _this.imgList.length ;i++){
@@ -605,8 +609,8 @@
               pkEntrust:_this.$route.query.pk,
               memo:_this.errorSignRemark ,
               abnormalPicture:listImg.join(","),
-              userCode: sessionStorage.getItem("token"),
-              source:sessionStorage.getItem("source"),
+              userCode:  _this.peopleTel ,
+              source:"wx",
             }),
             contentType: "application/json;charset=utf-8",
             dataType: "json",
@@ -636,7 +640,7 @@
               if(status=='timeout'){//超时,status还有success,error等值的情况
                 androidIos.second("网络请求超时");
               }else if(status=='error'){
-                androidIos.errorwife();
+                androidIos.second("网络请求超时");
               }
             }
           })
@@ -667,7 +671,7 @@
           backgroundImageInitial:require('../images/star_hollow.png'),
           backgroundImageOver:require('../images/star_solid.png'),
           unit: '星',
-          grade:0,
+          grade:5,
           height: 0.8* $("html").css("font-size").replace("px", ""),
           width: 0.8* $("html").css("font-size").replace("px", ""),
         });
@@ -777,7 +781,7 @@
     height: auto!important;
   }
   #signYes{
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left:0;
     height: auto;
@@ -876,7 +880,7 @@
     float: left;
   }
   #signYes2 .title, #signYes3 .title{
-   width:100%;
+    width:100%;
     height:1.09rem;
     font-size: 0.4rem;
     line-height: 1.09rem;
@@ -894,8 +898,8 @@
     margin-top: 0.5rem;
   }
   #signYes2 ul li,#signYes3 ul li{
-     font-size:0.35rem;
-     color:#333;
+    font-size:0.35rem;
+    color:#333;
     background:rgb(248,248,248);
     border:1px solid rgb(222,222,222);
     float: left;
@@ -924,18 +928,18 @@
     border: 1px solid #2c9cff!important;
   }
   #signYes4 .title,#signYes5 .title{
-     width:100%;
-     height:1.09rem;
-     font-size: 0.4rem;
-     line-height: 1.09rem;
-   }
+    width:100%;
+    height:1.09rem;
+    font-size: 0.4rem;
+    line-height: 1.09rem;
+  }
   #signYes4 img, #signYes5 img{
     width:1.9rem;
     display: block;
     margin: 1rem auto 0.65rem auto;
   }
-   .addImg{
-     width:90%;
+  .addImg{
+    width:90%;
     margin: 0 auto 0.2rem auto;
   }
   .addImgFirst{
@@ -952,12 +956,12 @@
     margin:0.54rem auto 0.25rem auto;
   }
   .addImgFirst input{
-     position: absolute;
-     width:100%;
-     top:0;
-     bottom: 0;
-     height: auto;
-     opacity: 0;
+    position: absolute;
+    width:100%;
+    top:0;
+    bottom: 0;
+    height: auto;
+    opacity: 0;
   }
   .addImgFirst p {
     text-align: center;
