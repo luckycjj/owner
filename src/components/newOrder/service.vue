@@ -175,22 +175,6 @@
           },
         fapiaoFalse:function () {
           var _this = this;
-         /* _this.message = {
-            company:"",
-            shuihao:"",
-            address:"",
-            phone:"",
-            moblie:"",
-            email:"",
-            bank:"",
-            bankNumber:"",
-          }*/
-          /*_this.serviceList[2].check = false;*/
-         /* var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
-          if(fapiaoXinxi != undefined){
-            _this.serviceList[2].check = true;
-            _this.message = JSON.parse(fapiaoXinxi);
-          }*/
           _this.fapiao = false;
           _this.chooseServiceBox();
         },
@@ -310,14 +294,14 @@
             success: function (getElectronicBill) {
               if(getElectronicBill.success == "1"){
                 _this.message = {
-                    company:getElectronicBill.corpName,
-                    shuihao:getElectronicBill.taxNo,
-                    address:getElectronicBill.corpAddr,
-                    phone:getElectronicBill.phone,
-                    moblie:getElectronicBill.mobile,
-                    email:getElectronicBill.email,
-                    bank:getElectronicBill.bank,
-                    bankNumber:getElectronicBill.bankAccount,
+                    company:getElectronicBill.corpName == undefined ? "" : getElectronicBill.corpName,
+                    shuihao:getElectronicBill.taxNo == undefined ? "" : getElectronicBill.taxNo,
+                    address:getElectronicBill.corpAddr == undefined ? "" : getElectronicBill.corpAddr,
+                    phone:getElectronicBill.phone == undefined ? "" : getElectronicBill.phone,
+                    moblie:getElectronicBill.mobile == undefined ? "" : getElectronicBill.mobile,
+                    email:getElectronicBill.email == undefined ? "" : getElectronicBill.email,
+                    bank:getElectronicBill.bank == undefined ? "" : getElectronicBill.bank,
+                    bankNumber:getElectronicBill.bankAccount == undefined ? "" : getElectronicBill.bankAccount,
                 }
               }else{
                 androidIos.second(getElectronicBill.message);
