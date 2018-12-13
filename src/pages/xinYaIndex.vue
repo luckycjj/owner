@@ -176,7 +176,7 @@
             }, function(ret, err) {
               if (ret.status) {
                 console.log(ret.wordStr);
-                _this.keyWord = ret.wordStr.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'').toUpperCase();
+                _this.keyWord = ret.wordStr;
               } else {
                 console.log(err.msg);
               }

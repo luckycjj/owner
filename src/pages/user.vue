@@ -15,7 +15,7 @@
         <div class="clearBoth"></div>
       </div>
       <ul>
-        <li @touchend="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
+        <li @click="lookMore(item)" v-for="(item,index) in tabList" :class="index % 2 == 0 ? (tabList.length -1 == index ? 'marTop' : 'marTop borderShow') : ''">
           <div class="tableIcon" :style="{backgroundImage:'url(' + item.icon + ')'}"></div>
           <p>{{item.name}}<span v-if="item.number > 0">{{item.number}}</span></p>
           <div class="lookMore"></div>

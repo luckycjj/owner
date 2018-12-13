@@ -732,6 +732,7 @@ var androidIos = {
       paddingBottom = 0 + "px";
       paddingTop =10 + "px";
     }
+    console.log(paddingTop)
     var docuId = document.getElementById(id);
     if(docuId == null){
       for(var i = 0 ; i < document.getElementsByClassName(id).length;i++){
