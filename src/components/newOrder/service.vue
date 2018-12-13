@@ -238,6 +238,12 @@
                return false;
              }
           }
+          if(_this.message.phone != ""){
+            if(!androidIos.telCheck(_this.message.phone)){
+              bomb.first("电话号码有误");
+              return false;
+            }
+          }
           $.ajax({
             type: "POST",
             url: androidIos.ajaxHttp()+"/company/electronicBill",
