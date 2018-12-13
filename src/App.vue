@@ -91,7 +91,7 @@
     beforeUpdate:function () {
       var _this = this;
       _this.title = document.title;
-      _this.html = location.href;
+      _this.html = location.href.split("#")[1];
       if(_this.html.indexOf("/login") != -1   || _this.html.indexOf("/orderLogisticsMore3") != -1 || _this.html.indexOf("/orderLogisticsMore2") != -1 || _this.html.indexOf("/haveCar") != -1 || _this.html.indexOf("/newProlist") != -1 || _this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/orderLogistics/orderLogisticsMore") != -1){
         $("#appBox").hide();
       }else{
@@ -130,7 +130,7 @@
       var _this = this;
       _this.$nextTick(function () {
         _this.title = document.title;
-        _this.html = location.href;
+        _this.html = location.href.split("#")[1];
         if(_this.html.indexOf("/login") != -1  || _this.html.indexOf("/orderLogisticsMore3") != -1 || _this.html.indexOf("/orderLogisticsMore2") != -1 || _this.html.indexOf("/haveCar") != -1 || _this.html.indexOf("/newProlist") != -1  || _this.html.indexOf("/xinYaIndex") != -1 || _this.html.indexOf("/orderLogistics/orderLogisticsMore") != -1){
           $("#appBox").hide();
         }else{
