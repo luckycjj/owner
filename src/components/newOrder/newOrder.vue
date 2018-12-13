@@ -615,15 +615,16 @@
                       }
                     }
                     var servList = [];
-                    /*var service1 = invoiceDetail.photo_back;
-                    var service2 = invoiceDetail.paper_back;
-                    var service3 = invoiceDetail.elect_back;
-                    if(service1 == 1){
+                    var service = invoiceDetail.increaseValue;
+                    if(service.indexOf("拍照回单") != -1){
                       servList.push("拍照回单（免费）");
                     }
-                    if(service2 == 1){
+                    if(service.indexOf("纸质回单") != -1){
                       servList.push("纸质回单（免费）");
-                    }*/
+                    }
+                    if(service.indexOf("电子发票") != -1){
+                      servList.push("开具电子发票");
+                    }
                     var pdlist = {
                       startAddress:{
                         people:invoiceDetail.delivery.contact,
@@ -1925,7 +1926,18 @@
                   _this.$cjj("提交成功");
                   sessionStorage.removeItem("servicePk");
                   setTimeout(function () {
-                    androidIos.gobackFrom(_this);
+                    if(_this.$route.query.type == 3){
+                      androidIos.gobackFrom(_this);
+                    }else{
+                      if(_this.pk == ""){
+                         sessionStorage.removeItem("addPageList");
+                         sessionStorage.removeItem("trackListTap");
+                         _this.$router.push({path:"/trackList",query:{type:1}});
+                      }else{
+                        androidIos.gobackFrom(_this);
+                      }
+                    }
+
                   },1000)
                 }else if(createOrder.success=="-1"){
                   androidIos.second(createOrder.message)

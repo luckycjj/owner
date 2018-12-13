@@ -98,7 +98,8 @@
                     </div>
                     <div class="go" v-else-if=" type == '0' && orderSource == 1">
                       <button class="zhifu" @touchend.stop.prevent="shenhe()">确认</button>
-                      <button @touchend.stop.prevent="closedOrder(2)">驳回</button>
+                    <!--  <button @touchend.stop.prevent="closedOrder(2)">驳回</button>-->
+                      <button @touchend.stop.prevent="orderAgain(3)">修改订单</button>
                       <div class="clearBoth"></div>
                     </div>
                     <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
