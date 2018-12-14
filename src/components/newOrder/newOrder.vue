@@ -30,7 +30,7 @@
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox borderno">
-          <span>收货时间</span>
+          <span>卸货时间</span>
           <input type="text" style="width:21%;" name="USER_AGES" id="USER_AGET" readonly class="input" placeholder="请选择时分" v-model="both.timeAfterF"/>
           <input type="text" style="width:28%;" name="USER_AGES" id="USER_AGEFo" readonly class="input" placeholder="请选择年月日" v-model="both.timeAfterS"/>
           <div class="clearBoth"></div>
@@ -49,7 +49,8 @@
             <div class="clearBoth"></div>
           </div>
           <div class="lablebox borderno" style="border-top: 1px solid #dadada!important;">
-            <span class="required">货物重量</span>
+            <span class="required" style="float: left">货物重量</span>
+            <img src="../../images/calculator.png" class="lableboxImg" @click="calculatorGo()">
             <div class="unit" :id="'Z00'+index">{{item.unitWight}}</div>
             <input type="text" placeholder="请输入货物重量" maxlength="10" v-model="item.wight" @keyup="weightKeyup()"/>
             <div class="clearBoth"></div>
@@ -73,10 +74,6 @@
          <img src="../../images/add.png" @touchend="addList()">
         <div class="clearBoth"></div>
       </div>-->
-      <div id="calculator">
-        完善所有信息，承运商接单更快呦
-        <img src="../../images/calculator.png" @click="calculatorGo()">
-      </div>
       <div  v-if="pk==''" id="insurance" class="label" >
         <div class="lablebox" v-if="both.carTypeLook">
           <span class="required">车辆类型</span>
@@ -98,12 +95,12 @@
           <h5 @click="guPrice()">估价</h5>
           <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @input="asdfgh()"/>
           <transition name="slide-fade">
-             <div id="yuguBox" v-if="yuguPrice != ''">{{yuguPrice}}元</div>
+            <div id="yuguBox" v-if="yuguPrice != ''">{{yuguPrice}}<span>元</span></div>
           </transition>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox borderno">
-          <span>是否装卸<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
+          <span>是否需要装卸<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
           <p  id="Z11" v-html="both.handlingCode==''?'选择装卸类型':both.handlingVal" :class="both.handlingCode == '' ? '' : 'blackColor'"></p>
           <div class="clearBoth"></div>
           <h6>装卸需要收取额外费用，具体费用信息详见<span>收费标准</span></h6>
@@ -250,7 +247,7 @@
                 goodsType:"",
                 protype:0,
                 goodstypenumber:"",
-                number:1,
+                number:"",
                 wight:"",
                 unitWight:"吨",
                 wightTen:"1",
@@ -426,7 +423,7 @@
             }
             for(var x = 0;x<_this.both.productList.length;x++){
               if(_this.both.productList[x].number < 1){
-                _this.both.productList[x].number = 1;
+                 _this.both.productList[x].number = 1;
               }
               if( _this.both.productList[x].wight != ""){
                 weightList.push( _this.both.productList[x].wight);
@@ -511,7 +508,7 @@
                     async:false,
                     success: function (checkPrice) {
                       if(checkPrice.success=="1"){
-                        _this.yuguPrice = checkPrice.message;
+                        _this.yuguPrice = checkPrice.message*1;
                       }else if(checkPrice.success=="-1"){
                         androidIos.second(checkPrice.message)
                       }
@@ -1171,7 +1168,7 @@
                       _this.both.productList[name.id.substr(4)*1].unitWight = name.firstVal;
                     }
                   }
-                  if(_this.both.productList[i].protype == 1 || _this.both.productList[i].protype == 2) {
+                  if(_this.both.productList[i].protype == 0 || _this.both.productList[i].protype == 1 || _this.both.productList[i].protype == 2) {
                     var unitWeight = new LArea();
                     unitWeight.init({
                       'trigger': '#Z01' + i,
@@ -1982,7 +1979,7 @@
                   }
                   if(self.productList[i].protype == 0){
                     if(self.productList[i].wight*1 == "0"){
-                      bomb.first("请填写货物的重量");
+                      bomb.first("请填写货物的体积或重量");
                       return false;
                     }
                   }else if(self.productList[i].protype == 1){
@@ -2384,12 +2381,12 @@
     color:#999;
     padding-bottom: 0.2rem;
     text-align: center;
-    font-size: 0.3125rem;
+    font-size: 0.32rem;
   }
   .lablebox h6 span{
     line-height: 0.5rem;
-    color: rgb(231, 44, 49);
-    font-size: 0.3125rem;
+    color:#999;
+    font-size: 0.32rem;
   }
   .lablebox span{
     line-height: 1.4rem;
@@ -2398,6 +2395,12 @@
     padding-left: 0.3rem;
     margin-left: -0.3rem;
   }
+  .lableboxImg{
+        width:0.45rem;
+        float: left;
+        margin-top:0.48rem;
+       margin-left: 0.32rem;
+  }
    .lablebox input{
      line-height: 0.6rem;
      height: 0.6rem;
@@ -2405,7 +2408,7 @@
      color: #333;
      float: right;
      text-align: right;
-     width: 55%;
+     width: 45%;
      margin-right: 3%;
      margin-top:0.4rem;
    }
@@ -2414,7 +2417,7 @@
      font-size: 0.375rem;
      color:#bcbcbc;
      margin-right: 5%;
-     width: 57%;
+     width: 52%;
      text-align: right;
      overflow: hidden;
      text-overflow:ellipsis;
@@ -2473,12 +2476,12 @@
      margin-left: 0.2rem;
    }
    #chengyunshang{
-     width:3rem;
+     width:3.35rem;
      display: block;
      float: left;
-     line-height: 1.3rem;
+     line-height: 1.2rem;
      font-size: 0.4rem;
-     background: #218ce0;
+     background: #6BA7D6;
      color:#fff;
      letter-spacing: 0.03125rem;
      overflow: hidden;
@@ -2486,10 +2489,10 @@
      white-space: nowrap;
    }
   #submit{
-    width:7rem;
+    width:6.65rem;
     display: block;
     float: right;
-    line-height: 1.3rem;
+    line-height: 1.2rem;
     font-size: 0.4rem;
     background: #1869A9;
     color:white;
@@ -2704,7 +2707,7 @@
     opacity: 0;
   }
   #read{
-    margin-bottom: 2rem!important;
+    margin-bottom: 2.3rem!important;
   }
   #footerButton{
     position: fixed;
@@ -2712,11 +2715,11 @@
   }
   #footerButton p{
     text-align: left;
-    padding-left: 3%;
-    color:#333;
-    font-size: 0.375rem;
-    line-height: 0.8rem;
-    background: #f5f5f5;
+    padding-left: 0.52rem;
+    color:#999;
+    font-size: 0.32rem;
+    line-height: 1.04rem;
+    background: #fff;
   }
   #calculator{
     margin: 0.4rem auto 0 auto;
@@ -2734,13 +2737,18 @@
   }
   #yuguBox{
     position: absolute;
-    line-height:1.4rem ;
+    line-height:1.13rem ;
     background: #1a6bac;
     color:white;
-    right:0.9rem;
-    padding: 0 0.3rem;
-    top:-1.4rem;
-    font-size: 0.375rem;
+    right:0.5rem;
+    padding: 0 0.27rem;
+    top:-0.8rem;
+    font-size: 0.5rem;
     border-radius: 0.2rem;
+  }
+  #yuguBox span{
+    line-height:1.13rem ;
+    color:white;
+    font-size:0.32rem ;
   }
 </style>
