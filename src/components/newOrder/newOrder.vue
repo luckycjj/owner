@@ -95,14 +95,18 @@
         </div>
         <div class="lablebox imgno">
           <span class="required">货物运费</span>
+          <h5 @click="guPrice()">估价</h5>
           <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @input="asdfgh()"/>
+          <transition name="slide-fade">
+             <div id="yuguBox" v-if="yuguPrice != ''">{{yuguPrice}}元</div>
+          </transition>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox borderno">
           <span>是否装卸<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
           <p  id="Z11" v-html="both.handlingCode==''?'选择装卸类型':both.handlingVal" :class="both.handlingCode == '' ? '' : 'blackColor'"></p>
           <div class="clearBoth"></div>
-          <h6>装卸需要收取额外费用，具体费用信息详见收费标准</h6>
+          <h6>装卸需要收取额外费用，具体费用信息详见<span>收费标准</span></h6>
         </div>
       </div>
       <div v-if="pk==''" id="read"  style="margin: 0.3rem auto; width: 94%;background: transparent;line-height: 0.6rem;">
@@ -315,18 +319,10 @@
                }],
                second:[],
             },
-            handlingList:[{
-              region:"请选择",
-              code:"",
-            },{
-              region:"需要装卸",
-              code:0,
-            },{
-              region:"只装或者只卸",
-              code:1,
-            }],
+            handlingList:[],
             productBox:false,
             productOther:"",
+            yuguPrice:"",
             suremend: new Debounce(this.ajaxPost, 1000)
           }
        },
@@ -413,6 +409,131 @@
           androidIos.bridge(_this);
       },
       methods:{
+        guPrice:function () {
+          var _this = this;
+          if(_this.yuguPrice == ""){
+            var self = _this.both;
+            var weight =0;
+            var volumn = 0;
+            var weightList = [];
+            if(_this.both.startAddress.pk == ""){
+              bomb.first("请选择装货地点");
+              return false;
+            }
+            if(_this.both.endAddress.pk == ""){
+              bomb.first("请选择装货地点");
+              return false;
+            }
+            for(var x = 0;x<_this.both.productList.length;x++){
+              if(_this.both.productList[x].number < 1){
+                _this.both.productList[x].number = 1;
+              }
+              if( _this.both.productList[x].wight != ""){
+                weightList.push( _this.both.productList[x].wight);
+              }
+              if(_this.both.productList[x].goodsType == ""){
+                bomb.first("请选择货物");
+                return false;
+              }
+              if(_this.both.productList[x].protype == 0 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+                bomb.first("请填写重量和体积");
+                return false;
+              }
+              if(_this.both.productList[x].protype == 1 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+                bomb.first("请填写重量和体积");
+                return false;
+              }
+              if(_this.both.productList[x].protype == 2 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+                bomb.first("请填写重量和体积");
+                return false;
+              }
+              weight = weight*1 + _this.both.productList[x].wight * _this.both.productList[x].wightTen;
+              volumn = volumn*1 + _this.both.productList[x].weight * _this.both.productList[x].weightTen;
+            }
+            if(_this.pk == ""){
+              if(self.tranType != self.tranTypeValue){
+                if(( weight*1 > 0 || volumn*1 > 0) && _this.both.price == ""){
+                  var carListSureValueList = self.carListSureValue.split(",");
+                  var carListSureValue = "";
+                  for(var i = 0 ; i < carListSureValueList.length ;i ++){
+                    if(carListSureValueList[i] == ""){
+                      carListSureValueList.splice(i,1)
+                    }
+                  }
+                  carListSureValue = carListSureValueList.join(",");
+                  var carWidthListSureValueList = (self.carWidthListSure + ","+ self.cartypeOtherSure).split(",");
+                  var carWidthListSureValue = "";
+                  for(var i = 0 ; i < carWidthListSureValueList.length ;i ++){
+                    if(carWidthListSureValueList[i] == ""){
+                      carWidthListSureValueList.splice(i,1)
+                    }
+                  }
+                  carWidthListSureValue = carWidthListSureValueList.join(",");
+                  var listJson = carWidthListSureValue.split(",");
+                  var listJSonNow = [];
+                  for(var i = 0; i<listJson.length;i++){
+                    if(listJson[i].indexOf("-") != -1){
+                      listJSonNow.push({
+                        value : i ,
+                        displayName : listJson[i].split("-")[1]/2 + listJson[i].split("-")[0]/2
+                      })
+                    }else{
+                      listJSonNow.push({
+                        value : i ,
+                        displayName : listJson[i]
+                      })
+                    }
+                  }
+                  listJSonNow.sort(function (a,b) {
+                    return a.displayName - b.displayName
+                  })
+                  var newList = [];
+                  for(var i = 0 ;i < listJSonNow.length ;i++){
+                    newList.push(listJson[listJSonNow[i].value])
+                  }
+                  carWidthListSureValue = newList.join(",");
+                  var json = {
+                    startCity:_this.both.startAddress.city.split("-")[1].replace("市",""),
+                    endCity:_this.both.endAddress.city.split("-")[1].replace("市",""),
+                    carLength: carWidthListSureValue,
+                    weight:weight,
+                    volume:volumn,
+                    userCode:sessionStorage.getItem("token"),
+                    source:sessionStorage.getItem("source")
+                  }
+                  $.ajax({
+                    type: "POST",
+                    url: androidIos.ajaxHttp()+"/order/checkPrice",
+                    data:JSON.stringify(json),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    timeout: 10000,
+                    async:false,
+                    success: function (checkPrice) {
+                      if(checkPrice.success=="1"){
+                        _this.yuguPrice = checkPrice.message;
+                      }else if(checkPrice.success=="-1"){
+                        androidIos.second(checkPrice.message)
+                      }
+                    },
+                    complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                      if(status=='timeout'){//超时,status还有success,error等值的情况
+                        androidIos.second("网络请求超时");
+                      }else if(status=='error'){
+                        androidIos.errorwife();
+                      }
+                    }
+                  })
+                }
+              }else{
+                bomb.first("请选择车辆类型");
+              }
+            }
+          }else{
+            _this.yuguPrice = "";
+          }
+
+        },
         lookTuoyun:function () {
           var _this = this;
           _this.both.price = _this.price;
@@ -547,7 +668,34 @@
                 }
               }
             })
-            Promise.all([ajax1, ajax2, ajax3]).then(function(values) {
+            var ajax4 =  $.ajax({
+              type: "GET",
+              url: androidIos.ajaxHttp()+"/settings/getSysConfigList",
+              data:{str:"fh_zx",userCode:sessionStorage.getItem("token"),source:sessionStorage.getItem("source")},
+              dataType: "json",
+              timeout: 10000,
+              success: function (getSysConfigList) {
+                 var list = [{
+                   region:"- 请选择 -",
+                   code:""
+                 }]
+                for(var  i = 0; i < getSysConfigList.length ; i++){
+                  list.push({
+                    region:getSysConfigList[i].displayName,
+                    code:getSysConfigList[i].value,
+                  })
+                }
+                _this.handlingList = list;
+              },
+              complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                if(status=='timeout'){//超时,status还有success,error等值的情况
+                  androidIos.second("网络请求超时");
+                }else if(status=='error'){
+                  androidIos.errorwife();
+                }
+              }
+            })
+            Promise.all([ajax1, ajax2, ajax3,ajax4]).then(function(values) {
               var newTimeCjj = new Date();
               var yearCjj = newTimeCjj.getFullYear();
               var monthCjj = newTimeCjj.getMonth()+1;
@@ -1405,18 +1553,21 @@
          /* _this.price = "";
           _this.both.price = "";
           _this.suremend();*/
+          _this.yuguPrice = "";
         },
         volumeKeyup:function(){
           var _this = this;
           /*_this.price = "";
           _this.both.price = "";*/
          /* _this.suremend();*/
+          _this.yuguPrice = "";
         },
         numberKeyup:function (item) {
           var _this = this;
          /* _this.price = "";
           _this.both.price = "";*/
          /* _this.suremend();*/
+          _this.yuguPrice = "";
         },
         readChoose:function(){
           var _this = this;
@@ -2226,12 +2377,18 @@
     background-size: 0.187rem;
     background-repeat: no-repeat;
     background-position: 95% 0.55rem;
+    position: relative;
   }
   .lablebox h6{
     line-height: 0.5rem;
     color:#999;
     padding-bottom: 0.2rem;
     text-align: center;
+    font-size: 0.3125rem;
+  }
+  .lablebox h6 span{
+    line-height: 0.5rem;
+    color: rgb(231, 44, 49);
     font-size: 0.3125rem;
   }
   .lablebox span{
@@ -2249,7 +2406,7 @@
      float: right;
      text-align: right;
      width: 55%;
-     margin-right: 5%;
+     margin-right: 3%;
      margin-top:0.4rem;
    }
    .lablebox p{
@@ -2263,6 +2420,16 @@
      text-overflow:ellipsis;
      white-space: nowrap;
    }
+  .lablebox h5{
+    float: right;
+    font-size: 0.375rem;
+    color:#666;
+    padding-left:3% ;
+    margin-right: 5%;
+    line-height: 0.6rem;
+    border-left: 1px solid #666;
+    margin-top: 0.35rem;
+  }
   .unit{
     float: right;
     color:#333;
@@ -2564,5 +2731,16 @@
     position: absolute;
     right:0.1rem;
     top:-0.1rem;
+  }
+  #yuguBox{
+    position: absolute;
+    line-height:1.4rem ;
+    background: #1a6bac;
+    color:white;
+    right:0.9rem;
+    padding: 0 0.3rem;
+    top:-1.4rem;
+    font-size: 0.375rem;
+    border-radius: 0.2rem;
   }
 </style>
