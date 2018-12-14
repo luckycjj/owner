@@ -148,7 +148,6 @@
               }
               var newOrder = JSON.parse(sessionStorage.getItem("newOrder"));
               var pdlist = {
-                histroyAddressLength:true,
                 startAddress:{
                   people:invoiceDetail.delivery.contact,
                   tel:invoiceDetail.delivery.mobile,
@@ -164,55 +163,12 @@
                   address:invoiceDetail.arrival.detailAddr,
                   company:invoiceDetail.arrival.addrName,
                   pk:invoiceDetail.arrival.pkAddress,
-                },
-                timeBeforeF:_this.day(60*60*1000).split(" ")[1],
-                timeBeforeS:_this.day(60*60*1000).split(" ")[0],
-                timeAfterF:"08:00:00",
-                timeAfterS:_this.day(24*60*60*1000).split(" ")[0],
-                productList:[{
-                  pkInvPackB:"",
-                  goodsType:"",
-                  protype:2,
-                  goodstypenumber:"",
-                  number:1,
-                  wight:"",
-                  unitWight:"吨",
-                  wightTen:"1",
-                  weight:"",
-                  unitWeight:"立方米",
-                  weightTen:"1",
-                  tranpk:"",
-                }],
-                tranType:"",
-                trantypenumber:"",
-                appoint:"",
-                pk_carrier:"",
-                jizhuangjixie:"",
-                driver_name:"",
-                carTypeLook:true,
-                insurance:"",
-                pay:0,
-                read:false,
-                scrollTop:0,
-                initialWeight:0,
-                price:"",
-                carList:newOrder.carList,
-                carListSure:"",
-                carListSureValue:"",
-                carWidthList:newOrder.carWidthList,
-                carWidthListSure:"",
-                carWidthListSureValue:"",
-                cartypeOther:"",
-                cartypeOtherSure:"",
-                carTypeList:newOrder.carTypeList,
-                carTypeListSure:"",
-                carTypeListSureValue:"",
-                carListMore:newOrder.carListMore,
-                carWidthListMore:newOrder.carWidthListMore,
-                carTypeListMore:newOrder.carTypeListMore,
-                service:""
+                }
               }
-              sessionStorage.setItem("histroyAddress",JSON.stringify(pdlist));
+              newOrder.startAddress = pdlist.startAddress;
+              newOrder.endAddress = pdlist.endAddress;
+              sessionStorage.setItem("newOrder",JSON.stringify(newOrder));
+           /*   sessionStorage.setItem("histroyAddress",JSON.stringify(pdlist));*/
               androidIos.gobackFrom(_this);
             }else{
               androidIos.second(invoiceDetail.message);

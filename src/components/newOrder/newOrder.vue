@@ -73,6 +73,10 @@
          <img src="../../images/add.png" @touchend="addList()">
         <div class="clearBoth"></div>
       </div>-->
+      <div id="calculator">
+        完善所有信息，承运商接单更快呦
+        <img src="../../images/calculator.png" @click="calculatorGo()">
+      </div>
       <div  v-if="pk==''" id="insurance" class="label" >
         <div class="lablebox" v-if="both.carTypeLook">
           <span class="required">车辆类型</span>
@@ -89,10 +93,16 @@
           <p v-html="both.remark==''?'请填写备注,例如:自卸,走高速':both.remark" :class="both.remark==''?'':'blackColor'" @click="remark()"></p>
           <div class="clearBoth"></div>
         </div>
-        <div class="lablebox borderno imgno">
+        <div class="lablebox imgno">
           <span class="required">货物运费</span>
           <input type="text" placeholder="请输入运费" maxlength="20" v-model="price" @input="asdfgh()"/>
           <div class="clearBoth"></div>
+        </div>
+        <div class="lablebox borderno">
+          <span>是否装卸<span style="color:#999;font-size:0.32rem;margin-left: 0.0001rem; padding-left: 0.1rem; ">(选填)</span></span>
+          <p  id="Z11" v-html="both.handlingCode==''?'选择装卸类型':both.handlingVal" :class="both.handlingCode == '' ? '' : 'blackColor'"></p>
+          <div class="clearBoth"></div>
+          <h6>装卸需要收取额外费用，具体费用信息详见收费标准</h6>
         </div>
       </div>
       <div v-if="pk==''" id="read"  style="margin: 0.3rem auto; width: 94%;background: transparent;line-height: 0.6rem;">
@@ -103,8 +113,11 @@
           <div class="clearBoth"></div>
         </div>
       </div>
-      <button id="chengyunshang"  @click="appoint()" v-html="both.appoint==''?'指定承运商':both.appoint"></button>
-      <button id="submit" class="gogogo" @click="submitGo()">提交</button>
+      <div id="footerButton">
+        <p v-if="both.appoint != ''">承运商名称: {{both.appoint}}</p>
+        <button id="chengyunshang"  @click="appoint()">指定承运商</button>
+        <button id="submit" class="gogogo" @click="submitGo()">发布</button>
+      </div>
       <div class="clearBoth"></div>
       <transition name="slide-fade">
         <div id="vehicleBox" v-if="vehicleBox">
@@ -156,7 +169,7 @@
               <div class="clearBoth"></div>
             </div>
             <div class="message_price">
-              <h6>金额</h6><h5>¥{{price*1}}</h5>
+              <h6>运费</h6><h5>¥{{price*1}}</h5>
               <div class="clearBoth"></div>
             </div>
             <div class="message_button">
@@ -271,6 +284,8 @@
               carTypeListMore:false,
               carTypeLook:true,
               service:"",
+              handlingCode:"",
+              handlingVal:""
             },
             pk:"",
             price:"",
@@ -300,6 +315,16 @@
                }],
                second:[],
             },
+            handlingList:[{
+              region:"请选择",
+              code:"",
+            },{
+              region:"需要装卸",
+              code:0,
+            },{
+              region:"只装或者只卸",
+              code:1,
+            }],
             productBox:false,
             productOther:"",
             suremend: new Debounce(this.ajaxPost, 1000)
@@ -350,7 +375,7 @@
                       break;
                     }
                   }
-                  _this.suremend();
+                 /* _this.suremend();*/
                 }else{
                   bomb.removeClass("submit","submit");
                 }
@@ -539,8 +564,8 @@
               _this.both.timeAfterS = _this.ten(newDataCjj.getFullYear())+"-"+ _this.ten((newDataCjj.getMonth()+1))+"-"+_this.ten(newDataCjj.getDate());
               _this.both.timeAfterF = "08:00:00";
               var newOrder = sessionStorage.getItem("newOrder");
-              var histroyAddress = sessionStorage.getItem("histroyAddress");
               var startAddress = sessionStorage.getItem("startAddress");
+              var histroyAddress = sessionStorage.getItem("histroyAddress");
               var endAddress = sessionStorage.getItem("endAddress");
               var goodsType =  sessionStorage.getItem("goodsType");
               var appoint = sessionStorage.getItem("appoint");
@@ -625,6 +650,14 @@
                     if(service.indexOf("电子发票") != -1){
                       servList.push("开具电子发票");
                     }
+                    var handlingCode = invoiceDetail.handlingCode || "";
+                    var handlingVal = "";
+                    for(var i = 0 ; i < _this.handlingList.length;i++){
+                       if(_this.handlingList[i].code == handlingCode && handlingCode != ""){
+                         handlingVal = _this.handlingList[i].region;
+                         break;
+                       }
+                    }
                     var pdlist = {
                       startAddress:{
                         people:invoiceDetail.delivery.contact,
@@ -676,6 +709,8 @@
                       carTypeListMore:_this.both.carTypeListMore,
                       carTypeLook:true,
                       service:servList.join(","),
+                      handlingCode:handlingCode,
+                      handlingVal:handlingVal
                     }
                     _this.price = invoiceDetail.price*1;
                     _this.both = pdlist;
@@ -697,13 +732,7 @@
                   }
                 })
               }
-              if(histroyAddress!=undefined){
-                histroyAddress = JSON.parse(histroyAddress);
-                _this.both = histroyAddress;
-                sessionStorage.removeItem("histroyAddress");
-                sessionStorage.removeItem("newOrder");
-              }
-              if(newOrder!=undefined && histroyAddress == undefined){
+              if(newOrder!=undefined){
                 newOrder = JSON.parse(newOrder);
                 _this.both = newOrder;
                 _this.price = _this.both.price;
@@ -1023,11 +1052,30 @@
                     }
                   }
                 }
+
                 var z = 0;
-                for(var i = 0; i < _this.jizhuangjixie.length;i++){
-                  if(_this.jizhuangjixie[i].region == _this.both.jizhuangjixie){
-                     z = i;
-                  }
+                for(var  i = 0 ; i < _this.handlingList.length ; i++){
+                   if(_this.handlingList[i].code == _this.both.handlingCode){
+                      z = i;
+                      break;
+                   }
+                }
+                var  handlingBox = new LArea();
+                handlingBox.init({
+                  'trigger': '#Z11',
+                  'valueTo': '#Z11',
+                  'keys': {
+                    id: 'id',
+                    name: 'name'
+                  },
+                  'type': 1,
+                  'data':_this.handlingList
+                });
+                handlingBox.value = [z];
+                handlingBox.addPointer = function (name) {
+                  name = JSON.parse(name);
+                  _this.both.handlingCode = name.firstCode;
+                  _this.both.handlingVal = name.firstVal;
                 }
               })
             });
@@ -1354,21 +1402,21 @@
         },
         weightKeyup:function(){
           var _this = this;
-          _this.price = "";
+         /* _this.price = "";
           _this.both.price = "";
-          _this.suremend();
+          _this.suremend();*/
         },
         volumeKeyup:function(){
           var _this = this;
-          _this.price = "";
-          _this.both.price = "";
-          _this.suremend();
+          /*_this.price = "";
+          _this.both.price = "";*/
+         /* _this.suremend();*/
         },
         numberKeyup:function (item) {
           var _this = this;
          /* _this.price = "";
           _this.both.price = "";*/
-          _this.suremend();
+         /* _this.suremend();*/
         },
         readChoose:function(){
           var _this = this;
@@ -1908,8 +1956,9 @@
               weight_count:(self.productList[0].wight*self.productList[0].wightTen*1000).toString(),
               volume_count:(self.productList[0].weight*self.productList[0].weightTen).toString(),
               trans_type:self.productList[0].tranpk.toString(),
+              handlingCode:self.handlingCode
             };
-            androidIos.loading("正在提交");
+            androidIos.loading("正在发布");
             bomb.removeClass("submit","gogogo");
             $.ajax({
               type: "POST",
@@ -1923,7 +1972,7 @@
                 bomb.addClass("submit","gogogo");
                 if(createOrder.success=="1"){
                   _this.newOrderMessageBox = false;
-                  _this.$cjj("提交成功");
+                  _this.$cjj("发布成功");
                   sessionStorage.removeItem("servicePk");
                   setTimeout(function () {
                     if(_this.$route.query.type == 3){
@@ -2170,13 +2219,20 @@
     width:90%;
     margin-left: 5%;
     padding: 0 5% 0 0;
-    height: 1.4rem;
+    min-height: 1.4rem;
     line-height: 1.4rem;
     border-bottom: 1px solid #dadada;
     background-image: url("../../images/lookMore.png");
     background-size: 0.187rem;
     background-repeat: no-repeat;
-    background-position: 95% 50%;
+    background-position: 95% 0.55rem;
+  }
+  .lablebox h6{
+    line-height: 0.5rem;
+    color:#999;
+    padding-bottom: 0.2rem;
+    text-align: center;
+    font-size: 0.3125rem;
   }
   .lablebox span{
     line-height: 1.4rem;
@@ -2250,34 +2306,27 @@
      margin-left: 0.2rem;
    }
    #chengyunshang{
-     width:3.4rem;
+     width:3rem;
      display: block;
      float: left;
-     margin: 0.5rem 0 0.5rem 1.27rem;
-     line-height: 1rem;
+     line-height: 1.3rem;
      font-size: 0.4rem;
-     background: transparent;
-     color:#1869A9;
-     border-radius: 0.1rem;
+     background: #218ce0;
+     color:#fff;
      letter-spacing: 0.03125rem;
-     border: 1px solid #1869A9;
      overflow: hidden;
      text-overflow:ellipsis;
      white-space: nowrap;
-     height: 1rem;
    }
   #submit{
-    width:3.4rem;
+    width:7rem;
     display: block;
     float: right;
-    margin: 0.5rem 1.27rem 0.5rem 0;
-    line-height: 1rem;
-    font-size: 0.5rem;
+    line-height: 1.3rem;
+    font-size: 0.4rem;
     background: #1869A9;
     color:white;
-    border-radius: 0.1rem;
     letter-spacing: 0.03125rem;
-    border: 1px solid #1869A9;
   }
   #gofrommessage{
     width:90%;
@@ -2486,5 +2535,34 @@
     /* .slide-fade-leave-active for below version 2.1.8 */ {
     transform: translateY(0.13rem);
     opacity: 0;
+  }
+  #read{
+    margin-bottom: 2rem!important;
+  }
+  #footerButton{
+    position: fixed;
+    bottom:0;
+  }
+  #footerButton p{
+    text-align: left;
+    padding-left: 3%;
+    color:#333;
+    font-size: 0.375rem;
+    line-height: 0.8rem;
+    background: #f5f5f5;
+  }
+  #calculator{
+    margin: 0.4rem auto 0 auto;
+    font-size: 0.375rem;
+    line-height: 0.4rem;
+    width: 94%;
+    text-align: center;
+    position: relative;
+  }
+  #calculator img{
+    width:0.6rem;
+    position: absolute;
+    right:0.1rem;
+    top:-0.1rem;
   }
 </style>
