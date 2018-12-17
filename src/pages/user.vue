@@ -30,8 +30,8 @@
         <div id="shareBody">
           <div id="shareBodyTab">
             <p>分享至...</p>
-            <label :style="{width:100 / shareList.length + '%'}" v-for="(item,index) in shareList">
-              <img :src="item.icon" @touchend="shareType(index)">
+            <label  @touchend="shareType(index)" :style="{width:100 / shareList.length + '%'}" v-for="(item,index) in shareList">
+              <img :src="item.icon">
               <h6>{{item.name}}</h6>
             </label>
             <div class="clearBoth"></div>
@@ -281,7 +281,32 @@
       shareType:function (index) {
         var _this = this;
         if(index == 0){
-
+          try{
+            var wx = api.require('wx');
+            wx.isInstalled(function(ret, err) {
+              if (ret.installed) {
+                androidIos.second("当前设备已安装微信客户端");
+              } else {
+                androidIos.second('当前设备未安装微信客户端');
+              }
+            });
+          }
+          catch(e){
+            androidIos.second("浏览器暂不支持分享");
+          }
+        }else if(index == 2){
+          var u = navigator.userAgent;
+          var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+          //android终端
+          var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+          var name = "http://www.xsungroup.com/";
+          var tel= "";
+          if(isiOS){
+            document.getElementsByTagName('a')[index].href="sms://"+tel+"?body="+name;
+          }
+          else{
+            document.getElementsByTagName('a')[index].href="sms://"+tel+"&body="+name;
+          }
         }
       },
       imgChange:function (e) {
