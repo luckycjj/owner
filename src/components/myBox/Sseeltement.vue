@@ -205,15 +205,13 @@
           _this.settime = setTimeout(function () {
             _this.ajax1 = $.ajax({
               type: "POST",
-              url: androidIos.ajaxHttp() + "/order/loadInvoice",
+              url: androidIos.ajaxHttp() + "/pay/payList",
               data:JSON.stringify({
                 page:pageNum,
                 size:pageSize,
-                type:2,
-                state:curNavIndex == 0 && _this.type == null ? 10 : curNavIndex == 0  &&  _this.type != null ? ""  : curNavIndex == 1 && _this.type == null ? 7 : curNavIndex == 1 && _this.type != null ? 16 : curNavIndex == 2  && _this.type == null  ? 8: curNavIndex == 2  && _this.type != null  ? 7 :  curNavIndex == 3  && _this.type != null  ? 8 :"",
+                type:curNavIndex + 1,
                 userCode:sessionStorage.getItem("token"),
-                source:sessionStorage.getItem("source"),
-                today:_this.$route.query.today != undefined ? 1 : 0,
+                source:sessionStorage.getItem("source")
               }),
               contentType: "application/json;charset=utf-8",
               dataType: "json",
