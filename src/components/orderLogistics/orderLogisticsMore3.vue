@@ -698,7 +698,7 @@
                 }
               }
               thisThat.type = trackingStatusValue;
-              thisThat.titleName = trackingStatusValue == 0 ? "新建" : trackingStatusValue == 10 ? "已确认"  : trackingStatusValue == 15 ? "已调度": trackingStatusValue == 20 ? "司机发车" : trackingStatusValue == 30 ? "部分提货" : trackingStatusValue == 40 ? "已提货" : trackingStatusValue == 50 ? "部分到货" : trackingStatusValue == 60 ? "已到货" : trackingStatusValue == 70 ? "部分签收" : trackingStatusValue == 1000 ? "已签收"  : trackingStatusValue == 1001 ? "已签收" : trackingStatusValue == 90 ? "已回单" : trackingStatusValue == 100 ? "关闭" : trackingStatusValue == 10000 ? "未付款" : trackingStatusValue == 10001 ? "已付款" :  "";
+              thisThat.titleName = trackingStatusValue == 0 ? "新建" : trackingStatusValue == 10 ? "已确认"  : trackingStatusValue == 15 ? "已调度": trackingStatusValue == 20 ? "司机发车" : trackingStatusValue == 30 ? "部分提货" : trackingStatusValue == 40 ? "已提货" : trackingStatusValue == 50 ? "部分到货" : trackingStatusValue == 60 ? "已到货" : trackingStatusValue == 70 ? "部分签收" : trackingStatusValue == 1000 ? "已签收"  : trackingStatusValue == 1001 ? "已签收" : trackingStatusValue == 90 ? "已回单" : trackingStatusValue == 100 ? "关闭" : trackingStatusValue == 10000 ? "待付款" : trackingStatusValue == 10001 ? "已付款" :  "";
               thisThat.payStatus = invoiceDetail.payStatus;
               var tranTypeBoth = invoiceDetail.transType;
               if(invoiceDetail.carLength !=  "" && invoiceDetail.carLength !=  null){

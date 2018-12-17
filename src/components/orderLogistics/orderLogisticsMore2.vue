@@ -3,7 +3,7 @@
     <div id="title" v-title data-title="订单详情"></div>
     <div id="titleText"  style="top:0.72rem">
       <div id="titleGoback"  @touchend="goback()" ></div>
-      <p v-html="orderSource == 2 ? (type == '10000' ? '待支付' : '已支付') : pdlist[0].orderTypeName"></p>
+      <p v-html="orderSource == 2 ? (type == '10000' ? '待付款' : '已支付') : pdlist[0].orderTypeName"></p>
       <div class="callUs" @touchend="telCall('021-50929122')"><div class="callUsLine"></div>物流客服</div>
     </div>
     <div id="container"></div>

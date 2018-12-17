@@ -418,7 +418,7 @@
               return false;
             }
             if(_this.both.endAddress.pk == ""){
-              bomb.first("请选择装货地点");
+              bomb.first("请选择卸货地点");
               return false;
             }
             for(var x = 0;x<_this.both.productList.length;x++){
@@ -449,7 +449,7 @@
             }
             if(_this.pk == ""){
               if(self.tranType != self.tranTypeValue){
-                if(( weight*1 > 0 || volumn*1 > 0) && _this.both.price == ""){
+                if(( weight*1 > 0 || volumn*1 > 0)){
                   var carListSureValueList = self.carListSureValue.split(",");
                   var carListSureValue = "";
                   for(var i = 0 ; i < carListSureValueList.length ;i ++){

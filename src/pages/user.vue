@@ -70,7 +70,7 @@
         tabList:[{
           name:"结算中心",
           icon:require("../images/settlementcenter.png"),
-          url:"/settlement",
+          url:"/Sseeltement",
           number:0,
         },{
           name:"我的地址",
