@@ -83,7 +83,7 @@
                     <div class="meno">{{item.pickPay.remark}}</div>
                   </div>
                   <div id="sure">
-                    <div class="go" v-if="type=='10000' && orderSource == 2 " >
+                    <div class="go" v-if="type=='10000' && orderSource == 1 " >
                       <button  @touchend.stop.prevent="payOrder()" class="zhifu">支付</button>
                       <div class="clearBoth"></div>
                     </div>
