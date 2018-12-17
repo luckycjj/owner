@@ -12,9 +12,9 @@
       <div class="company inputUp">
         <input @keyup="filterInput()" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="start.phone"/>
       </div>
-      <div class="company inputUp">
+      <!--<div class="company inputUp">
         <input @input="filterInput()" type="text" maxlength="40" placeholder="请输入公司名" v-model="start.company"/>
-      </div>
+      </div>-->
       <div class="company inputUp">
         <p id="X00" :class="start.province!=''?'blackColor':''" v-html="start.province == '' ? '选择省市区':start.province+'-'+start.city+'-'+start.area"></p>
       </div>
@@ -80,7 +80,7 @@
               addresspk = JSON.parse(addresspk);
               _this.start.name = addresspk.contact;
               _this.start.phone = addresspk.mobile;
-              _this.start.company = addresspk.addrName;
+              _this.start.company = "";//addresspk.addrName
               _this.start.address = addresspk.detailAddr;
               _this.start.province = addresspk.province;
               _this.start.city = addresspk.city;
@@ -185,7 +185,7 @@
           save:function () {
              var _this = this;
                var pk = _this.$route.query.pk;
-               if(_this.start.name == '' || _this.start.phone =='' || _this.start.company == '' || _this.start.address =='' || _this.start.province == ''){
+               if(_this.start.name == '' || _this.start.phone ==''  || _this.start.address =='' || _this.start.province == ''){
                  bomb.first("请填写完整相关信息");
                  return false;
                }
@@ -200,7 +200,7 @@
                }
                if(pk == undefined){
                  var json ={
-                   addrName:_this.start.company,
+                   addrName:"",
                    mobile:_this.start.phone,
                    detailAddr:_this.start.address,
                    userCode:sessionStorage.getItem("token"),
@@ -242,7 +242,7 @@
                }else{
                  var json ={
                    pkAddress:pk,
-                   addrName:_this.start.company,
+                   addrName:"",
                    mobile:_this.start.phone,
                    detailAddr:_this.start.address,
                    province:_this.start.province,
