@@ -18,7 +18,7 @@
       </div>
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist" @click="lookTrackMore(items.pkInvoice,index)">
+          <li v-for="(items,indexs) in item.prolist" @click.stop="lookTrackMore(items.pkInvoice,index)">
             <h1>订单编号：{{items.vbillno}}</h1>
             <h3 v-html="tabShow == 0 ? '待付款' : '已付款'"></h3>
             <div class="proBox">
@@ -26,9 +26,9 @@
             </div>
             <div class="button">
               <p>合计 <span><span>￥</span>20000</span></p>
-              <button class="zhifu" v-if="tabShow == 0">支付</button>
+              <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.pkInvoice)">支付</button>
               <button v-if="tabShow == 1">申请开票</button>
-              <button v-if="tabShow == 1">再来一单</button>
+              <button v-if="tabShow == 1" @click.stop="again(items.pkInvoice)">再来一单</button>
               <div class="clearBoth"></div>
             </div>
           </li>
@@ -87,6 +87,16 @@
       androidIos.bridge(_this);
     },
     methods:{
+      zhifu:function (pk) {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: '/money',query:{pk:pk}});
+      },
+      again:function (pk) {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: '/newOrder',query:{pk:pk,type:2}});
+      },
       telphone:function(tel){
         androidIos.telCall(tel);
       },
@@ -99,7 +109,6 @@
         var trackTap = sessionStorage.getItem("SseeltementListTap");
         if(trackTap != undefined){
           _this.tabShow = trackTap*1;
-          sessionStorage.removeItem("SseeltementListTap");
         }
         var curNavIndex = _this.tabShow;//首页0; 奶粉1; 面膜2; 图书3;
         var mescrollArr=new Array(_this.list.length);//4个菜单所对应的4个mescroll对象

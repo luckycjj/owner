@@ -103,6 +103,7 @@
       androidIos.judgeIphoneX("user",2);
       sessionStorage.removeItem("settlementTap");
       sessionStorage.removeItem("trackTap");
+      sessionStorage.removeItem("SseeltementListTap");
       var ownerMessage = sessionStorage.getItem("ownerMessage");
       if(ownerMessage != null) {
         ownerMessage = JSON.parse(ownerMessage);

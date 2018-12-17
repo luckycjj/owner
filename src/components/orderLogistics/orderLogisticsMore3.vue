@@ -111,6 +111,11 @@
                       <button class="zhifu" @touchend.stop.prevent="orderAgain(2)">再下一单</button>
                       <div class="clearBoth"></div>
                     </div>
+                    <div class="go" v-else-if="type=='10001' && orderSource == 1 ">
+                      <button class="zhifu"  @touchend.stop.prevent="orderAgain(2)">再下一单</button>
+                      <button @touchend="scoreYes(1)">申请开票</button>
+                      <div class="clearBoth"></div>
+                    </div>
                     <div class="go" v-else>
                       <button style="border-color:white;"></button>
                       <div class="clearBoth"></div>
@@ -599,8 +604,9 @@
             androidIos.telCall(tel);
           },
           payOrder:function () {
-            var _this = this;
-            bridge.invoke('payOrder',_this.$route.query.pk);
+              var _this = this;
+              androidIos.addPageList();
+              _this.$router.push({ path: '/money',query:{pk:_this.$route.query.pk}});
           },
           changeOrder:function(){
             var _this = this;

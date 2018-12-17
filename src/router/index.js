@@ -9,6 +9,7 @@ import settlement from '@/components/myBox/settlement'
 import changePassword from '@/components/myBox/changePassword'
 import Sseeltement from '@/components/myBox/Sseeltement'
 import statusNow from '@/components/myBox/statusNow'
+import money from '@/components/myBox/money'
 import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
@@ -296,6 +297,11 @@ export default new Router({
       path:'/message',
       name:'message',
       component:message,
+    },
+    {
+      path:'/money',
+      name:'money',
+      component:money,
     },
     {
       path:'/Sseeltement',
