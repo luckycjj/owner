@@ -2366,14 +2366,14 @@
   .lablebox{
     width:90%;
     margin-left: 5%;
-    padding: 0 5% 0 0;
+/*    padding: 0 5% 0 0;*/
     min-height: 1.4rem;
     line-height: 1.4rem;
     border-bottom: 1px solid #dadada;
     background-image: url("../../images/lookMore.png");
     background-size: 0.187rem;
     background-repeat: no-repeat;
-    background-position: 95% 0.55rem;
+    background-position: 100% 0.55rem;
     position: relative;
   }
   .lablebox h6{
@@ -2740,9 +2740,9 @@
     line-height:1.13rem ;
     background: #1a6bac;
     color:white;
-    right:0.5rem;
+    right:0rem;
     padding: 0 0.27rem;
-    top:-0.8rem;
+    top:-0.9rem;
     font-size: 0.5rem;
     border-radius: 0.2rem;
   }
