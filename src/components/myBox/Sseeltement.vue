@@ -23,6 +23,20 @@
             <h3 v-html="tabShow == 0 ? '待付款' : '已付款'"></h3>
             <div class="proBox">
               <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0" v-html="pro.weight / 1000 < 1 ? '/' + pro.weight + '千克' :  '/' + pro.weight / 1000 + '吨'"></span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
+              <div class="lookMorePrice" @click.stop="items.lookMore = !items.lookMore">
+                费用明细
+                <img src="../../images/icon-return1.png" :class="items.lookMore ? 'xuanzhuan' : ''">
+              </div>
+              <div class="tranPrice">
+                运输费用<span><span>￥</span>500</span>
+              </div>
+              <div class="otherPrice" v-if="items.lookMore">
+                <label>空时费 <span>¥100</span></label>
+                <label>空时费 <span>¥100</span></label>
+                <label>空时费 <span>¥100</span></label>
+                <label>空时费 <span>¥100</span></label>
+                <div class="clearBoth"></div>
+              </div>
             </div>
             <div class="button">
               <p>合计 <span><span>￥</span>20000</span></p>
@@ -206,6 +220,9 @@
               timeout: 30000,
               success: function (loadInvoice) {
                 if (loadInvoice.success == "1") {
+                  for(var i = 0 ; i < loadInvoice.list.length ; i++){
+                    loadInvoice.list[i].lookMore = false;
+                  }
                   successCallback(loadInvoice.list);
                 }else{
                   androidIos.second(loadInvoice.message);
@@ -412,6 +429,7 @@
   .proBoxList{
     color:#999;
     font-size:0.35rem ;
+    width:85%;
   }
   .proBoxList span{
     color:#999;
@@ -484,5 +502,55 @@
     background:#1a6bac ;
     color:white;
     border-color: #1a6bac;
+  }
+  .lookMorePrice{
+     position: absolute;
+    right:0.42rem;
+    top:0.26rem;
+    padding-right:0.53rem;
+    font-size: 0.32rem;
+    color:#999999;
+  }
+  .lookMorePrice img{
+    width:0.35rem;
+    position: absolute;
+    right:0;
+    top:0.15rem;
+  }
+  .tranPrice{
+     font-size: 0.375rem;
+     color:#373737;
+    line-height: 0.82rem;
+  }
+  .tranPrice span{
+    font-size: 0.48rem;
+    color:#373737;
+    line-height: 0.82rem;
+  }
+  .tranPrice span span{
+      font-size:0.347rem ;
+    line-height: 0.82rem;
+    margin-left:0.1rem ;
+    margin-right: 0.05rem;
+  }
+  .otherPrice{
+    width:100%;
+  }
+  .otherPrice label{
+    color:#666666;
+    font-size: 0.347rem;
+    min-width:33%;
+    float: left;
+  }
+  .otherPrice label span{
+    color:#666666;
+    font-size: 0.347rem;
+    margin-left: 0.1rem;
+  }
+  .xuanzhuan{
+    -moz-transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
   }
 </style>
