@@ -54,6 +54,16 @@
             $(".tanBox-yes").unbind('click').click(function(){
               $(".tanBox-bigBox").remove();
               sessionStorage.setItem("addPageList",0);
+              androidIos.delCookie("MESSAGEOWNER");
+              androidIos.delCookie("BAIDUTOKEN");
+              androidIos.delCookie("locationAMap");
+              try{
+                var ajpush = api.require('ajpush');
+                ajpush.removeListener();
+              }
+              catch(e){
+                console.log("暂不支持")
+              }
               _this.$router.push({path:"/login"});
             });
           },
