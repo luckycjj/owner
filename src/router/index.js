@@ -10,6 +10,8 @@ import changePassword from '@/components/myBox/changePassword'
 import Sseeltement from '@/components/myBox/Sseeltement'
 import statusNow from '@/components/myBox/statusNow'
 import money from '@/components/myBox/money'
+import invoice from '@/components/myBox/invoice'
+import invoiceMore from '@/components/myBox/invoiceMore'
 import authentication from '@/components/authentication/authentication'
 import login from '../pages/login'
 import user from '../pages/user'
@@ -253,6 +255,16 @@ Vue.filter('selectTime',function (time) {
 })
 export default new Router({
   routes: [
+    {
+      path:'/invoice',
+      name:'invoice',
+      component:invoice,
+    },
+    {
+      path:'/invoiceMore',
+      name:'invoiceMore',
+      component:invoiceMore,
+    },
     {
       path:'/orderLogisticsMore3',
       name:'orderLogisticsMore3',

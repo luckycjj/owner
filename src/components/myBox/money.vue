@@ -31,8 +31,8 @@
         name: "money",
         data(){
            return{
-             fhd:"FHD201812100001",
-             price:800,
+             fhd:"",
+             price:0,
              payList:[{
                icon:require("../../images/zhifubao.png"),
                name:"支付宝",
@@ -53,6 +53,8 @@
         },
       mounted:function () {
         var _this = this;
+        _this.fhd = _this.$route.query.pk;
+        _this.price = _this.$route.query.money;
         androidIos.judgeIphoneX("money",2);
       },
       methods:{

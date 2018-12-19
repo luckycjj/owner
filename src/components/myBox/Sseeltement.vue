@@ -36,10 +36,10 @@
               </div>
             </div>
             <div class="button">
-              <p>合计 <span><span>￥</span>20000</span></p>
-              <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.pkInvoice)">支付</button>
-              <button v-if="tabShow == 1">申请开票</button>
-              <button v-if="tabShow == 1" @click.stop="again(items.pkInvoice)">再来一单</button>
+              <p>合计 <span><span>￥</span>{{items.zongmoney}}</span></p>
+              <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.orderNo,items.zongmoney)">支付</button>
+              <button v-else @click.stop="kaipiao(items.orderNo,items.zongmoney)">申请开票</button>
+             <!-- <button v-if="tabShow == 0" @click.stop="again(items.pkInvoice)">再来一单</button>-->
               <div class="clearBoth"></div>
             </div>
           </li>
@@ -98,10 +98,15 @@
       androidIos.bridge(_this);
     },
     methods:{
-      zhifu:function (pk) {
+      zhifu:function (pk,money) {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/money',query:{pk:pk}});
+        _this.$router.push({ path: '/money',query:{pk:pk,money:money}});
+      },
+      kaipiao:function (pk,money) {
+        var _this = this;
+        androidIos.addPageList();
+        _this.$router.push({ path: '/invoice',query:{pk:pk,money:money}});
       },
       again:function (pk) {
         var _this = this;
@@ -217,6 +222,7 @@
                 if (loadInvoice.success == "1") {
                   for(var i = 0 ; i < loadInvoice.list.length ; i++){
                     loadInvoice.list[i].lookMore = false;
+                    loadInvoice.list[i].zongmoney = 2000;
                   }
                   successCallback(loadInvoice.list);
                 }else{
@@ -238,9 +244,9 @@
         }
       },
       lookTrackMore:function (pk) {
-        var _this = this;
+      /*  var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:2}});
+        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:2}});*/
       },
     },
     beforeDestroy:function () {
