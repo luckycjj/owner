@@ -51,6 +51,7 @@
           localStorage.removeItem("SCREENROBBING2");
           sessionStorage.removeItem("searchDate");
           sessionStorage.removeItem("xinYaIndex");
+          console.log(androidIos.getcookie("MESSAGEOWNER"));
           androidIos.bridge(_this);
       },
       methods:{
