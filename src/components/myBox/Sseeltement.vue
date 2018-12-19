@@ -19,11 +19,11 @@
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
           <li v-for="(items,indexs) in item.prolist" @click.stop="lookTrackMore(items.pkInvoice,index)">
-            <h1>订单编号：{{items.vbillno}}</h1>
+            <h1>订单编号：{{items.orderNo}}</h1>
             <h3 v-html="tabShow == 0 ? '待付款' : '已付款'"></h3>
             <div class="proBox">
-              <div class="proBoxList" v-for="(pro,proIndex) in items.itemDaos">{{items.transType}}/{{pro.goodsName}}/{{pro.num}}件<span v-if="pro.weight*1 > 0" v-html="pro.weight / 1000 < 1 ? '/' + pro.weight + '千克' :  '/' + pro.weight / 1000 + '吨'"></span><span v-if="pro.volume*1 > 0">/{{pro.volume*1}}立方米</span></div>
-              <div class="lookMorePrice" @click.stop="items.lookMore = !items.lookMore">
+              <div class="proBoxList" >{{items.type}}/{{items.goods}}/{{items.num}}件<span v-if="items.weight*1 > 0" v-html="items.weight / 1000 < 1 ? '/' + items.weight + '千克' :  '/' + items.weight / 1000 + '吨'"></span><span v-if="items.volume*1 > 0">/{{items.volume*1}}立方米</span></div>
+              <div class="lookMorePrice" @click.stop="items.lookMore = !items.lookMore" v-if="items.costs.length > 0">
                 费用明细
                 <img src="../../images/icon-return1.png" :class="items.lookMore ? 'xuanzhuan' : ''">
               </div>
@@ -31,10 +31,7 @@
                 运输费用<span><span>￥</span>500</span>
               </div>
               <div class="otherPrice" v-if="items.lookMore">
-                <label>空时费 <span>¥100</span></label>
-                <label>空时费 <span>¥100</span></label>
-                <label>空时费 <span>¥100</span></label>
-                <label>空时费 <span>¥100</span></label>
+                <label v-for="price in items.costs">空时费 <span>¥100</span></label>
                 <div class="clearBoth"></div>
               </div>
             </div>

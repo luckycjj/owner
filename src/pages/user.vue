@@ -134,6 +134,9 @@
               corpName:  getUserInfo.corpName,
               role:getUserInfo.role,
             }));
+            androidIos.setcookie("MESSAGEOWNER",JSON.stringify({
+              token:sessionStorage.getItem("token"),
+            }),80);
             _this.jrisdiction();
           }else{
             androidIos.second(getUserInfo.message);

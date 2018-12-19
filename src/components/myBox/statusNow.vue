@@ -68,6 +68,9 @@
               _this.corpName = getUserInfo.corpName;
               _this.corpAddress = getUserInfo.corpAddress;
               _this.creditCode = getUserInfo.creditCode;
+              androidIos.setcookie("MESSAGEOWNER",JSON.stringify({
+                token:sessionStorage.getItem("token"),
+              }),80);
               sessionStorage.setItem("ownerMessage",JSON.stringify({
                 licType: getUserInfo.licType,
                 name:  getUserInfo.name,

@@ -98,6 +98,9 @@
                       corpName: getUserInfo.corpName,
                       role: getUserInfo.role
                     }));
+                    androidIos.setcookie("MESSAGEOWNER",JSON.stringify({
+                      token:sessionStorage.getItem("token"),
+                    }),80);
                   } else {
                     androidIos.second(getUserInfo.message);
                   }
