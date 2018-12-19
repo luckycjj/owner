@@ -2,13 +2,14 @@
     <div id="service">
       <div id="title" v-title data-title="增值服务"></div>
       <ul>
-         <li  @click.stop="biaodan(index,$event)" v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
+        <!-- @click.stop="biaodan(index,$event)" -->
+         <li v-for="(item,index) in serviceList" :class="index == serviceList.length - 1 ? 'borderno': ''">
            <span>{{item.displayName}}</span>
            <div class="circleBox" @click="readChoose(index)" :class="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' ) ? 'circletrue' : ''"> <div class="quanquan" v-if="(item.check && index != 2 )|| (index == 2 && item.check && message.company != '' && message.shuihao != '' )"></div></div>
            <div class="clearBoth"></div>
          </li>
       </ul>
-      <div id="tabLook" v-if=" serviceList[2].check && message.company != '' && message.shuihao != ''">
+     <!-- <div id="tabLook" v-if=" serviceList[2].check && message.company != '' && message.shuihao != ''">
         <div class="tab" style="margin-top: 0.3rem;">
           <p>公司名称</p>
           <h3>{{message.company}}</h3>
@@ -49,7 +50,7 @@
           <h3>{{message.email}}</h3>
           <div class="clearBoth"></div>
         </div>
-      </div>
+      </div>-->
       <h1>如需纸质回单或拍照回单，签收时纸质签名，电子签名请务必清晰</h1>
       <transition name="slide-fade">
         <div id="fapiao" style="top:0rem" v-if="fapiao">
@@ -182,7 +183,7 @@
           var _this = this;
           _this.serviceList[index].check =  !_this.serviceList[index].check;
           _this.chooseServiceBox();
-          if(index == 2 && _this.serviceList[index].check){
+          /*if(index == 2 && _this.serviceList[index].check){
               _this.fapiao = true;
               _this.getFa();
               var fapiaoXinxi = sessionStorage.getItem("fapiaoXinxi");
@@ -193,7 +194,7 @@
                 androidIos.judgeIphoneX("fapiaoTop",0);
                 androidIos.judgeIphoneX("imgClosed",2);
               })
-          }
+          }*/
         },
         biaodan:function (index,e) {
             var _this = this;

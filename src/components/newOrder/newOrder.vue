@@ -11,12 +11,12 @@
           </div>
           <div class="right">
             <div class="message  pickmessage">
-              <p>装货地址</p>
+              <p>提货地址</p>
               <h1 v-html="both.startAddress.people==''?'提货人姓名、联系电话、提货城市、详细地址':both.startAddress.people + ' ' + both.startAddress.tel + ' ' + both.startAddress.city + ' ' + both.startAddress.address" :class="both.startAddress.people==''?'':'blackColor'" @click="goStartAddress()"></h1>
             </div>
             <div class="borderBottom"></div>
             <div class="message arrmessage">
-              <p>卸货地址</p>
+              <p>收货地址</p>
               <h1 v-html="both.endAddress.people==''?'收货人姓名、联系电话、提货城市、详细地址':both.endAddress.people + ' ' + both.endAddress.tel + ' ' + both.endAddress.city + ' ' + both.endAddress.address" :class="both.endAddress.people==''?'':'blackColor'" @click="goEndAddress()"></h1>
             </div>
           </div>
@@ -24,13 +24,13 @@
       </div>
       <div id="time" class="label">
         <div class="lablebox">
-          <span>装货时间</span>
+          <span>提货时间</span>
           <input type="text" style="width:21%;" name="USER_AGE" id="USER_AGE" readonly class="input" placeholder="请选择时分" v-model="both.timeBeforeF"/>
           <input type="text" style="width:28%;" name="USER_AGE" id="USER_AGES" readonly class="input" placeholder="请选择年月日" v-model="both.timeBeforeS"/>
           <div class="clearBoth"></div>
         </div>
         <div class="lablebox borderno">
-          <span>卸货时间</span>
+          <span>收货时间</span>
           <input type="text" style="width:21%;" name="USER_AGES" id="USER_AGET" readonly class="input" placeholder="请选择时分" v-model="both.timeAfterF"/>
           <input type="text" style="width:28%;" name="USER_AGES" id="USER_AGEFo" readonly class="input" placeholder="请选择年月日" v-model="both.timeAfterS"/>
           <div class="clearBoth"></div>
@@ -169,8 +169,16 @@
               <h6>规格</h6><h5>{{item.number * 1}}件<span v-if="item.wight * 1 >0">/{{item.wight * 1}}{{item.unitWight}}</span><span v-if="item.weight * 1 >0">/{{item.weight * 1}}{{item.unitWeight}}</span></h5>
               <div class="clearBoth"></div>
             </div>
+            <div class="message_price" v-if="both.zhuangxiePrice*1 != 0">
+              <h6>装卸费</h6><h5>¥{{both.zhuangxiePrice*1}}</h5>
+              <div class="clearBoth"></div>
+            </div>
             <div class="message_price">
               <h6>运费</h6><h5>¥{{price*1}}</h5>
+              <div class="clearBoth"></div>
+            </div>
+            <div class="message_price"  v-if="both.zhuangxiePrice*1 != 0">
+              <h6>总费用</h6><h5>¥{{price*1 + both.zhuangxiePrice*1}}</h5>
               <div class="clearBoth"></div>
             </div>
             <div class="message_button">
@@ -286,7 +294,8 @@
               carTypeLook:true,
               service:"",
               handlingCode:"",
-              handlingVal:""
+              handlingVal:"",
+              zhuangxiePrice:0,
             },
             pk:"",
             price:"",
@@ -320,7 +329,8 @@
             productBox:false,
             productOther:"",
             yuguPrice:"",
-            suremend: new Debounce(this.ajaxPost, 1000)
+            suremend: new Debounce(this.ajaxPost, 1000),
+            priceFile:[40,60]
           }
        },
      watch:{
@@ -414,11 +424,11 @@
             var volumn = 0;
             var weightList = [];
             if(_this.both.startAddress.pk == ""){
-              bomb.first("请选择装货地点");
+              bomb.first("请选择提货地点");
               return false;
             }
             if(_this.both.endAddress.pk == ""){
-              bomb.first("请选择卸货地点");
+              bomb.first("请选择收货地点");
               return false;
             }
             for(var x = 0;x<_this.both.productList.length;x++){
@@ -1950,6 +1960,32 @@
                     _this.newOrderMessageBox = true;
                   });
                 }else{
+                  var weightBoth = 0;
+                  var wolumeBoth = 0;
+                  for( var i = 0 ; i < self.productList.length ; i++ ){
+                    weightBoth += androidIos.numMulti(self.productList[i].wight,self.productList[i].wightTen);
+                    wolumeBoth += androidIos.numMulti(self.productList[i].weight,self.productList[i].weightTen);
+                  }
+                  var pingjun = 0.25;
+                  if(self.handlingCode == ""){
+                     self.zhuangxiePrice = 0;
+                  }else if(self.handlingCode == 0){
+                     if(wolumeBoth * pingjun > weightBoth){
+                       //轻货
+                       self.zhuangxiePrice = androidIos.numMulti(androidIos.numMulti(wolumeBoth,_this.priceFile[1]),2);
+                     }else{
+                        //重货
+                       self.zhuangxiePrice =androidIos.numMulti(androidIos.numMulti(weightBoth,_this.priceFile[0]),2);
+                     }
+                  }else{
+                    if(wolumeBoth * pingjun > weightBoth){
+                      //轻货
+                      self.zhuangxiePrice = androidIos.numMulti(wolumeBoth,_this.priceFile[1]);
+                    }else{
+                      //重货
+                      self.zhuangxiePrice =androidIos.numMulti(weightBoth,_this.priceFile[0]);
+                    }
+                  }
                   _this.newOrderMessageBox = true;
                 }
               }else{
@@ -2031,10 +2067,10 @@
                 goodsCode: "",
                 tranType:self.productList[i].tranpk,
                 num: self.productList[i].number*1,
-                weight:self.productList[i].wight*self.productList[i].wightTen*1000,
-                volume:self.productList[i].weight*self.productList[i].weightTen
+                weight:androidIos.numMulti(self.productList[i].wight,self.productList[i].wightTen)*1000,
+                volume:androidIos.numMulti(self.productList[i].weight,self.productList[i].weightTen)
               }
-              weightBoth = weightBoth + self.productList[i].wight*self.productList[i].wightTen;
+              weightBoth = weightBoth + androidIos.numMulti(self.productList[i].wight,self.productList[i].wightTen);
               list.push(listjson);
             }
             var carListSureValueList = self.carListSureValue.split(",");
@@ -2098,7 +2134,7 @@
               weightBoth:weightBoth,
               photo_back: self.service.indexOf("拍照") != -1 ? 1 : 0,
               paper_back: self.service.indexOf("纸质") != -1 ? 1 : 0,
-              elect_back: self.service.indexOf("电子发票") != -1 ? sessionStorage.getItem("servicePk") : 0,
+              elect_back: self.service.indexOf("电子发票") != -1 ? 10 : 0, //sessionStorage.getItem("servicePk")
               goods_name:self.productList[0].goodstypenumber,
               num_count: (self.productList[0].number*1).toString(),
               weight_count:(self.productList[0].wight*self.productList[0].wightTen*1000).toString(),

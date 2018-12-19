@@ -139,7 +139,7 @@
                 </div>
               </div>
               <div class="peoplemessage">
-                <p class="peoplemessageP2">卸货方信息</p>
+                <p class="peoplemessageP2">收货方信息</p>
                 <div style="position: relative;margin:0.1rem auto 0 auto;width:9.3rem;margin-left: 0.7rem;padding-bottom: 0.4rem">
                   <div class="messageBox">
                     <h1 style="font-size: 0.375rem; color:#373737;float: left;margin-top: 0.34rem;">{{item.endMessage.name}}</h1>

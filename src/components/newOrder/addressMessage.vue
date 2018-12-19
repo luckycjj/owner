@@ -5,7 +5,7 @@
     <div id="carTitleBox"   @touchend="event($event)">
       <div class="carTitleBox">
         <div class="carTitleback" @touchend="goback()"></div>
-        <h1 style="text-align: center;font-size: 0.426667rem;line-height: 1.3rem;color: #333;letter-spacing: 0.0133rem;" v-html="addressType == 1 ? '我的提货地址' : '我的发货地址'"></h1>
+        <h1 style="text-align: center;font-size: 0.426667rem;line-height: 1.3rem;color: #333;letter-spacing: 0.0133rem;" v-html="addressType == 1 ? '我的提货地址' : '我的收货地址'"></h1>
         <p @click="addNew()" id="sousuo">添加新地址</p>
       </div>
     </div>
