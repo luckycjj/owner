@@ -156,7 +156,7 @@
               </div>
             </div>
             <div class="company" v-if="item.carrier.company != ''">
-              <p class="peoplemessageP2">承运商信息</p>
+              <p class="peoplemessageP3">承运商信息</p>
               <div style="position: relative;margin:0.1rem auto 0 auto;width:9.3rem;margin-left: 0.7rem;padding-bottom: 0.4rem">
                 <div class="messageBox">
                   <h1 style="font-size: 0.375rem; color:#373737;margin-top: 0.34rem;">公司名称:&nbsp;&nbsp;{{item.carrier.company}}</h1>
@@ -1104,6 +1104,9 @@
       }
       .peoplemessageP2{
         background-image: url("../../images/trackMoreDaohuo.png");
+      }
+      .peoplemessageP3{
+        background-image: url("../../images/icon-carrier.png");
       }
       .peoplemessage h1{
         color:#333;
