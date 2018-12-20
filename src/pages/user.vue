@@ -111,6 +111,10 @@
         _this.message.name = ownerMessage.name;
         _this.message.status = ownerMessage.status;
       }
+      var OWNERSETMESSAGE = localStorage.getItem("OWNERSETMESSAGE");
+      if(OWNERSETMESSAGE == undefined){
+        localStorage.removeItem("yesTrue");
+      }
       var ajax = $.ajax({
         type: "POST",
         url: androidIos.ajaxHttp() + "/getUserInfo",

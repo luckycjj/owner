@@ -30,6 +30,8 @@
       mounted:function () {
           var _this = this;
           localStorage.removeItem("MESSAGEOWNER");
+          localStorage.removeItem("yesTrue");
+          localStorage.removeItem("OWNERSETMESSAGE");
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("haveCarTap");
           sessionStorage.removeItem("ownerMessage");

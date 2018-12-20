@@ -114,7 +114,7 @@
             <h6 v-if="message.third.idCardF.bendi == ''">点击拍照</h6>
           </div>
           <div class="SFZFLook">
-            <img src="../../images/SFZF.png"    @touchend="lookImg($event,require('../../images/SFZZ.png'))">
+            <img src="../../images/SFZF.png"    @touchend="lookImg($event,require('../../images/SFZF.png'))">
             <span>样例</span>
           </div>
           <div class="clearBoth"></div>
@@ -135,7 +135,7 @@
         </div>
       </div>
       <h5 class="calltel" @click="telCall()">有问题请联系客服</h5>
-      <button @touchend="goNext()" v-html="nowStep == 1 || nowStep == 2 ? '下一步': '提交'"></button>
+      <button @click="goNext()" v-html="nowStep == 1 || nowStep == 2 ? '下一步': '提交'"></button>
       <div v-if="baiduhuotiBox" id="baiduhuotiBox">
         <div id="baiduhuoti">
           <div id="baiduhuotiTop">
@@ -525,11 +525,12 @@
              }
            }
            if(_this.nowStep < 3){
-             if(_this.nowStep == 2){
+             if(_this.nowStep == 2 && localStorage.getItem("yesTrue") == undefined){
                androidIos.first("请确认公司名称和社会信用代码");
                $(".tanBox-yes").html("已确认");
                $(".tanBox-yes").unbind('click').click(function(){
                  $(".tanBox-bigBox").remove();
+                 localStorage.setItem("yesTrue",true);
                  _this.nowStep ++ ;
                  _this.showBefore();
                });
