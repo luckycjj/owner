@@ -20,6 +20,7 @@
         <div id="table"></div>
       </div>
     </div>
+    <img src="./images/driverPng.png" id="PNG" v-if="show">
     <router-view/>
   </div>
 </template>
@@ -38,6 +39,7 @@
       return {
         title:"",
         doNow:"",
+        show:true,
       }
     },
     mounted:function () {
@@ -56,12 +58,14 @@
           }else{
             var cookie = JSON.parse(name).user;
             if(date.getTime() > JSON.parse(name).expiryDate){
+              _this.show = false;
               _this.$router.push({ path: '/login'});
             }else{
               cookie = JSON.parse(cookie);
               androidIos.jianting(cookie.token);
               sessionStorage.setItem("token",cookie.token);
               sessionStorage.setItem("tokenBefore",cookie.token);
+              _this.show = false;
               _this.$router.push({ path: '/xinYaIndex'});
             }
           }
@@ -74,8 +78,10 @@
           androidIos.jianting(cookie.token);
           sessionStorage.setItem("token",cookie.token);
           sessionStorage.setItem("tokenBefore",cookie.token);
+          _this.show = false;
           _this.$router.push({ path: '/xinYaIndex'});
         }else if(cookie == ""){
+          _this.show = false;
           _this.$router.push({ path: '/login'});
         }
       }
@@ -527,5 +533,15 @@
   #iphoneXX{
     width:100%;
     height: 0;
+  }
+  #PNG{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    width:auto;
+    height: auto;
+    z-index: 10;
   }
 </style>
