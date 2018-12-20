@@ -29,6 +29,7 @@
       },
       mounted:function () {
           var _this = this;
+          localStorage.removeItem("MESSAGEOWNER");
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("haveCarTap");
           sessionStorage.removeItem("ownerMessage");
@@ -51,7 +52,6 @@
           localStorage.removeItem("SCREENROBBING2");
           sessionStorage.removeItem("searchDate");
           sessionStorage.removeItem("xinYaIndex");
-          console.log(androidIos.getcookie("MESSAGEOWNER"));
           androidIos.bridge(_this);
       },
       methods:{

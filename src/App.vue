@@ -44,18 +44,41 @@
       var _this = this;
       _this.title = document.title;
       androidIos.judgeIphoneX("iphoneXX",4);
-      var cookie = androidIos.getcookie("MESSAGEOWNER");
       sessionStorage.setItem("source",1);
-      if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
-        cookie = JSON.parse(cookie);
-        androidIos.jianting(cookie.token);
-        sessionStorage.setItem("token",cookie.token);
-        sessionStorage.setItem("tokenBefore",cookie.token);
-        _this.$router.push({ path: '/xinYaIndex'});
-      }else if(cookie == ""){
-        _this.$router.push({ path: '/login'});
+      try{
+        var date = new Date();
+        api.getPrefs({
+          key: "MESSAGEOWNER"
+        }, function(ret, err) {
+          var name = ret.value;
+          if(name == ""){
+            _this.$router.push({ path: '/login'});
+          }else{
+            var cookie = JSON.parse(name).user;
+            if(date.getTime() > JSON.parse(name).expiryDate){
+              _this.$router.push({ path: '/login'});
+            }else{
+              cookie = JSON.parse(cookie);
+              androidIos.jianting(cookie.token);
+              sessionStorage.setItem("token",cookie.token);
+              sessionStorage.setItem("tokenBefore",cookie.token);
+              _this.$router.push({ path: '/xinYaIndex'});
+            }
+          }
+        });
       }
-      androidIos.bridge(_this);
+      catch(e){
+        var cookie = androidIos.getcookie("MESSAGEOWNER");
+        if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
+          cookie = JSON.parse(cookie);
+          androidIos.jianting(cookie.token);
+          sessionStorage.setItem("token",cookie.token);
+          sessionStorage.setItem("tokenBefore",cookie.token);
+          _this.$router.push({ path: '/xinYaIndex'});
+        }else if(cookie == ""){
+          _this.$router.push({ path: '/login'});
+        }
+      }
     },
     beforeUpdate:function () {
       var _this = this;

@@ -68,7 +68,7 @@
           androidIos.judgeIphoneX("footer",1);
           var driverBottomIcon = sessionStorage.getItem("driverBottomIcon");
           sessionStorage.removeItem("NEWORDERTRANTYPE");
-          _this.cookie = androidIos.getcookie("MESSAGEOWNER");
+          _this.cookie = 33333;
           if(driverBottomIcon != undefined){
             _this.items = JSON.parse(driverBottomIcon);
           }

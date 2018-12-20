@@ -566,27 +566,49 @@ var androidIos = {
   },
   setcookie:function (c_name,value,time) {
     var date = new Date();
-    localStorage.setItem(c_name,JSON.stringify({
+    try{
+      api.setPrefs({
+        key:c_name,
+        value:JSON.stringify({
+          user:value,
+          expiryDate: date.getTime() + time*24*60*60*1000
+        })
+      });
+    }
+    catch(e){
+      localStorage.setItem(c_name,JSON.stringify({
         user:value,
         expiryDate: date.getTime() + time*24*60*60*1000
-    }))
+      }))
+    }
+
   },
   getcookie:function (c_name) {
-     var name = localStorage.getItem(c_name);
      var date = new Date();
+     var name = localStorage.getItem(c_name);
      if(name == undefined){
-        return "";
+       return "";
      }else{
-        if(date.getTime() > JSON.parse(name).expiryDate){
-          localStorage.removeItem(c_name);
-          return "";
-        }else{
-          return JSON.parse(name).user;
-        }
+       if(date.getTime() > JSON.parse(name).expiryDate){
+         localStorage.removeItem(c_name);
+         return "";
+       }else{
+         return JSON.parse(name).user;
+       }
      }
+
   },
   delCookie:function (c_name){
-    localStorage.removeItem(c_name);
+    try{
+      api.setPrefs({
+        key:c_name,
+        value:""
+      });
+    }
+    catch(e){
+      localStorage.removeItem(c_name);
+    }
+
   },
   setcookie1:function (c_name,value,time) {
     var exdate=new Date();
