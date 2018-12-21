@@ -896,7 +896,7 @@
                 })
                 sessionStorage.removeItem("newOrder");
               }
-              if(newOrder==null && histroyAddress == null){
+              if(newOrder==null && histroyAddress == null &&  _this.both.startAddress.pk == ""){
                 $.ajax({
                   type: "POST",
                   url: androidIos.ajaxHttp()+"/address/getAddres",

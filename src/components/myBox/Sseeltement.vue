@@ -38,8 +38,8 @@
             <div class="button">
               <p>合计 <span><span>￥</span>{{items.zongmoney}}</span></p>
               <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.orderNo,items.zongmoney)">支付</button>
-              <button v-else @click.stop="kaipiao(items.orderNo,items.zongmoney)">申请开票</button>
-             <!-- <button v-if="tabShow == 0" @click.stop="again(items.pkInvoice)">再来一单</button>-->
+              <button v-if="tabShow == 1" @click.stop="kaipiao(items.orderNo,items.zongmoney)">申请开票</button>
+              <button v-if="tabShow == 0" @click.stop="again(items.pk)">再来一单</button>
               <div class="clearBoth"></div>
             </div>
           </li>

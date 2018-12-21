@@ -60,23 +60,31 @@
             })
           }else{
             var cookie = JSON.parse(name).user;
-            if(date.getTime() > JSON.parse(name).expiryDate){
-              _this.showImg = false;
-              _this.$nextTick(function () {
-                androidIos.judgeIphoneX("iphoneXX", 4);
-                _this.$router.push({path: '/login'});
-              })
+            if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
+              if(date.getTime() > JSON.parse(name).expiryDate){
+                _this.showImg = false;
+                _this.$nextTick(function () {
+                  androidIos.judgeIphoneX("iphoneXX", 4);
+                  _this.$router.push({path: '/login'});
+                })
+              }else{
+                cookie = JSON.parse(cookie);
+                androidIos.jianting(cookie.token);
+                sessionStorage.setItem("token",cookie.token);
+                sessionStorage.setItem("tokenBefore",cookie.token);
+                _this.showImg = false;
+                _this.$nextTick(function () {
+                  androidIos.judgeIphoneX("iphoneXX", 4);
+                  _this.$router.push({path: '/xinYaIndex'});
+                })
+              }
             }else{
-              cookie = JSON.parse(cookie);
-              androidIos.jianting(cookie.token);
-              sessionStorage.setItem("token",cookie.token);
-              sessionStorage.setItem("tokenBefore",cookie.token);
               _this.showImg = false;
               _this.$nextTick(function () {
                 androidIos.judgeIphoneX("iphoneXX", 4);
-                _this.$router.push({path: '/xinYaIndex'});
               })
             }
+
           }
         });
       }
@@ -97,6 +105,11 @@
           _this.$nextTick(function () {
             androidIos.judgeIphoneX("iphoneXX",4);
             _this.$router.push({ path: '/login'});
+          })
+        }else{
+          _this.showImg = false;
+          _this.$nextTick(function () {
+            androidIos.judgeIphoneX("iphoneXX",4);
           })
         }
       }

@@ -175,10 +175,40 @@
           _this.$nextTick(function () {
             $("#invoice").animate({scrollTop: _this.both.scrollTop}, 0);
           })
+        }else{
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/company/getElectronicBill",
+            data:JSON.stringify({
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source"),
+              pk: ""
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 10000,
+            success: function (getElectronicBill) {
+              if(getElectronicBill.success == "1"){
+                _this.both.invoicerise = getElectronicBill.corpName;
+                _this.both.dutyparagraph = getElectronicBill.taxNo;
+              }else{
+                androidIos.second(getElectronicBill.message);
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              $("#common-blackBox").remove();
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
         }
          if(invoiceMore != undefined){
            invoiceMore = JSON.parse(invoiceMore);
            _this.both.moremessage = invoiceMore;
+           _this.both.moremessageList = [];
            _this.both.moremessageList.push(_this.both.moremessage.memo);
            _this.both.moremessageList.push(_this.both.moremessage.address);
            _this.both.moremessageList.push(_this.both.moremessage.bank);
@@ -192,18 +222,50 @@
           var _this = this;
           var _both = _this.both;
           var type = _this.getType();
-          var json = {
-            invoicerise : _both.invoicerise,
-            dutyparagraph : _both.dutyparagraph,
-            content : _both.content,
-            price : _both.price,
-            moremessage : _both.moremessageList.join(","),
-            addresseename : type == 1 ? _both.addresseename : undefined,
-            tel : type == 1 ? _both.tel : undefined,
-            address : type == 1 ? _both.address : undefined,
-            email : type == 0 ? _both.email : undefined,
+          if(type == 1){
+            var json = {
+              corpName : _both.invoicerise,
+              taxNo : _both.dutyparagraph,
+              ifDefault:1,
+              memo: _both.moremessageList.join(","),
+              recipient : type == 1 ? _both.addresseename : undefined,
+              recipientPhone : type == 1 ? _both.tel : undefined,
+              recipientAddr : type == 1 ? _both.address : undefined,
+              email : type == 0 ? _both.email : undefined,
+              pk:_this.$route.query.pk,
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }
+            $.ajax({
+              type: "POST",
+              url: androidIos.ajaxHttp() + "/pay/billingApplication",
+              data:JSON.stringify(json),
+              contentType: "application/json;charset=utf-8",
+              dataType: "json",
+              timeout: 30000,
+              success: function (orderConfirm) {
+                if(orderConfirm.success == "1"){
+                  _this.$cjj("提交成功");
+                  setTimeout(function () {
+                    androidIos.gobackFrom(_this);
+                  },500)
+                }else{
+                  androidIos.second(orderConfirm.message);
+                }
+              },
+              complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                $("#common-blackBox").remove();
+                if(status=='timeout'){//超时,status还有success,error等值的情况
+                  androidIos.second("网络请求超时");
+                }else if(status=='error'){
+                  androidIos.errorwife();
+                }
+              }
+            })
+          }else{
+            androidIos.second("此功能正在开发");
           }
-          console.log(json)
+
         },
         checkYes:function (index) {
           var _this = this;
