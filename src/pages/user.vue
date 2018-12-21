@@ -310,10 +310,10 @@
           var name = "http://www.xsungroup.com/";
           var tel= "";
           if(isiOS){
-            document.getElementsByTagName('a')[index].href="sms://"+tel+"?body="+name;
+            document.getElementsByTagName('a')[index].href="sms://"+tel+"&body="+name;
           }
           else{
-            document.getElementsByTagName('a')[index].href="sms://"+tel+"&body="+name;
+            document.getElementsByTagName('a')[index].href="sms://"+tel+"?body="+name;
           }
         }
       },
