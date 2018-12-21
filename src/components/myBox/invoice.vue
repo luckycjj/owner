@@ -367,29 +367,31 @@
       width:100%;
     }
   p{
-    font-size: 0.35rem;
-    color:#666;
+    font-size: 0.3467rem;
+    color:#999;
     width:90%;
-    margin-left:5%;
-    line-height: 1.333rem;
+    margin:0.25rem 0 0.1rem 5%;
   }
   ul{
     width:90%;
+    padding: 0.32rem 5%;
     margin: 0 auto;
+    background: white;
   }
   ul li{
     width:4.2rem;
     float: left;
-    line-height:1.62rem ;
-    color:#333;
-    font-size:0.4rem ;
+    line-height:1.35rem ;
+    color:#999;
+    font-size:0.48rem ;
     text-align: center;
-    border: 1px solid #e5e5e8;
+    border: 1px solid #999;
     background: white;
+    border-radius: 0.15rem;
   }
     ul .checked{
-      color:#3f51b5;
-      border-color: #3f51b5;
+      color:#1D68A8;
+      border-color: #1D68A8;
   }
   ul h1{
     margin-top: 0.27rem;
@@ -403,11 +405,11 @@
     width:95%;
     margin-left: 5%;
     border-bottom: 1px solid #f1f1f1;
-    height: 1.3rem;
+    height: 1.52rem;
   }
   .lable h2{
      float: left;
-     line-height: 1.3rem;
+     line-height: 1.52rem;
     margin-left: 0.1rem;
     font-size: 0.375rem;
     color:#373737;
@@ -428,7 +430,7 @@
     font-size: 0.375rem;
     color:#373737;
     line-height: 0.6rem;
-    margin-top: 0.35rem;
+    margin-top: 0.46rem;
   }
     .lable h3{
       float: right;
@@ -437,7 +439,7 @@
       font-size: 0.375rem;
       color:#999;
       line-height: 0.6rem;
-      margin-top: 0.35rem;
+      margin-top: 0.46rem;
     }
     .lable h6{
       float: right;
@@ -446,10 +448,10 @@
       font-size: 0.375rem;
       color:#333;
       line-height: 0.6rem;
-      margin-top: 0.35rem;
+      margin-top: 0.46rem;
     }
     .lable h3 span{
-      color:#e51c23;
+      color:#FC4D17;
       font-size: 0.375rem;
       margin-right: 0.1rem;
     }
@@ -463,7 +465,7 @@
     font-size: 0.375rem;
     color:#333;
     line-height: 0.6rem;
-    margin-top: 0.35rem;
+    margin-top: 0.46rem;
     text-align: right;
     background-image: url("../../images/lookMore.png");
     background-position:95% 50% ;
@@ -478,7 +480,7 @@
   }
   .lable h4{
     float: left;
-    line-height: 1.3rem;
+    line-height: 1.52rem;
     margin-left: 0.1rem;
     font-size: 0.375rem;
     color:#373737;
@@ -497,7 +499,7 @@
       border-radius: 50%;
       box-sizing: border-box;
       position: relative;
-      margin-top: 0.37rem;
+      margin-top: 0.5rem;
     }
     .checked{
       border-color: #1a6bac!important;
