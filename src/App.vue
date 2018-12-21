@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="bigbigtest appBox">
-    <div id="appBox">
+    <div id="appBox" v-if="!showImg">
       <div id="iphoneXX"></div>
       <div id="carTitleBox">
         <div class="carTitleBox">
@@ -20,7 +20,7 @@
         <div id="table"></div>
       </div>
     </div>
-    <img src="./images/driverPng.png" id="PNG" v-if="show">
+    <img src="./images/ownerPng.png" id="PNG" v-if="showImg">
     <router-view/>
   </div>
 </template>
@@ -39,13 +39,12 @@
       return {
         title:"",
         doNow:"",
-        show:true,
+        showImg:true,
       }
     },
     mounted:function () {
       var _this = this;
       _this.title = document.title;
-      androidIos.judgeIphoneX("iphoneXX",4);
       sessionStorage.setItem("source",1);
       try{
         var date = new Date();
@@ -54,19 +53,29 @@
         }, function(ret, err) {
           var name = ret.value;
           if(name == ""){
-            _this.$router.push({ path: '/login'});
+            _this.showImg = false;
+            _this.$nextTick(function () {
+              androidIos.judgeIphoneX("iphoneXX", 4);
+              _this.$router.push({path: '/login'});
+            })
           }else{
             var cookie = JSON.parse(name).user;
             if(date.getTime() > JSON.parse(name).expiryDate){
-              _this.show = false;
-              _this.$router.push({ path: '/login'});
+              _this.showImg = false;
+              _this.$nextTick(function () {
+                androidIos.judgeIphoneX("iphoneXX", 4);
+                _this.$router.push({path: '/login'});
+              })
             }else{
               cookie = JSON.parse(cookie);
               androidIos.jianting(cookie.token);
               sessionStorage.setItem("token",cookie.token);
               sessionStorage.setItem("tokenBefore",cookie.token);
-              _this.show = false;
-              _this.$router.push({ path: '/xinYaIndex'});
+              _this.showImg = false;
+              _this.$nextTick(function () {
+                androidIos.judgeIphoneX("iphoneXX", 4);
+                _this.$router.push({path: '/xinYaIndex'});
+              })
             }
           }
         });
@@ -78,11 +87,17 @@
           androidIos.jianting(cookie.token);
           sessionStorage.setItem("token",cookie.token);
           sessionStorage.setItem("tokenBefore",cookie.token);
-          _this.show = false;
-          _this.$router.push({ path: '/xinYaIndex'});
+          _this.showImg = false;
+          _this.$nextTick(function () {
+            androidIos.judgeIphoneX("iphoneXX", 4);
+            _this.$router.push({path: '/xinYaIndex'});
+          })
         }else if(cookie == ""){
-          _this.show = false;
-          _this.$router.push({ path: '/login'});
+          _this.showImg = false;
+          _this.$nextTick(function () {
+            androidIos.judgeIphoneX("iphoneXX",4);
+            _this.$router.push({ path: '/login'});
+          })
         }
       }
     },
@@ -540,8 +555,8 @@
     bottom:0;
     left:0;
     right:0;
-    width:auto;
-    height: auto;
+    width:100%;
+    height: 100%;
     z-index: 10;
   }
 </style>
