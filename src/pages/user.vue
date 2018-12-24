@@ -293,7 +293,20 @@
             var wx = api.require('wx');
             wx.isInstalled(function(ret, err) {
               if (ret.installed) {
-                androidIos.second('功能尚在开发');
+                wx.shareWebpage({
+                  apiKey: '',
+                  scene:index == 0 ? 'session' : 'timeline',
+                  title: '欣阳物流',
+                  description: '欣阳物流',
+                  thumb: require("../images/logo.png"),
+                  contentUrl: 'http://www.xsungroup.com/'
+                }, function(ret, err) {
+                  if (ret.status) {
+                    _this.$cjj('分享成功');
+                  } else {
+                    androidIos.second(err.code);
+                  }
+                });
               } else {
                 androidIos.second('当前设备未安装微信客户端');
               }

@@ -5,8 +5,8 @@
          <div class="top">
             <div id="imgBoxTab" style="top:0.375rem;">
               <img src="../images/date.png" id="date" @touchend="searchDateBoxTrue()">
-              <div  id="saoyisao">
-                <input type="file"  accept="image/*"  @change="jiexi($event)">
+              <div  id="saoyisao" @click="saoyisao()">
+                <input type="file"  accept="image/*"  @change="jiexi($event)" v-if="!apicloud">
               </div>
               <p @touchend="xunjia()">询价</p>
               <div class="clearBoth"></div>
@@ -79,6 +79,7 @@
              todayPrice : 0,
              keyWord:"",
              searchDateBox:false,
+             apicloud:false,
              searchList:[{
                name:"今天",
                value:0,
@@ -298,6 +299,29 @@
           androidIos.addPageList();
           _this.$router.push({ path: "/newOrder/inquiry"});
         },
+        saoyisao:function () {
+          var _this = this;
+          try{
+            var scanner = api.require('scanner');
+            scanner.open(function(ret, err) {
+              if (ret && ret.eventType == "success") {
+                  var img = ret.msg;
+                  androidIos.first("确定签收吗？");
+                  $(".tanBox-yes").unbind('click').click(function(){
+                    $(".tanBox-bigBox").remove();
+                    androidIos.addPageList();
+                    _this.$router.push({path:'/signIn',query:{pk:JSON.parse(img).pk,}});
+                  });
+
+              } else {
+                bomb.first("签收失败");
+              }
+            });
+          }
+          catch(e){
+            console.log("不支持apicloud");
+          }
+        },
         searchDateBoxTrue:function () {
           var _this = this;
           for(var i = 0 ; i < _this.searchList.length ; i++){
@@ -323,6 +347,13 @@
         go:function () {
             var _this = this;
             _this.corner();
+            try{
+              _this.apicloud = true;
+              var scanner = api.require('scanner');
+            }
+            catch(e){
+              _this.apicloud = false;
+            }
             var INDEXSCROLLTOP = sessionStorage.getItem("INDEXSCROLLTOP");
             if(INDEXSCROLLTOP != null){
               $("#xinYaIndexBox").animate({scrollTop: INDEXSCROLLTOP}, 0);
