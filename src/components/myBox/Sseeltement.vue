@@ -18,27 +18,29 @@
       </div>
       <div v-for="(item,index) in list" :id="'mescroll' + index" :class="index != tabShow ? 'hide' :''" class="mescroll">
         <ul :id="'dataList' + index" class="data-list">
-          <li v-for="(items,indexs) in item.prolist" @click.stop="lookTrackMore(items.pkInvoice,index)">
+          <li v-for="(items,indexs) in item.prolist" @click.stop="lookTrackMore(items.pk,index)">
             <h1>订单编号：{{items.orderNo}}</h1>
             <h3 v-html="tabShow == 0 ? '待付款' : '已付款'"></h3>
             <div class="proBox">
               <div class="proBoxList" >{{items.type}}/{{items.goods}}/{{items.num}}件<span v-if="items.weight*1 > 0" v-html="items.weight / 1000 < 1 ? '/' + items.weight + '千克' :  '/' + items.weight / 1000 + '吨'"></span><span v-if="items.volume*1 > 0">/{{items.volume*1}}立方米</span></div>
-              <div class="lookMorePrice" @click.stop="items.lookMore = !items.lookMore" v-if="items.costs.length > 0">
+              <div class="lookMorePrice" @click.stop="items.lookMore = !items.lookMore" v-if="items.costs.length > 1">
                 费用明细
                 <img src="../../images/icon-return1.png" :class="items.lookMore ? 'xuanzhuan' : ''">
               </div>
-              <div class="tranPrice">
-                运输费用<span><span>￥</span>500</span>
+              <div class="tranPrice" v-if="items.costs.length > 0">
+               {{items.costs[0].costName}}<span><span>￥</span>{{items.costs[0].cost*1}}</span>
               </div>
               <div class="otherPrice" v-if="items.lookMore">
-                <label v-for="price in items.costs">空时费 <span>¥100</span></label>
+                <label v-for="(price,indexPrice) in items.costs" v-if="indexPrice > 0">{{price.costName}} <span>¥{{price.cost*1}}</span></label>
                 <div class="clearBoth"></div>
               </div>
             </div>
             <div class="button">
               <p>合计 <span><span>￥</span>{{items.zongmoney}}</span></p>
-              <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.orderNo,items.zongmoney)">支付</button>
-              <button v-if="tabShow == 1" @click.stop="kaipiao(items.orderNo,items.zongmoney)">申请开票</button>
+              <p v-if="index == 0">已支付 <span><span>￥</span>{{items.paymoney}}</span></p>
+              <p v-if="index == 1">已开票 <span><span>￥</span>{{items.paymoney}}</span></p>
+              <button class="zhifu" v-if="tabShow == 0" @click.stop="zhifu(items.pk,items.zongmoney - items.paymoney,items.orderNo)">支付</button>
+              <button v-if="tabShow == 1" @click.stop="kaipiao(items.orderNo,items.zongmoney - items.paymoney)">申请开票</button>
               <button v-if="tabShow == 1" @click.stop="again(items.pk)">再来一单</button>
               <div class="clearBoth"></div>
             </div>
@@ -98,10 +100,10 @@
       androidIos.bridge(_this);
     },
     methods:{
-      zhifu:function (pk,money) {
+      zhifu:function (pk,money,fhd) {
         var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/money',query:{pk:pk,money:money}});
+        _this.$router.push({ path: '/money',query:{pk:pk,money:money,fhd:fhd}});
       },
       kaipiao:function (pk,money) {
         var _this = this;
@@ -222,7 +224,12 @@
                 if (loadInvoice.success == "1") {
                   for(var i = 0 ; i < loadInvoice.list.length ; i++){
                     loadInvoice.list[i].lookMore = false;
-                    loadInvoice.list[i].zongmoney = 2000;
+                    loadInvoice.list[i].zongmoney = 0 ;
+                    loadInvoice.list[i].paymoney = 0 ;
+                    for(var x = 0 ; x <  loadInvoice.list[i].costs.length ; x++){
+                      loadInvoice.list[i].zongmoney += loadInvoice.list[i].costs[x].cost *1;
+                      loadInvoice.list[i].paymoney +=  loadInvoice.list[i].costs[x].gotCost *1;
+                    }
                   }
                   successCallback(loadInvoice.list);
                 }else{
@@ -244,9 +251,9 @@
         }
       },
       lookTrackMore:function (pk) {
-      /*  var _this = this;
+        var _this = this;
         androidIos.addPageList();
-        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:2}});*/
+        _this.$router.push({ path: '/orderLogisticsMore3',query:{pk:pk,type:2}});
       },
     },
     beforeDestroy:function () {
@@ -469,7 +476,6 @@
   }
   .button{
     width:100%;
-    height: 0.74rem;
   }
   .button p {
     float: left;

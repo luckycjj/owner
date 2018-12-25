@@ -1,7 +1,7 @@
 import bridge from './bridge';
 import {bomb} from "./zujian";
 var androidIos = {
-  gobackFrom: function (that) {
+  gobackFrom: function (that,historyUrl) {
     if(bomb.hasClass("app","appBox")){
       $("#errorwifeBox").remove();
       $("#common-blackBox").remove();
@@ -23,6 +23,20 @@ var androidIos = {
          }else{
            androidIos.gogogogo();
          }
+      }else if(http.indexOf("/money") != -1){
+        androidIos.first("尚未支付，确定退出吗？");
+        $(".tanBox-yes").unbind('click').click(function(){
+          $(".tanBox-bigBox").remove();
+          var OLDUEL = sessionStorage.getItem("OLDUEL");
+          if(OLDUEL.indexOf("/newOrder") != -1){
+            sessionStorage.removeItem("addPageList");
+            sessionStorage.removeItem("trackListTap");
+            sessionStorage.removeItem("newOrder");
+            that.$router.push({path:"/user"});
+          }else{
+            androidIos.gogogogo();
+          }
+        });
       }else{
         androidIos.gogogogo();
       }
@@ -65,8 +79,8 @@ var androidIos = {
   },
   ajaxHttp: function () {
     //var http = 'http://10.10.10.187:8085';
-    //var http = 'http://10.10.10.202:8085';
-    var http = 'http://222.73.159.76:8085';
+    var http = 'http://10.10.10.224:8085';
+   // var http = 'http://222.73.159.76:8085';
     return http;
   },
   uniq:function(array){

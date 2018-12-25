@@ -85,6 +85,7 @@
                   <div id="sure">
                     <div class="go" v-if="type=='10000' && orderSource == 1 " >
                       <button  @touchend.stop.prevent="payOrder()" class="zhifu">支付</button>
+                      <button    @touchend.stop.prevent="closedOrder(1)">取消订单</button>
                       <div class="clearBoth"></div>
                     </div>
                     <div class="go" v-else-if="type*1 < 10 && type*1 > 0  && orderSource == 1">
@@ -97,9 +98,10 @@
                       <div class="clearBoth"></div>
                     </div>
                     <div class="go" v-else-if=" type == '0' && orderSource == 1">
-                      <button class="zhifu" @touchend.stop.prevent="shenhe()">确认</button>
-                    <!--  <button @touchend.stop.prevent="closedOrder(2)">驳回</button>-->
-                      <button @touchend.stop.prevent="orderAgain(3)">修改订单</button>
+                     <!-- <button class="zhifu" @touchend.stop.prevent="shenhe()">确认</button>-->
+                      <button  @touchend.stop.prevent="payOrder()" class="zhifu">支付</button>
+                      <button    @touchend.stop.prevent="closedOrder(1)">取消订单</button>
+                    <!--  <button @touchend.stop.prevent="orderAgain(3)">修改订单</button>-->
                       <div class="clearBoth"></div>
                     </div>
                     <div class="go" v-else-if="type=='1000' && orderSource == 1 ">
@@ -113,7 +115,7 @@
                     </div>
                     <div class="go" v-else-if="type=='10001' && orderSource == 1 ">
                       <button class="zhifu"  @touchend.stop.prevent="orderAgain(2)">再下一单</button>
-                      <button @touchend="scoreYes(1)">申请开票</button>
+                      <button @touchend.stop.prevent="kaipiao(item.number,item.goodsmessage.money)">申请开票</button>
                       <div class="clearBoth"></div>
                     </div>
                     <div class="go" v-else>
@@ -226,6 +228,11 @@
               var _this = this;
               androidIos.gobackFrom(_this);
             },
+          kaipiao:function (pk,money) {
+            var _this = this;
+            androidIos.addPageList();
+            _this.$router.push({ path: '/invoice',query:{pk:pk,money:money}});
+          },
             go:function () {
               var self = this;
               $.ajax({
@@ -606,7 +613,7 @@
           payOrder:function () {
               var _this = this;
               androidIos.addPageList();
-              _this.$router.push({ path: '/money',query:{pk:_this.$route.query.pk}});
+              _this.$router.push({ path: '/money',query:{pk:_this.$route.query.pk,money:_this.pdlist[0].goodsmessage.money,fhd:_this.pdlist[0].number}});
           },
           changeOrder:function(){
             var _this = this;
@@ -758,12 +765,12 @@
                   remark:invoiceDetail.remark == "" || invoiceDetail.remark == null ? "暂无备注" : invoiceDetail.remark
                 },
                 carPeople:{
-                  logo:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverImg:"",
-                  year:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?(invoiceDetail.driverDto[0].driverAge*1 < 1 ?"小于一年":invoiceDetail.driverDto[0].driverAge*1+'年'):"",
-                  grade:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].score*1:"",
-                  name:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].driverName:"",
-                  tel:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?invoiceDetail.driverDto[0].mobile:"",
-                  yes:invoiceDetail.driverDto!=null&&invoiceDetail.driverDto.length != 0?true:false,
+                  logo:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? invoiceDetail.driverDto[0].driverImg:"",
+                  year:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? (invoiceDetail.driverDto[0].driverAge*1 < 1 ?"小于一年":invoiceDetail.driverDto[0].driverAge*1+'年'):"",
+                  grade:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? invoiceDetail.driverDto[0].score*1 : "",
+                  name:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? invoiceDetail.driverDto[0].driverName : "",
+                  tel:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? invoiceDetail.driverDto[0].mobile : "",
+                  yes:invoiceDetail.driverDto!=null && invoiceDetail.driverDto.length != 0 ? true : false,
                 },
                 carrier:{
                   logo:invoiceDetail.carrierDto!=null?invoiceDetail.carrierDto.carrierImg:"",

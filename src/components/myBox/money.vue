@@ -48,14 +48,22 @@
                name:"银联支付",
                value:2,
                check:false,
-             }]
+             }],
+             oldUrl:"",
            }
         },
       mounted:function () {
         var _this = this;
-        _this.fhd = _this.$route.query.pk;
+        _this.fhd = _this.$route.query.fhd;
         _this.price = _this.$route.query.money;
         androidIos.judgeIphoneX("money",2);
+      },
+      beforeRouteEnter (to, from, next){
+        next(vm => {
+          // 通过 `vm` 访问组件实例,将值传入oldUrl
+          vm.oldUrl = from.path;
+          sessionStorage.setItem("OLDUEL",from.path);
+        })
       },
       methods:{
         checkPay:function (index) {
@@ -85,7 +93,49 @@
             bomb.first("请选择支付方式");
             return false;
           }
-          androidIos.second("功能正在开发");
+          /* androidIos.second("功能正在开发");*/
+          $.ajax({
+            type: "POST",
+            url: androidIos.ajaxHttp()+"/order/orderConfirm",
+            data:JSON.stringify({
+              pk:_this.$route.query.pk,
+              userCode:sessionStorage.getItem("token"),
+              source:sessionStorage.getItem("source")
+            }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            timeout: 10000,
+            success: function (orderConfirm) {
+              if(orderConfirm.success == "1"){
+                _this.$cjj("支付成功");
+                setTimeout(function () {
+                  if(_this.oldUrl.indexOf("newOrder") != -1){
+                    sessionStorage.removeItem("addPageList");
+                    sessionStorage.removeItem("trackListTap");
+                    sessionStorage.removeItem("newOrder");
+                    _this.$router.push({path:"/trackList",query:{type:1}});
+                  }else{
+                    var addPageList = sessionStorage.getItem("addPageList");
+                    if (addPageList * 1 > 0) {
+                      var number = addPageList * 1 - 1;
+                      sessionStorage.setItem("addPageList", number);
+                      window.history.go(-1);
+                    }
+                  }
+                },500)
+              }else{
+                androidIos.second(orderConfirm.message);
+              }
+            },
+            complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+              $("#common-blackBox").remove();
+              if(status=='timeout'){//超时,status还有success,error等值的情况
+                androidIos.second("网络请求超时");
+              }else if(status=='error'){
+                androidIos.errorwife();
+              }
+            }
+          })
         },
       }
     }

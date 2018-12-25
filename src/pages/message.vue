@@ -56,7 +56,7 @@
       data(){
          return{
            messageList:[{
-             name : "运单信息",
+             name : "订单信息",
              type:1,
              icon:require("../images/messageyundanwuliu.png"),
              number:0,

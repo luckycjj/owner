@@ -119,10 +119,6 @@
                value:"2",
                displayName:"纸质回单（免费）",
                check:false,
-             },{
-               value:"3",
-               displayName:"开具电子发票",
-               check:false,
              }],
             message:{
               company:"",

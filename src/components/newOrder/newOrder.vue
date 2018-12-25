@@ -703,21 +703,7 @@
               }
             })
             Promise.all([ajax1, ajax2, ajax3,ajax4]).then(function(values) {
-              var newTimeCjj = new Date();
-              var yearCjj = newTimeCjj.getFullYear();
-              var monthCjj = newTimeCjj.getMonth()+1;
-              var dateCjj = newTimeCjj.getDate();
-              var hourCjj = newTimeCjj.getHours();
-              var minCjj = newTimeCjj.getMinutes();
-              var secCjj = newTimeCjj.getSeconds();
-              var dateCjjS = dateCjj+1;
-              var hourCjjS = hourCjj+1;
-              var newDateCjj = new Date(yearCjj+"/"+monthCjj+"/"+dateCjj+" "+hourCjjS+":"+minCjj+":"+secCjj);
-              var newDataCjj = new Date((new Date()).getTime()+24*60*60*1000);
-              _this.both.timeBeforeS = _this.ten(newDateCjj.getFullYear())+"-"+ _this.ten((newDateCjj.getMonth()+1))+"-"+_this.ten(newDateCjj.getDate());
-              _this.both.timeBeforeF = _this.ten(newDateCjj.getHours())+":"+_this.ten(newDateCjj.getMinutes())+":"+_this.ten(newDateCjj.getSeconds());
-              _this.both.timeAfterS = _this.ten(newDataCjj.getFullYear())+"-"+ _this.ten((newDataCjj.getMonth()+1))+"-"+_this.ten(newDataCjj.getDate());
-              _this.both.timeAfterF = "08:00:00";
+              _this.getTime();
               var newOrder = sessionStorage.getItem("newOrder");
               var startAddress = sessionStorage.getItem("startAddress");
               var histroyAddress = sessionStorage.getItem("histroyAddress");
@@ -830,10 +816,10 @@
                         company:invoiceDetail.arrival.addrName,
                         pk:invoiceDetail.arrival.pkAddress,
                       },
-                      timeBeforeF:invoiceDetail.deliDate.split(" ")[1],
-                      timeBeforeS:invoiceDetail.deliDate.split(" ")[0],
-                      timeAfterF:invoiceDetail.arriDate.split(" ")[1],
-                      timeAfterS:invoiceDetail.arriDate.split(" ")[0],
+                      timeBeforeF:"",
+                      timeBeforeS:"",
+                      timeAfterF:"",
+                      timeAfterS:"",
                       productList:list,
                       tranType:transTypeName + carLengthName + carModelName ,
                       trantypenumber:"",
@@ -867,8 +853,18 @@
                       handlingCode:handlingCode,
                       handlingVal:handlingVal
                     }
+                    if(_this.$route.query.type == 3){
+                        pdlist.timeBeforeF = invoiceDetail.deliDate.split(" ")[1];
+                        pdlist.timeBeforeS = invoiceDetail.deliDate.split(" ")[0];
+                        pdlist.timeAfterF = invoiceDetail.arriDate.split(" ")[1];
+                        pdlist.timeAfterS = invoiceDetail.arriDate.split(" ")[0];
+                    }
                     _this.price = invoiceDetail.price*1;
                     _this.both = pdlist;
+                    if(_this.$route.query.type == 2){
+                      _this.getTime();
+                    }
+
                     _this.$nextTick(function () {
                       if(_this.pk != ""){
                         $(".pickmessage h1,.arrmessage h1,#time .lablebox").addClass("imgno");
@@ -1235,6 +1231,24 @@
               })
             });
           },
+        getTime:function () {
+          var _this = this;
+          var newTimeCjj = new Date();
+          var yearCjj = newTimeCjj.getFullYear();
+          var monthCjj = newTimeCjj.getMonth()+1;
+          var dateCjj = newTimeCjj.getDate();
+          var hourCjj = newTimeCjj.getHours();
+          var minCjj = newTimeCjj.getMinutes();
+          var secCjj = newTimeCjj.getSeconds();
+          var dateCjjS = dateCjj+1;
+          var hourCjjS = hourCjj+1;
+          var newDateCjj = new Date(yearCjj+"/"+monthCjj+"/"+dateCjj+" "+hourCjjS+":"+minCjj+":"+secCjj);
+          var newDataCjj = new Date((new Date()).getTime()+24*60*60*1000);
+          _this.both.timeBeforeS = _this.ten(newDateCjj.getFullYear())+"-"+ _this.ten((newDateCjj.getMonth()+1))+"-"+_this.ten(newDateCjj.getDate());
+          _this.both.timeBeforeF = _this.ten(newDateCjj.getHours())+":"+_this.ten(newDateCjj.getMinutes())+":"+_this.ten(newDateCjj.getSeconds());
+          _this.both.timeAfterS = _this.ten(newDataCjj.getFullYear())+"-"+ _this.ten((newDataCjj.getMonth()+1))+"-"+_this.ten(newDataCjj.getDate());
+          _this.both.timeAfterF = "08:00:00";
+        },
         lookMore:function (type) {
             var _this = this.both;
            if(type == 1){
@@ -2159,7 +2173,7 @@
                   _this.$cjj("发布成功");
                   sessionStorage.removeItem("servicePk");
                   setTimeout(function () {
-                    if(_this.$route.query.type == 3){
+                   /* if(_this.$route.query.type == 3){
                       androidIos.gobackFrom(_this);
                     }else{
                       if(_this.pk == ""){
@@ -2169,8 +2183,12 @@
                       }else{
                         androidIos.gobackFrom(_this);
                       }
-                    }
-
+                    }*/
+                    _this.both.price = _this.price;
+                    _this.both.scrollTop =  _this.getPageScroll();
+                    sessionStorage.setItem("newOrder",JSON.stringify(_this.both));
+                    androidIos.addPageList();
+                    _this.$router.push({ path: '/money',query:{pk:createOrder.errorCode,money:(_this.price*1 + _this.both.zhuangxiePrice*1),fhd:createOrder.message}});
                   },1000)
                 }else if(createOrder.success=="-1"){
                   androidIos.second(createOrder.message)

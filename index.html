@@ -110,6 +110,19 @@
             }else{
               androidIos.gogogogo();
             }
+          }else if(http.indexOf("/money") != -1){
+            androidIos.first("尚未支付，确定退出吗？");
+            $(".tanBox-yes").unbind('click').click(function(){
+              $(".tanBox-bigBox").remove();
+              var OLDUEL = sessionStorage.getItem("OLDUEL");
+              if(OLDUEL.indexOf("/newOrder") != -1){
+                sessionStorage.removeItem("addPageList");
+                sessionStorage.removeItem("newOrder");
+                window.history.go(-2);
+              }else{
+                androidIos.gogogogo();
+              }
+            });
           }else{
             androidIos.gogogogo();
           }
