@@ -21,7 +21,7 @@
             <h1>订单号：{{items.taskNo}}</h1>
             <h2>{{items.startCity}}-{{items.endCity}}</h2>
             <h3 v-for="(itemss,indexss) in items.item">
-              <span>{{itemss.goodsCode}}-{{itemss.goodsName}}</span>
+              <span>{{itemss.goodsCode}}</span>
               <span>{{itemss.num}}件</span>
               <span v-if=" itemss.weight*1 > 0 " v-html="itemss.weight*1 < 1 ? itemss.weight*1000 + '千克' : itemss.weight*1 + '吨'"></span>
               <span v-if=" itemss.volume*1 > 0 " v-html="itemss.volume*1 < 1 ? itemss.volume*1000 + '升' : itemss.volume*1 + '立方米'"></span>

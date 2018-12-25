@@ -79,8 +79,9 @@ var androidIos = {
   },
   ajaxHttp: function () {
     //var http = 'http://10.10.10.187:8085';
-    var http = 'http://10.10.10.224:8085';
-   // var http = 'http://222.73.159.76:8085';
+    //var http = 'http://10.10.10.224:8085';
+    //var http = 'http://222.73.159.76:8085';//sql server
+    var http = 'http://www.xsungroup.cn:8085/';//msyql
     return http;
   },
   uniq:function(array){
