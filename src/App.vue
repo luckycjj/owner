@@ -21,6 +21,7 @@
       </div>
     </div>
     <img src="./images/ownerPng.png" id="PNG" v-if="showImg">
+    <carouselComponent :show="showCarousel"></carouselComponent>
     <router-view/>
   </div>
 </template>
@@ -40,12 +41,49 @@
         title:"",
         doNow:"",
         showImg:true,
+        showCarousel:true,
       }
     },
     mounted:function () {
       var _this = this;
       _this.title = document.title;
       sessionStorage.setItem("source",1);
+      try{
+        var date = new Date();
+        api.getPrefs({
+          key: "carouselOwner"
+        }, function(ret, err) {
+          var name = ret.value;
+          if(name == ""){
+            _this.showCarousel = true;
+            androidIos.setcookie("carouselOwner",true,100);
+          }else{
+            var cookie = JSON.parse(name).user;
+            if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0) {
+              if (date.getTime() > JSON.parse(name).expiryDate) {
+                _this.showCarousel = true;
+                androidIos.setcookie("carouselOwner",true,100);
+              } else {
+                _this.showCarousel = false;
+              }
+            }else{
+              _this.showCarousel = false;
+            }
+          }
+          androidIos.bridge(_this);
+        });
+      }
+      catch(e){
+        var cookie = androidIos.getcookie("carouselOwner");
+        if(cookie != "" && sessionStorage.getItem("addPageList")*1 == 0){
+          _this.showCarousel = false;
+        }else if(cookie == ""){
+          _this.showCarousel = true;
+          androidIos.setcookie("carouselOwner",true,100);
+        }else{
+          _this.showCarousel = false;
+        }
+      }
       try{
         var date = new Date();
         api.getPrefs({
@@ -195,6 +233,9 @@
     methods:{
       go:function () {
         var _this = this;
+      },
+      showBox:function () {
+        this.showCarousel = false;
       },
       goback:function () {
         var _this = this;
