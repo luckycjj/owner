@@ -196,7 +196,7 @@
     　　color:#A4B9E0;
   }
   #login{
-    position: absolute;
+    position: fixed;
     top:0;
     bottom:0;
     height: auto;
