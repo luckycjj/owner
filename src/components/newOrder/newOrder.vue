@@ -442,15 +442,15 @@
                 bomb.first("请选择货物");
                 return false;
               }
-              if(_this.both.productList[x].protype == 0 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+              if(_this.both.productList[x].protype == 0 && (_this.both.productList[x].wight*1 == 0 && _this.both.productList[x].weight*1 == 0)){
                 bomb.first("请填写重量和体积");
                 return false;
               }
-              if(_this.both.productList[x].protype == 1 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+              if(_this.both.productList[x].protype == 1 && (_this.both.productList[x].wight*1 == 0 && _this.both.productList[x].weight*1 == 0)){
                 bomb.first("请填写重量和体积");
                 return false;
               }
-              if(_this.both.productList[x].protype == 2 && (_this.both.productList[x].wight*1 == 0 || _this.both.productList[x].weight*1 == 0)){
+              if(_this.both.productList[x].protype == 2 && (_this.both.productList[x].wight*1 == 0 &&_this.both.productList[x].weight*1 == 0)){
                 bomb.first("请填写重量和体积");
                 return false;
               }
