@@ -53,6 +53,10 @@
                 'height': This.options.height + 'px',
                 'width': This.options.width + 'px',
             })
+            that.find('.set_image_top img').css({
+              'height': This.options.height + 'px',
+              'width': This.options.width + 'px',
+            })
             if((This.options.havePoint)&&(grade%1!=0)){
                 that.find('.set_image_top>div').last().css({
                     'width': This.options.width * (grade -  Math.floor(grade)) + 'px',
@@ -77,6 +81,11 @@
                     'width': This.options.width + 'px',
                     'margin-right': This.options.spaceBetween + 'px',
                 })
+              debugger
+              that.find('.set_image_top img').css({
+                'height': This.options.height + 'px',
+                'width': This.options.width + 'px',
+              })
                 // 判断需要小数
                 if (This.options.havePoint) {
                     var X1 = e.pageX - $(this).offset().left;

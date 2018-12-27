@@ -322,7 +322,7 @@
                 $("#star_grade111").html("");
                 $("#star_grade111").markingSystem({
                   num: 5,
-                  havePoint: false,
+                  havePoint: true,
                   haveGrade: false,
                   backgroundImageInitial:require('../../images/star_hollow.png'),
                   backgroundImageOver:require('../../images/star_solid.png'),
