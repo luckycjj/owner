@@ -309,6 +309,11 @@
     margin-top: 0.08rem;
     float: left;
   }
+  @media (max-height: 400px) {
+    　.checkBox {
+      display: none;
+    }
+  }
   .checkedTrue{
     background-image: url("../../images/checkTrue.png");
     background-repeat: no-repeat;
