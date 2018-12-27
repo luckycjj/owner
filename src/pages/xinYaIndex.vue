@@ -14,7 +14,8 @@
 
             <div class="topLeft">
               <div class="topleftInputBox">
-                <input type="text" @touchend="keywordblur()"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>
+                <div id="inputCheck" @click="keywordblur()" v-html="keyWord == '' ? '请输入订单号、货品名称' : keyWord"></div>
+                <!--<input type="text"   placeholder="请输入订单号、货品名称" v-model="keyWord"/>-->
                 <img src="../images/huatong-2.png"  @click="yuyin = true">
               </div>
             </div>
@@ -150,6 +151,7 @@
         try{
           _this.iflyRecognition = api.require('iflyRecognition');
           _this.iflyRecognition.createUtility({
+            ios_appid: '5c04e56f',
             android_appid: '5c04a475'
           }, function(ret, err) {
             if (ret.status) {
@@ -560,6 +562,17 @@
   }
   input:-ms-input-placeholder { /* Internet Explorer 10+*/
     　　color:#fff;
+  }
+  #inputCheck{
+    font-size: 0.375rem;
+    color:#fff;
+    line-height: 0.375rem;
+    text-align: left;
+    width:100%;
+    background: transparent;
+    height: 0.4rem;
+    margin-top: 0.23rem;
+    display: block;
   }
   .topLeft input{
     font-size: 0.375rem;
